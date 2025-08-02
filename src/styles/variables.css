@@ -1,48 +1,50 @@
 /* CSS Variables and Global Styles */
 :root {
   /* Typography */
-  --font-family-system: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  
+  --font-family-system: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+    Consolas, "Courier New", monospace;
+
   /* Colors */
-  --color-primary: #007AFF;
-  --color-secondary: #5856D6;
-  --color-success: #34C759;
-  --color-warning: #FF9500;
-  --color-error: #FF3B30;
-  
+  --color-primary: #007aff;
+  --color-secondary: #5856d6;
+  --color-success: #34c759;
+  --color-warning: #ff9500;
+  --color-error: #ff3b30;
+
   /* Background Colors */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F2F2F7;
-  --bg-tertiary: #FFFFFF;
-  --bg-sidebar: #F6F6F6;
-  
+  --bg-primary: #ffffff;
+  --bg-secondary: #f2f2f7;
+  --bg-tertiary: #ffffff;
+  --bg-sidebar: #f6f6f6;
+
   /* Text Colors */
   --text-primary: #000000;
-  --text-secondary: #3C3C43;
-  --text-tertiary: #8E8E93;
-  
+  --text-secondary: #3c3c43;
+  --text-tertiary: #8e8e93;
+
   /* Border Colors */
-  --border-color: #C6C6C8;
-  --border-color-light: #E5E5EA;
-  
+  --border-color: #c6c6c8;
+  --border-color-light: #e5e5ea;
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   /* Border Radius */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-  
+
   /* Layout */
   --header-height: 60px;
   --sidebar-width: 200px;
@@ -52,17 +54,17 @@
 /* Dark mode variables */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: #1C1C1E;
-    --bg-secondary: #2C2C2E;
-    --bg-tertiary: #3A3A3C;
-    --bg-sidebar: #1C1C1E;
-    
-    --text-primary: #FFFFFF;
-    --text-secondary: #EBEBF5;
-    --text-tertiary: #8E8E93;
-    
-    --border-color: #38383A;
-    --border-color-light: #2C2C2E;
+    --bg-primary: #1c1c1e;
+    --bg-secondary: #2c2c2e;
+    --bg-tertiary: #3a3a3c;
+    --bg-sidebar: #1c1c1e;
+
+    --text-primary: #ffffff;
+    --text-secondary: #ebebf5;
+    --text-tertiary: #8e8e93;
+
+    --border-color: #38383a;
+    --border-color-light: #2c2c2e;
   }
 }
 

@@ -54,7 +54,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -104,7 +104,7 @@
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 1000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .refresh-btn::before {
@@ -136,7 +136,7 @@
   height: 60%;
   color: #1d1d1f;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .containers-loading p {
@@ -185,7 +185,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -208,7 +208,7 @@
   height: 60%;
   color: #6e6e73;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .empty-icon {
@@ -259,7 +259,7 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   gap: 20px;
   flex-wrap: nowrap;
 }
@@ -272,8 +272,8 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   color: #1d1d1f;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  min-height: 52px;
+  font-family: var(--font-family-system);
+  min-height: var(--min-row-height);
   gap: 20px;
   flex-wrap: nowrap;
   cursor: pointer; /* Make it clear rows are clickable */
@@ -317,8 +317,8 @@
   display: flex;
   justify-content: flex-end;
 }
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  min-height: 52px;
+  font-family: var(--font-family-system);
+  min-height: var(--min-row-height);
 }
 
 .table-row:hover {
@@ -352,13 +352,13 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .table-row {
   color: #1d1d1f;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .table-row:hover {
@@ -377,7 +377,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 15px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .container-id {
@@ -489,7 +489,7 @@
   box-sizing: border-box;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .action-btn:hover {
@@ -528,7 +528,7 @@
   transition-delay: 0.3s; /* Add delay for better UX */
   z-index: 1000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   pointer-events: none;
 }
 
@@ -718,7 +718,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 25px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
   animation: modalSlideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 @keyframes modalSlideIn {
@@ -790,7 +790,7 @@
   border-radius: 8px;
   color: #1d1d1f;
   font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   box-sizing: border-box;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -822,7 +822,7 @@
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   min-height: 44px;
   display: flex;

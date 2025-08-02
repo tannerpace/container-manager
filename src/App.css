@@ -55,8 +55,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Text", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  font-family: var(--font-family-system);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -95,7 +94,7 @@ body {
   height: 60%;
   color: #6e6e73;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .empty-icon {
@@ -126,13 +125,13 @@ body {
   position: sticky;
   top: 0;
   z-index: 5;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .table-row {
   color: #1d1d1f;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
 }
 
 .table-row:hover {
@@ -156,7 +155,7 @@ body {
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-family-system);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
