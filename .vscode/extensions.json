@@ -1,16 +1,16 @@
 {
   "recommendations": [
+    "SonarSource.sonarlint-vscode",
     "ms-vscode.vscode-typescript-next",
-    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-json",
+    "ms-vscode.vscode-typescript-next",
     "ms-vscode.vscode-eslint",
+    "esbenp.prettier-vscode",
     "github.copilot",
     "github.copilot-chat",
     "ms-azuretools.vscode-docker",
     "bradlc.vscode-tailwindcss",
-    "ms-vscode.vscode-json",
-    "formulahendry.auto-rename-tag",
-    "christian-kohler.path-intellisense",
-    "ms-vscode.vscode-typescript-next"
+    "christian-kohler.path-intellisense"
   ],
   "unwantedRecommendations": ["ms-vscode.vscode-typescript-next"]
 }

@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
-import { ActionButtonsList } from "./ActionButtonsList"
-import { TerminalModal } from "./Terminal/TerminalModal"
+import { ActionButtonsDropdown } from "./ActionButtonsDropdown"
 import "./ContainersList.css"
+import { TerminalModal } from "./Terminal/TerminalModal"
+
+// Hot reloading should work now! 🔥 Hamburger menu restored!
 
 interface ContainersListProps {
   onContainerSelect: (containerId: string) => void
@@ -126,6 +128,117 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     }
   }
 
+  const renderContainersContent = () => {
+    // No containers match search criteria
+    if (filteredContainers.length === 0 && containers.length > 0) {
+      return (
+        <div className="containers-empty">
+          <div className="empty-icon">🔍</div>
+          <h3>No containers match your search</h3>
+          <p>
+            Try adjusting your search term or clear the search to see all
+            containers.
+          </p>
+        </div>
+      )
+    }
+
+    // No containers exist at all
+    if (filteredContainers.length === 0) {
+      return (
+        <div className="empty-state">
+          <div className="empty-icon">📦</div>
+          <h3>No containers found</h3>
+          <p>Create a new container to get started</p>
+        </div>
+      )
+    }
+
+    // Render containers table
+    return (
+      <div className="containers-table">
+        <div className="table-header">
+          <div className="col-name">Name</div>
+          <div className="col-image">Image</div>
+          <div className="col-status">Status</div>
+          <div className="col-ports">Ports</div>
+          <div className="col-created">Created</div>
+          <div className="col-actions">Actions</div>
+        </div>
+
+        {filteredContainers.map((container) => (
+          <div
+            key={container.Id}
+            className="table-row"
+            onClick={(e) => {
+              // Don't trigger row click if clicking on action buttons or dropdown
+              if (
+                e.target instanceof Element &&
+                !e.target.closest(".action-buttons-dropdown") &&
+                !e.target.closest(".action-buttons")
+              ) {
+                onContainerSelect(container.Id)
+              }
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="col-name">
+              <div className="container-name">
+                {container.Names[0]?.replace("/", "") || "unnamed"}
+              </div>
+              <div className="container-id">
+                {container.Id.substring(0, 12)}
+              </div>
+            </div>
+
+            <div className="col-image">
+              <span className="image-name">{container.Image}</span>
+            </div>
+
+            <div className="col-status">
+              <div className="status-badge">
+                <div
+                  className="status-dot"
+                  style={{ backgroundColor: getStatusColor(container.State) }}
+                ></div>
+                <span>{container.State}</span>
+              </div>
+              <div className="status-detail">{container.Status}</div>
+            </div>
+
+            <div className="col-ports">
+              {container.Ports.length > 0 ? (
+                <div className="ports-list">
+                  {container.Ports.map((port, index) => (
+                    <div key={index} className="port-mapping">
+                      {port.PublicPort
+                        ? `${port.PublicPort}:${port.PrivatePort}`
+                        : port.PrivatePort}
+                      <span className="port-type">/{port.Type}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <span className="no-ports">-</span>
+              )}
+            </div>
+
+            <div className="col-created">
+              {new Date(container.Created * 1000).toLocaleDateString()}
+            </div>
+
+            <div className="col-actions">
+              <ActionButtonsDropdown
+                container={container}
+                onAction={handleAction}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   if (loading && containers.length === 0) {
     return (
       <div className="containers-loading">
@@ -168,103 +281,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
         </div>
       </div>
 
-      {filteredContainers.length === 0 && containers.length > 0 ? (
-        <div className="containers-empty">
-          <div className="empty-icon">🔍</div>
-          <h3>No containers match your search</h3>
-          <p>
-            Try adjusting your search term or clear the search to see all
-            containers.
-          </p>
-        </div>
-      ) : filteredContainers.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📦</div>
-          <h3>No containers found</h3>
-          <p>Create a new container to get started</p>
-        </div>
-      ) : (
-        <div className="containers-table">
-          <div className="table-header">
-            <div className="col-name">Name</div>
-            <div className="col-image">Image</div>
-            <div className="col-status">Status</div>
-            <div className="col-ports">Ports</div>
-            <div className="col-created">Created</div>
-            <div className="col-actions">Actions</div>
-          </div>
-
-          {filteredContainers.map((container) => (
-            <div
-              key={container.Id}
-              className="table-row"
-              onClick={(e) => {
-                // Don't trigger row click if clicking on action buttons
-                if (
-                  e.target instanceof Element &&
-                  !e.target.closest(".action-buttons")
-                ) {
-                  onContainerSelect(container.Id)
-                }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="col-name">
-                <div className="container-name">
-                  {container.Names[0]?.replace("/", "") || "unnamed"}
-                </div>
-                <div className="container-id">
-                  {container.Id.substring(0, 12)}
-                </div>
-              </div>
-
-              <div className="col-image">
-                <span className="image-name">{container.Image}</span>
-              </div>
-
-              <div className="col-status">
-                <div className="status-badge">
-                  <div
-                    className="status-dot"
-                    style={{ backgroundColor: getStatusColor(container.State) }}
-                  ></div>
-                  <span>{container.State}</span>
-                </div>
-                <div className="status-detail">{container.Status}</div>
-              </div>
-
-              <div className="col-ports">
-                {container.Ports.length > 0 ? (
-                  <div className="ports-list">
-                    {container.Ports.map((port, index) => (
-                      <div key={index} className="port-mapping">
-                        {port.PublicPort
-                          ? `${port.PublicPort}:${port.PrivatePort}`
-                          : port.PrivatePort}
-                        <span className="port-type">/{port.Type}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="no-ports">-</span>
-                )}
-              </div>
-
-              <div className="col-created">
-                {new Date(container.Created * 1000).toLocaleDateString()}
-              </div>
-
-              <div className="col-actions">
-                <ActionButtonsList
-                  container={container}
-                  onAction={handleAction}
-                  onContainerSelect={onContainerSelect}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {renderContainersContent()}
 
       {/* Rename Modal */}
       {renameModalVisible && (

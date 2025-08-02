@@ -8,11 +8,10 @@
 .container-details {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background: var(--bg-primary, #ffffff);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  margin: 1rem;
 }
 
 /* Dark mode support */

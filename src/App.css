@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   text-align: left;
-  overflow: hidden;
+  overflow: auto;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
@@ -23,7 +23,7 @@
 .app-body {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  overflow: auto;
   gap: 0.75rem;
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.3);
@@ -32,6 +32,7 @@
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.1),
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
   padding: 0.75rem;
+  min-height: 0;
 }
 
 .sidebar {
@@ -42,7 +43,7 @@
 
 .main-content {
   flex: 1;
-  overflow: auto;
+  overflow: visible;
   min-width: 0;
   width: 100%;
   border-radius: 0.75rem;

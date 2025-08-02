@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { dockerTerminalActions } from "../utils/terminalUtils"
 import "./DockerSetupGuide.css"
 
 interface DockerSetupGuideProps {
@@ -8,33 +9,19 @@ interface DockerSetupGuideProps {
 export function DockerSetupGuide({ onClose }: DockerSetupGuideProps) {
   const [isStartingColima, setIsStartingColima] = useState(false)
   const [colimaOutput, setColimaOutput] = useState<string>("")
-  const [colimaAvailable, setColimaAvailable] = useState(false)
-  const [colimaStatus, setColimaStatus] = useState<ColimaStatus | null>(null)
-  const [dockerAPIReady, setDockerAPIReady] = useState(false)
 
   // Detect if we're on macOS (for showing Colima button)
   const isMacOS =
     typeof navigator !== "undefined" && navigator.platform.includes("Mac")
 
-  useEffect(() => {
-    const checkColima = async () => {
-      if (isMacOS) {
-        const available = await isColimaAvailable()
-        setColimaAvailable(available)
-
-        if (available) {
-          const status = await getColimaStatus()
-          setColimaStatus(status)
-
-          // Check if Docker API is accessible
-          const apiReady = await checkDockerAPI()
-          setDockerAPIReady(apiReady)
-        }
-      }
+  // Simple helper to get optimal config based on common Mac specs
+  const getOptimalConfig = () => {
+    const cores = navigator.hardwareConcurrency || 4
+    return {
+      cpu: Math.min(cores >= 8 ? 4 : 2, 4),
+      memory: cores >= 8 ? 8 : 4,
     }
-
-    checkColima()
-  }, [isMacOS])
+  }
 
   const startColima = async () => {
     setIsStartingColima(true)
@@ -42,7 +29,7 @@ export function DockerSetupGuide({ onClose }: DockerSetupGuideProps) {
 
     try {
       // Show optimized command based on system
-      const config = getOptimalColimaConfig()
+      const config = getOptimalConfig()
       setColimaOutput(`🔧 Optimized Colima configuration detected:
 
 📋 Copy and run this command in your terminal:
@@ -58,7 +45,6 @@ colima start --api --cpu ${config.cpu} --memory ${config.memory}
 ⏱️ Starting Colima usually takes 30-60 seconds.
 
 🔍 After running the command, click "Check Status" to verify!`)
-
     } catch (error) {
       setColimaOutput(
         `❌ Error: ${
@@ -75,7 +61,7 @@ colima start --api --cpu 2 --memory 4`
 
   const checkColimaStatus = async () => {
     setColimaOutput("🔍 Checking Colima and Docker API status...")
-    
+
     try {
       // Simulate checking status and provide manual commands
       setColimaOutput(`📊 Status Check Commands:
@@ -94,9 +80,10 @@ colima start --api --cpu 2 --memory 4
 docker ps
 
 ✅ When the API responds, close this dialog and refresh Container Manager!`)
-
     } catch (error) {
-      setColimaOutput(`❌ Error: ${error instanceof Error ? error.message : "Unknown error"}
+      setColimaOutput(`❌ Error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }
 
 🛠️ Manual status check:
 1. Run: colima status
@@ -129,15 +116,19 @@ docker ps
                   onClick={startColima}
                   disabled={isStartingColima}
                 >
-                  {isStartingColima
-                    ? "Starting..."
-                    : "🍎 Quick Start Colima"}
+                  {isStartingColima ? "Starting..." : "🍎 Quick Start Colima"}
                 </button>
                 <button
                   className="colima-status-btn"
                   onClick={checkColimaStatus}
                 >
                   📊 Check Status
+                </button>
+                <button
+                  className="colima-terminal-btn"
+                  onClick={() => dockerTerminalActions.colima()}
+                >
+                  🖥️ Open in Terminal
                 </button>
               </div>
               {colimaOutput && (

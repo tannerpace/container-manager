@@ -1,6 +1,6 @@
 import React from "react"
-import { ActionButton } from "../ActionButton"
 import type { DockerContainer } from "../../types/docker"
+import { ActionButton } from "../ActionButton"
 import "./ActionButtonsList.css"
 
 export interface ActionButtonConfig {

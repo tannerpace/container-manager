@@ -5,10 +5,15 @@
  * Sets up native Docker access and IPC handlers
  */
 
+import { exec, spawn } from 'child_process'
 import { app, BrowserWindow, ipcMain } from 'electron'
+import * as os from 'os'
 import * as path from 'path'
+import { promisify } from 'util'
 import { DockerSocketBridge } from './dockerBridge'
 import { setupDockerIPC } from './dockerClient'
+
+const execAsync = promisify(exec)
 
 let mainWindow: Electron.BrowserWindow | null = null
 let dockerBridge: DockerSocketBridge | null = null
@@ -106,4 +111,69 @@ ipcMain.handle('app:getVersion', () => {
 
 ipcMain.handle('app:getPlatform', () => {
   return process.platform
+})
+
+/**
+ * System utility IPC handlers
+ */
+ipcMain.handle('system:execute-applescript', async (_event, script: string) => {
+  const { stdout } = await execAsync(`osascript -e "${script.replace(/"/g, '\\"')}"`)
+  return stdout.trim()
+})
+
+ipcMain.handle('system:exec', async (_event, command: string) => {
+  try {
+    const result = await execAsync(command)
+    return {
+      stdout: result.stdout,
+      stderr: result.stderr
+    }
+  } catch (error: unknown) {
+    const err = error as Error
+    return {
+      stdout: '',
+      stderr: err.message
+    }
+  }
+})
+
+ipcMain.handle('system:exec-long-running', async (_event, command: string) => {
+  return new Promise((resolve) => {
+    const child = spawn('sh', ['-c', command])
+    let stdout = ''
+    let stderr = ''
+
+    child.stdout.on('data', (data) => {
+      stdout += data.toString()
+    })
+
+    child.stderr.on('data', (data) => {
+      stderr += data.toString()
+    })
+
+    child.on('close', (code) => {
+      resolve({
+        stdout,
+        stderr: stderr || (code !== 0 ? `Process exited with code ${code}` : '')
+      })
+    })
+
+    child.on('error', (error) => {
+      resolve({
+        stdout,
+        stderr: error.message
+      })
+    })
+  })
+})
+
+ipcMain.handle('system:get-system-info', async () => {
+  return {
+    nodeVersion: process.version,
+    osInfo: `${os.type()} ${os.release()}`,
+    architecture: os.arch(),
+    hostname: os.hostname(),
+    totalMemory: os.totalmem(),
+    availableMemory: os.freemem()
+  }
 })

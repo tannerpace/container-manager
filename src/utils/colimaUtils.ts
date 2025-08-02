@@ -44,7 +44,7 @@ export const getColimaStatus = async (): Promise<ColimaStatus> => {
       return JSON.parse(result.stdout)
     }
     throw new Error('Electron not available')
-  } catch (error) {
+  } catch {
     return {
       status: 'Unknown',
       runtime: 'docker',
@@ -133,12 +133,4 @@ export const getOptimalColimaConfig = (): ColimaStartOptions => {
   }
 }
 
-// Type declaration for Electron bridge
-declare global {
-  interface Window {
-    electron?: {
-      exec: (command: string) => Promise<{ stdout: string; stderr: string }>
-      execLongRunning: (command: string) => Promise<{ stdout: string; stderr: string }>
-    }
-  }
-}
+import '../types/electron'
