@@ -2,7 +2,17 @@ import { useDocker } from "../context/DockerContext"
 import "./NetworksList.css"
 
 export function NetworksList() {
-  const { networks, loading, error, refreshNetworks } = useDocker()
+  const {
+    networks,
+    loading,
+    error,
+    searchTerm,
+    filterNetworks,
+    refreshNetworks,
+  } = useDocker()
+
+  // Filter networks based on search term
+  const filteredNetworks = filterNetworks(networks, searchTerm)
 
   const handleRefresh = async () => {
     await refreshNetworks()
@@ -68,7 +78,7 @@ export function NetworksList() {
             <div className="col-actions">Actions</div>
           </div>
 
-          {networks.map((network) => (
+          {filteredNetworks.map((network) => (
             <div key={network.Id} className="table-row">
               <div className="col-name">
                 <div className="network-name">{network.Name}</div>

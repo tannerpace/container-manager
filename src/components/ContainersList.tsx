@@ -11,6 +11,8 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     containers,
     loading,
     error,
+    searchTerm,
+    filterContainers,
     startContainer,
     stopContainer,
     restartContainer,
@@ -21,6 +23,9 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     removeContainer,
     refreshContainers,
   } = useDocker()
+
+  // Filter containers based on search term
+  const filteredContainers = filterContainers(containers, searchTerm)
 
   const [renameModalVisible, setRenameModalVisible] = useState(false)
   const [currentContainer, setCurrentContainer] = useState<string | null>(null)
@@ -116,7 +121,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     <div className="containers-list">
       <div className="containers-header">
         <div className="header-content">
-          <h2>Containers ({containers.length})</h2>
+          <h2>Containers ({filteredContainers.length})</h2>
           <div className="header-actions">
             <button
               onClick={() => handleAction("refresh", "")}
@@ -130,7 +135,16 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
         </div>
       </div>
 
-      {containers.length === 0 ? (
+      {filteredContainers.length === 0 && containers.length > 0 ? (
+        <div className="containers-empty">
+          <div className="empty-icon">🔍</div>
+          <h3>No containers match your search</h3>
+          <p>
+            Try adjusting your search term or clear the search to see all
+            containers.
+          </p>
+        </div>
+      ) : filteredContainers.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">📦</div>
           <h3>No containers found</h3>
@@ -147,7 +161,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             <div className="col-actions">Actions</div>
           </div>
 
-          {containers.map((container) => (
+          {filteredContainers.map((container) => (
             <div key={container.Id} className="table-row">
               <div className="col-name">
                 <div className="container-name">

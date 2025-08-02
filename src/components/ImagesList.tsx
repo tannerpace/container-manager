@@ -1,28 +1,39 @@
-import { useDocker } from '../context/DockerContext'
-import './ImagesList.css'
+import { useDocker } from "../context/DockerContext"
+import "./ImagesList.css"
 
 export function ImagesList() {
-  const { images, loading, error, removeImage, refreshImages } = useDocker()
+  const {
+    images,
+    loading,
+    error,
+    searchTerm,
+    filterImages,
+    removeImage,
+    refreshImages,
+  } = useDocker()
+
+  // Filter images based on search term
+  const filteredImages = filterImages(images, searchTerm)
 
   const handleAction = async (action: string, imageId: string) => {
     switch (action) {
-      case 'remove':
-        if (confirm('Are you sure you want to remove this image?')) {
+      case "remove":
+        if (confirm("Are you sure you want to remove this image?")) {
           await removeImage(imageId)
         }
         break
-      case 'refresh':
+      case "refresh":
         await refreshImages()
         break
     }
   }
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes'
+    if (bytes === 0) return "0 Bytes"
     const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const sizes = ["Bytes", "KB", "MB", "GB"]
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
   }
 
   if (loading && images.length === 0) {
@@ -39,7 +50,10 @@ export function ImagesList() {
       <div className="images-error">
         <h3>Error loading images</h3>
         <p>{error}</p>
-        <button onClick={() => handleAction('refresh', '')} className="retry-btn">
+        <button
+          onClick={() => handleAction("refresh", "")}
+          className="retry-btn"
+        >
           Retry
         </button>
       </div>
@@ -52,8 +66,8 @@ export function ImagesList() {
         <div className="header-content">
           <h2>Images ({images.length})</h2>
           <div className="header-actions">
-            <button 
-              onClick={() => handleAction('refresh', '')} 
+            <button
+              onClick={() => handleAction("refresh", "")}
               className="refresh-btn"
               disabled={loading}
             >
@@ -79,37 +93,39 @@ export function ImagesList() {
             <div className="col-size">Size</div>
             <div className="col-actions">Actions</div>
           </div>
-          
-          {images.map((image) => (
+
+          {filteredImages.map((image) => (
             <div key={image.Id} className="table-row">
               <div className="col-repository">
                 <div className="image-repo">
-                  {image.RepoTags?.[0]?.split(':')[0] || 'none'}
+                  {image.RepoTags?.[0]?.split(":")[0] || "none"}
                 </div>
               </div>
-              
+
               <div className="col-tag">
                 <span className="image-tag">
-                  {image.RepoTags?.[0]?.split(':')[1] || 'none'}
+                  {image.RepoTags?.[0]?.split(":")[1] || "none"}
                 </span>
               </div>
-              
+
               <div className="col-id">
-                <span className="image-id">{image.Id.replace('sha256:', '').substring(0, 12)}</span>
+                <span className="image-id">
+                  {image.Id.replace("sha256:", "").substring(0, 12)}
+                </span>
               </div>
-              
+
               <div className="col-created">
                 {new Date(image.Created * 1000).toLocaleDateString()}
               </div>
-              
+
               <div className="col-size">
                 <span className="image-size">{formatBytes(image.Size)}</span>
               </div>
-              
+
               <div className="col-actions">
                 <div className="action-buttons">
                   <button
-                    onClick={() => handleAction('remove', image.Id)}
+                    onClick={() => handleAction("remove", image.Id)}
                     className="action-btn remove-btn"
                     title="Remove image"
                   >

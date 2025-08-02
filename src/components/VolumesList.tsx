@@ -2,7 +2,11 @@ import { useDocker } from "../context/DockerContext"
 import "./VolumesList.css"
 
 export function VolumesList() {
-  const { volumes, loading, error, refreshVolumes } = useDocker()
+  const { volumes, loading, error, searchTerm, filterVolumes, refreshVolumes } =
+    useDocker()
+
+  // Filter volumes based on search term
+  const filteredVolumes = filterVolumes(volumes, searchTerm)
 
   const handleRefresh = async () => {
     await refreshVolumes()
@@ -67,7 +71,7 @@ export function VolumesList() {
             <div className="col-actions">Actions</div>
           </div>
 
-          {volumes.map((volume) => (
+          {filteredVolumes.map((volume) => (
             <div key={volume.Name} className="table-row">
               <div className="col-name">
                 <div className="volume-name">{volume.Name}</div>
