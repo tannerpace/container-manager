@@ -187,7 +187,6 @@
   gap: 20px;
   flex-wrap: nowrap;
 }
-}
 
 .table-row {
   display: flex;
@@ -205,37 +204,43 @@
 
 /* Column flex basis for ImagesList */
 .images-list .table-header > *:nth-child(1),
-.images-list .table-row > *:nth-child(1) { /* Repository */
+.images-list .table-row > *:nth-child(1) {
+  /* Repository */
   flex: 1 1 200px;
   min-width: 150px;
 }
 
 .images-list .table-header > *:nth-child(2),
-.images-list .table-row > *:nth-child(2) { /* Tag */
+.images-list .table-row > *:nth-child(2) {
+  /* Tag */
   flex: 0 0 120px;
   min-width: 100px;
 }
 
 .images-list .table-header > *:nth-child(3),
-.images-list .table-row > *:nth-child(3) { /* Image ID */
+.images-list .table-row > *:nth-child(3) {
+  /* Image ID */
   flex: 0 0 200px;
   min-width: 150px;
 }
 
 .images-list .table-header > *:nth-child(4),
-.images-list .table-row > *:nth-child(4) { /* Created */
+.images-list .table-row > *:nth-child(4) {
+  /* Created */
   flex: 0 0 150px;
   min-width: 120px;
 }
 
 .images-list .table-header > *:nth-child(5),
-.images-list .table-row > *:nth-child(5) { /* Size */
+.images-list .table-row > *:nth-child(5) {
+  /* Size */
   flex: 0 0 100px;
   min-width: 80px;
 }
 
 .images-list .table-header > *:nth-child(6),
-.images-list .table-row > *:nth-child(6) { /* Actions */
+.images-list .table-row > *:nth-child(6) {
+  /* Actions */
   flex: 0 0 140px;
   min-width: 140px;
   display: flex;
@@ -420,6 +425,20 @@
   border-color: #dc3545;
 }
 
+/* Run button styling */
+.run-btn {
+  background: linear-gradient(145deg, #30d158, #28a745);
+  color: white;
+  border: none;
+}
+
+.run-btn:hover {
+  background: linear-gradient(145deg, #28a745, #20c238);
+  border-color: rgba(48, 209, 88, 0.3);
+  box-shadow: 0 2px 8px rgba(48, 209, 88, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .images-list {
@@ -545,5 +564,13 @@
 
   .retry-btn:hover {
     background: linear-gradient(145deg, #d70015, #a50000);
+  }
+
+  .run-btn {
+    background: linear-gradient(145deg, #32d74b, #30d158);
+  }
+
+  .run-btn:hover {
+    background: linear-gradient(145deg, #30d158, #28a745);
   }
 }

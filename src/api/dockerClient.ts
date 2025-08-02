@@ -136,6 +136,43 @@ export class DockerAPIClient {
     return this.makeRequest<{ Id: string }>(`/commit${query}`, { method: 'POST' })
   }
 
+  /**
+   * Create a new container from an image
+   */
+  async createContainer(imageId: string, containerName?: string): Promise<{ Id: string }> {
+    const createConfig = {
+      Image: imageId,
+      AttachStdin: false,
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true,
+      OpenStdin: false,
+      StdinOnce: false,
+      ...(containerName && { name: containerName })
+    }
+
+    const response = await this.makeRequest<{ Id: string }>('/containers/create', {
+      method: 'POST',
+      body: JSON.stringify(createConfig)
+    })
+
+    return response
+  }
+
+  /**
+   * Create and start a container from an image
+   */
+  async runContainer(imageId: string, containerName?: string): Promise<{ Id: string }> {
+    const container = await this.createContainer(imageId, containerName)
+
+    // Start the container
+    await this.makeRequest<void>(`/containers/${container.Id}/start`, {
+      method: 'POST'
+    })
+
+    return container
+  }
+
   // Container inspection and monitoring
   async getContainerLogs(id: string, options: LogOptions = {}): Promise<string> {
     const params = new URLSearchParams()

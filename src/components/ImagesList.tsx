@@ -10,6 +10,7 @@ export function ImagesList() {
     filterImages,
     removeImage,
     refreshImages,
+    runContainer,
   } = useDocker()
 
   // Filter images based on search term
@@ -20,6 +21,14 @@ export function ImagesList() {
       case "remove":
         if (confirm("Are you sure you want to remove this image?")) {
           await removeImage(imageId)
+        }
+        break
+      case "run":
+        try {
+          await runContainer(imageId)
+        } catch (error) {
+          console.error("Error running container:", error)
+          alert("Failed to create and run container from this image")
         }
         break
       case "refresh":
@@ -133,6 +142,13 @@ export function ImagesList() {
 
               <div className="col-actions">
                 <div className="action-buttons">
+                  <button
+                    onClick={() => handleAction("run", image.Id)}
+                    className="action-btn run-btn"
+                    data-tooltip="Run container"
+                  >
+                    ▶️
+                  </button>
                   <button
                     onClick={() => handleAction("remove", image.Id)}
                     className="action-btn remove-btn"

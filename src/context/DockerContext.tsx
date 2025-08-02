@@ -298,6 +298,75 @@ export function DockerProvider({ children }: DockerProviderProps) {
     }
   }
 
+  const createContainer = async (imageId: string, containerName?: string) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      const createConfig = {
+        Image: imageId,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        ...(containerName && { name: containerName }),
+      }
+
+      await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      // Refresh containers to get updated list
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error creating container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
+  const runContainer = async (imageId: string, containerName?: string) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      const createConfig = {
+        Image: imageId,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        ...(containerName && { name: containerName }),
+      }
+
+      const response = await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      const containerId = response.Id
+
+      // Start the container
+      await makeDockerAPICall(`/containers/${containerId}/start`, {
+        method: "POST",
+      })
+
+      // Refresh containers to get updated list
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error running container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
   // Search/filter utility functions
   const setSearchTerm = (term: string) => {
     dispatch({ type: "SET_SEARCH_TERM", payload: term })
@@ -330,6 +399,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
     exportContainer,
     removeContainer,
     removeImage,
+    createContainer,
+    runContainer,
     setSearchTerm,
     filterContainers,
     filterImages,

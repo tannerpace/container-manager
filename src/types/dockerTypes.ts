@@ -116,6 +116,8 @@ export interface DockerContextType extends DockerState {
   exportContainer: (id: string, tag?: string) => Promise<void>
   removeContainer: (id: string) => Promise<void>
   removeImage: (id: string) => Promise<void>
+  createContainer: (imageId: string, containerName?: string) => Promise<void>
+  runContainer: (imageId: string, containerName?: string) => Promise<void>
   setSearchTerm: (term: string) => void
   filterContainers: (
     containers: DockerContainer[],
