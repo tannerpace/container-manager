@@ -117,12 +117,13 @@
 .images-table {
   flex: 1;
   overflow: auto;
+  min-width: 1100px; /* Ensure minimum width for proper column display */
 }
 
 .table-header,
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr 1.5fr 1fr 100px; /* Fixed width for actions column */
+  grid-template-columns: 2fr 1fr 2fr 1.5fr 1fr 150px; /* Larger fixed width for actions */
   gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #333;

@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .containers-header {
@@ -161,12 +164,14 @@
 .containers-table {
   flex: 1;
   overflow: auto;
+  width: 100%;
+  min-width: 1200px; /* Ensure minimum width so columns don't get too compressed */
 }
 
 .table-header,
 .table-row {
   display: grid;
-  grid-template-columns: 1.8fr 2.2fr 1.5fr 1.5fr 1fr 1fr;
+  grid-template-columns: 1.8fr 2.2fr 1.5fr 1.5fr 1fr 150px; /* Larger fixed width for actions */
   gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #333;
@@ -284,6 +289,8 @@
   flex-wrap: nowrap;
   overflow: hidden;
   min-width: 0;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .action-btn {

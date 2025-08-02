@@ -60,7 +60,7 @@ export const DOCKER_CONFIGS = {
 export const getCurrentDockerConfig = (): DockerConfig => {
   // Check if we're in Electron environment
   const isElectron = typeof window !== 'undefined' &&
-    typeof (window as any).electronAPI !== 'undefined'
+    typeof (window as Window & { electronAPI?: unknown }).electronAPI !== 'undefined'
 
   // Check if we're in Node.js environment (Electron main process)
   const isNodeJS = typeof process !== 'undefined' && process.versions?.node

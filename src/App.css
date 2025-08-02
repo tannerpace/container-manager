@@ -29,6 +29,8 @@
 .main-content {
   flex: 1;
   overflow: auto;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Reset default styles */

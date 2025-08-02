@@ -1,4 +1,4 @@
-import { useDocker } from "../context/DockerContext"
+import { useDocker } from "../hooks/useDocker"
 import "./ImagesList.css"
 
 export function ImagesList() {
@@ -136,7 +136,7 @@ export function ImagesList() {
                   <button
                     onClick={() => handleAction("remove", image.Id)}
                     className="action-btn remove-btn"
-                    title="Remove image"
+                    data-tooltip="Remove image"
                   >
                     🗑️
                   </button>

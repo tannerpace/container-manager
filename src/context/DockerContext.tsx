@@ -1,180 +1,14 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import { getCurrentDockerConfig } from "../config/docker"
-
-// Docker API types
-export interface DockerContainer {
-  Id: string
-  Names: string[]
-  Image: string
-  ImageID: string
-  Command: string
-  Created: number
-  Ports: Array<{
-    IP?: string
-    PrivatePort: number
-    PublicPort?: number
-    Type: string
-  }>
-  Labels: Record<string, string>
-  State: string
-  Status: string
-  HostConfig: {
-    NetworkMode: string
-  }
-  NetworkSettings: {
-    Networks: Record<string, unknown>
-  }
-  Mounts: Array<{
-    Type: string
-    Source: string
-    Destination: string
-    Mode: string
-    RW: boolean
-    Propagation: string
-  }>
-}
-
-export interface DockerImage {
-  Id: string
-  ParentId: string
-  RepoTags: string[] | null
-  RepoDigests: string[] | null
-  Created: number
-  Size: number
-  VirtualSize: number
-  SharedSize: number
-  Labels: Record<string, string> | null
-  Containers: number
-}
-
-export interface DockerVolume {
-  CreatedAt: string
-  Driver: string
-  Labels: Record<string, string> | null
-  Mountpoint: string
-  Name: string
-  Options: Record<string, string> | null
-  Scope: string
-}
-
-export interface DockerNetwork {
-  Name: string
-  Id: string
-  Created: string
-  Scope: string
-  Driver: string
-  EnableIPv6: boolean
-  IPAM: {
-    Driver: string
-    Options: Record<string, unknown> | null
-    Config: Array<{
-      Subnet?: string
-      Gateway?: string
-    }>
-  }
-  Internal: boolean
-  Attachable: boolean
-  Ingress: boolean
-  ConfigFrom: {
-    Network: string
-  }
-  ConfigOnly: boolean
-  Containers: Record<string, unknown>
-  Options: Record<string, unknown>
-  Labels: Record<string, string>
-}
-
-interface DockerState {
-  containers: DockerContainer[]
-  images: DockerImage[]
-  volumes: DockerVolume[]
-  networks: DockerNetwork[]
-  loading: boolean
-  error: string | null
-  connected: boolean
-  searchTerm: string
-}
-
-type DockerAction =
-  | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_CONNECTED"; payload: boolean }
-  | { type: "SET_CONTAINERS"; payload: DockerContainer[] }
-  | { type: "SET_IMAGES"; payload: DockerImage[] }
-  | { type: "SET_VOLUMES"; payload: DockerVolume[] }
-  | { type: "SET_NETWORKS"; payload: DockerNetwork[] }
-  | { type: "SET_SEARCH_TERM"; payload: string }
-
-const initialState: DockerState = {
-  containers: [],
-  images: [],
-  volumes: [],
-  networks: [],
-  loading: false,
-  error: null,
-  connected: false,
-  searchTerm: "",
-}
-
-function dockerReducer(state: DockerState, action: DockerAction): DockerState {
-  switch (action.type) {
-    case "SET_LOADING":
-      return { ...state, loading: action.payload }
-    case "SET_ERROR":
-      return { ...state, error: action.payload, loading: false }
-    case "SET_CONNECTED":
-      return { ...state, connected: action.payload }
-    case "SET_CONTAINERS":
-      return { ...state, containers: action.payload, loading: false }
-    case "SET_IMAGES":
-      return { ...state, images: action.payload, loading: false }
-    case "SET_VOLUMES":
-      return { ...state, volumes: action.payload, loading: false }
-    case "SET_NETWORKS":
-      return { ...state, networks: action.payload, loading: false }
-    case "SET_SEARCH_TERM":
-      return { ...state, searchTerm: action.payload }
-    default:
-      return state
-  }
-}
-
-interface DockerContextType extends DockerState {
-  refreshContainers: () => Promise<void>
-  refreshImages: () => Promise<void>
-  refreshVolumes: () => Promise<void>
-  refreshNetworks: () => Promise<void>
-  startContainer: (id: string) => Promise<void>
-  stopContainer: (id: string) => Promise<void>
-  restartContainer: (id: string) => Promise<void>
-  pauseContainer: (id: string) => Promise<void>
-  unpauseContainer: (id: string) => Promise<void>
-  renameContainer: (id: string, name: string) => Promise<void>
-  exportContainer: (id: string, tag?: string) => Promise<void>
-  removeContainer: (id: string) => Promise<void>
-  removeImage: (id: string) => Promise<void>
-  setSearchTerm: (term: string) => void
-  filterContainers: (
-    containers: DockerContainer[],
-    searchTerm: string
-  ) => DockerContainer[]
-  filterImages: (images: DockerImage[], searchTerm: string) => DockerImage[]
-  filterVolumes: (volumes: DockerVolume[], searchTerm: string) => DockerVolume[]
-  filterNetworks: (
-    networks: DockerNetwork[],
-    searchTerm: string
-  ) => DockerNetwork[]
-}
-
-const DockerContext = createContext<DockerContextType | undefined>(undefined)
-
-export function useDocker() {
-  const context = useContext(DockerContext)
-  if (context === undefined) {
-    throw new Error("useDocker must be used within a DockerProvider")
-  }
-  return context
-}
+import type { DockerContextType } from "../types/dockerTypes"
+import {
+  filterContainers,
+  filterImages,
+  filterNetworks,
+  filterVolumes,
+} from "../utils/dockerFilters"
+import { dockerReducer, initialState } from "../utils/dockerReducer"
+import { DockerContext } from "./DockerContextDefinition"
 
 interface DockerProviderProps {
   children: React.ReactNode
@@ -465,67 +299,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
   }
 
   // Search/filter utility functions
-  const filterContainers = (
-    containers: DockerContainer[],
-    searchTerm: string
-  ): DockerContainer[] => {
-    if (!searchTerm.trim()) return containers
-    const term = searchTerm.toLowerCase()
-    return containers.filter(
-      (container) =>
-        container.Names.some((name) => name.toLowerCase().includes(term)) ||
-        container.Image.toLowerCase().includes(term) ||
-        container.Id.toLowerCase().includes(term) ||
-        container.State.toLowerCase().includes(term) ||
-        container.Status.toLowerCase().includes(term)
-    )
-  }
-
-  const filterImages = (
-    images: DockerImage[],
-    searchTerm: string
-  ): DockerImage[] => {
-    if (!searchTerm.trim()) return images
-    const term = searchTerm.toLowerCase()
-    return images.filter(
-      (image) =>
-        image.Id.toLowerCase().includes(term) ||
-        (image.RepoTags &&
-          image.RepoTags.some((tag) => tag.toLowerCase().includes(term))) ||
-        (image.RepoDigests &&
-          image.RepoDigests.some((digest) =>
-            digest.toLowerCase().includes(term)
-          ))
-    )
-  }
-
-  const filterVolumes = (
-    volumes: DockerVolume[],
-    searchTerm: string
-  ): DockerVolume[] => {
-    if (!searchTerm.trim()) return volumes
-    const term = searchTerm.toLowerCase()
-    return volumes.filter(
-      (volume) =>
-        volume.Name.toLowerCase().includes(term) ||
-        volume.Driver.toLowerCase().includes(term) ||
-        volume.Mountpoint.toLowerCase().includes(term)
-    )
-  }
-
-  const filterNetworks = (
-    networks: DockerNetwork[],
-    searchTerm: string
-  ): DockerNetwork[] => {
-    if (!searchTerm.trim()) return networks
-    const term = searchTerm.toLowerCase()
-    return networks.filter(
-      (network) =>
-        network.Name.toLowerCase().includes(term) ||
-        network.Id.toLowerCase().includes(term) ||
-        network.Driver.toLowerCase().includes(term) ||
-        network.Scope.toLowerCase().includes(term)
-    )
+  const setSearchTerm = (term: string) => {
+    dispatch({ type: "SET_SEARCH_TERM", payload: term })
   }
 
   useEffect(() => {
@@ -539,10 +314,6 @@ export function DockerProvider({ children }: DockerProviderProps) {
 
     initializeData()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const setSearchTerm = (term: string) => {
-    dispatch({ type: "SET_SEARCH_TERM", payload: term })
-  }
 
   const contextValue: DockerContextType = {
     ...state,

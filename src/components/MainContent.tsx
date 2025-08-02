@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useDocker } from "../context/DockerContext"
+import { useDocker } from "../hooks/useDocker"
 import { ContainersList } from "./ContainersList"
 import { DockerSetupGuide } from "./DockerSetupGuide"
 import { ImagesList } from "./ImagesList"

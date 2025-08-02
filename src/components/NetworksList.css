@@ -172,11 +172,12 @@
   flex: 1;
   overflow: auto;
   background-color: #1e1e1e;
+  min-width: 1150px; /* Ensure minimum width for proper column display */
 }
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr 100px; /* Fixed width for actions column */
+  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr 150px; /* Larger fixed width for actions */
   gap: 1rem;
   padding: 1rem 1.5rem;
   background-color: #252526;
@@ -194,7 +195,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr 100px; /* Fixed width for actions column */
+  grid-template-columns: 2fr 2fr 1fr 1fr 1.5fr 150px; /* Larger fixed width for actions */
   gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #333;

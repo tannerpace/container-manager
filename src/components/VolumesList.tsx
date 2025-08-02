@@ -1,4 +1,4 @@
-import { useDocker } from "../context/DockerContext"
+import { useDocker } from "../hooks/useDocker"
 import "./VolumesList.css"
 
 export function VolumesList() {

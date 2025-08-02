@@ -6,7 +6,7 @@
  */
 
 
-const { contextBridge, ipcRenderer } = require('electron')
+import { contextBridge, ipcRenderer } from 'electron'
 
 /**
  * Docker API exposed to renderer process
