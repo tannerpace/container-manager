@@ -32,8 +32,10 @@ function createWindow(): void {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
-    // Use loadURL with file:// protocol for production build
-    mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`)
+    // Use loadFile for production build - simpler and more reliable
+    mainWindow.loadFile(path.join(__dirname, '../../index.html'))
+    // Open dev tools in production to debug blank screen
+    mainWindow.webContents.openDevTools()
   }
 
   mainWindow.on('closed', () => {
