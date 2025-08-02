@@ -22,9 +22,14 @@ let dockerBridge: DockerSocketBridge | null = null
  * Create the main applicatsion window
  */
 function createWindow(): void {
+  const iconPath = process.env.NODE_ENV === 'development'
+    ? path.join(__dirname, '../../public/freewhaley-256.png')
+    : path.join(__dirname, '../../public/freewhaley-256.png')
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    icon: iconPath,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

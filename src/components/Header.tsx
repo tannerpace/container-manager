@@ -1,5 +1,5 @@
 import { useState } from "react"
-import whaleSvg from "../assets/whale-icon.svg"
+import whaleSvg from "../assets/whaley.svg"
 import { useDocker } from "../hooks/useDocker"
 import "./Header.css"
 import { SystemInfoModal } from "./SystemInfoModal"

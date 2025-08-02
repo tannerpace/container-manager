@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useDocker } from "../hooks/useDocker"
 import type { DockerContainer } from "../types/dockerTypes"
 import { ActionModal } from "./ActionModal"
@@ -51,7 +51,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
   const [actionModalVisible, setActionModalVisible] = useState(false)
   const [actionModalContainer, setActionModalContainer] =
     useState<DockerContainer | null>(null)
-  const [actionModalPosition, setActionModalPosition] = useState({ x: 0, y: 0 })
+  const actionButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
@@ -127,14 +127,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     event: React.MouseEvent,
     container: DockerContainer
   ) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    const scrollY = window.scrollY || document.documentElement.scrollTop
-    const scrollX = window.scrollX || document.documentElement.scrollLeft
-
-    setActionModalPosition({
-      x: rect.left + scrollX - 180, // Position to the left of the button
-      y: rect.bottom + scrollY + 5, // Position below the button
-    })
+    actionButtonRef.current = event.currentTarget as HTMLButtonElement
     setActionModalContainer(container)
     setActionModalVisible(true)
   }
@@ -434,7 +427,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       <ActionModal
         container={actionModalContainer}
         isOpen={actionModalVisible}
-        position={actionModalPosition}
+        anchorEl={actionButtonRef.current}
         onAction={handleAction}
         onClose={handleCloseActionModal}
       />

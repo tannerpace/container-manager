@@ -6,7 +6,7 @@ import "./ActionModal.css"
 interface ActionModalProps {
   container: DockerContainer | null
   isOpen: boolean
-  position: { x: number; y: number }
+  anchorEl: HTMLElement | null
   onAction: (action: string, containerId: string) => void
   onClose: () => void
 }
@@ -14,7 +14,7 @@ interface ActionModalProps {
 export const ActionModal: React.FC<ActionModalProps> = ({
   container,
   isOpen,
-  position,
+  anchorEl,
   onAction,
   onClose,
 }) => {
@@ -51,6 +51,26 @@ export const ActionModal: React.FC<ActionModalProps> = ({
     return null
   }
 
+  // Calculate position based on anchor element
+  const getModalPosition = () => {
+    if (!anchorEl) return { left: 0, top: 0 }
+
+    const rect = anchorEl.getBoundingClientRect()
+    const scrollX = window.scrollX || document.documentElement.scrollLeft
+    const scrollY = window.scrollY || document.documentElement.scrollTop
+
+    return {
+      left: Math.max(
+        10,
+        Math.min(rect.left + scrollX - 180, window.innerWidth - 220)
+      ),
+      top: Math.max(
+        10,
+        Math.min(rect.bottom + scrollY + 5, window.innerHeight - 400)
+      ),
+    }
+  }
+
   const containerId = container.Id
   const containerName = container.Names[0]?.replace(/^\//, "") || "Unknown"
   const status = container.State
@@ -76,8 +96,7 @@ export const ActionModal: React.FC<ActionModalProps> = ({
         ref={modalRef}
         style={{
           position: "fixed",
-          left: Math.max(10, Math.min(position.x, window.innerWidth - 220)),
-          top: Math.max(10, Math.min(position.y, window.innerHeight - 400)),
+          ...getModalPosition(),
           zIndex: 10000,
         }}
       >
