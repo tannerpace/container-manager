@@ -10,11 +10,11 @@ import * as path from 'path'
 import { DockerSocketBridge } from './dockerBridge'
 import { setupDockerIPC } from './dockerClient'
 
-let mainWindow: InstanceType<typeof BrowserWindow> | null = null
+let mainWindow: Electron.BrowserWindow | null = null
 let dockerBridge: DockerSocketBridge | null = null
 
 /**
- * Create the main application window
+ * Create the main applicatsion window
  */
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -32,7 +32,8 @@ function createWindow(): void {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../index.html'))
+    // Use loadURL with file:// protocol for production build
+    mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`)
   }
 
   mainWindow.on('closed', () => {
