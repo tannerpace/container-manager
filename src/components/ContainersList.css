@@ -276,6 +276,7 @@
   min-height: 52px;
   gap: 20px;
   flex-wrap: nowrap;
+  cursor: pointer; /* Make it clear rows are clickable */
 }
 
 /* Column flex basis for ContainersList */

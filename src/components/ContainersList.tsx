@@ -194,7 +194,21 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
           </div>
 
           {filteredContainers.map((container) => (
-            <div key={container.Id} className="table-row">
+            <div
+              key={container.Id}
+              className="table-row"
+              onClick={(e) => {
+                // Don't trigger row click if clicking on action buttons
+                if (
+                  e.target instanceof Element &&
+                  !e.target.closest(".action-buttons")
+                ) {
+                  onContainerSelect(container.Id)
+                }
+              }}
+              style={{ cursor: "pointer" }}
+              title="Click to view container details"
+            >
               <div className="col-name">
                 <div className="container-name">
                   {container.Names[0]?.replace("/", "") || "unnamed"}
@@ -247,7 +261,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     className="action-btn details-btn"
                     data-tooltip="View details"
                   >
-                    📋
+                    �️
                   </button>
 
                   {container.State?.toLowerCase() === "running" ? (
@@ -329,7 +343,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     className="action-btn copy-btn"
                     data-tooltip="Copy container"
                   >
-                    📋
+                    �
                   </button>
 
                   <button
@@ -463,49 +477,6 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             setTerminalContainerName("")
           }}
         />
-      )}
-
-      {/* Remove Confirmation Modal */}
-      {removeModalVisible && containerToRemove && (
-        <div className="modal-overlay">
-          <div className="modal remove-confirmation-modal">
-            <div className="modal-header">
-              <h3>Remove Container</h3>
-              <button
-                className="close-btn"
-                onClick={() => {
-                  setRemoveModalVisible(false)
-                  setContainerToRemove(null)
-                }}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="modal-content">
-              <p>
-                Are you sure you want to remove the container{" "}
-                <strong>
-                  {containers.find((c) => c.Id === containerToRemove)?.Names[0]}
-                </strong>
-                ? This action cannot be undone.
-              </p>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="btn btn-secondary"
-                onClick={() => {
-                  setRemoveModalVisible(false)
-                  setContainerToRemove(null)
-                }}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-danger" onClick={handleRemove}>
-                Remove Container
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   )
