@@ -140,7 +140,7 @@
 .volumes-loading p {
   font-size: 16px;
   font-weight: 500;
-  color: #6e6e73;
+  color: #424245;
 }
 
 .loading-spinner {
@@ -171,7 +171,7 @@
 }
 
 .volumes-error p {
-  color: #6e6e73;
+  color: #424245;
   font-size: 16px;
   margin-bottom: 24px;
 }
@@ -205,7 +205,7 @@
   align-items: center;
   justify-content: center;
   height: 60%;
-  color: #6e6e73;
+  color: #424245;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
@@ -251,7 +251,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   font-weight: 600;
-  color: #6e6e73;
+  color: #424245;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -351,7 +351,7 @@
 }
 
 .mountpoint {
-  color: #6e6e73;
+  color: #424245;
   font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
   font-size: 13px;
   font-weight: 500;
@@ -508,19 +508,19 @@
 
   .col-name::before {
     content: "Name: ";
-    color: #6e6e73;
+    color: #424245;
   }
   .col-driver::before {
     content: "Driver: ";
-    color: #6e6e73;
+    color: #424245;
   }
   .col-mountpoint::before {
     content: "Mount Point: ";
-    color: #6e6e73;
+    color: #424245;
   }
   .col-created::before {
     content: "Created: ";
-    color: #6e6e73;
+    color: #424245;
   }
 
   .col-actions {

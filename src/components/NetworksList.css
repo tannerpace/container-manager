@@ -152,7 +152,7 @@
 .networks-loading p {
   font-size: 16px;
   font-weight: 500;
-  color: #6e6e73;
+  color: #424245;
 }
 
 .loading-spinner {
@@ -183,7 +183,7 @@
 }
 
 .networks-error p {
-  color: #6e6e73;
+  color: #424245;
   font-size: 16px;
   margin-bottom: 24px;
 }
@@ -222,7 +222,7 @@
   justify-content: center;
   height: 300px;
   gap: 1rem;
-  color: #888;
+  color: #3d3d3d;
 }
 
 .empty-icon {
@@ -232,7 +232,7 @@
 
 .empty-state h3 {
   margin: 0;
-  color: #ccc;
+  color: #6d6d70;
 }
 
 .empty-state p {
@@ -260,7 +260,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   font-weight: 600;
-  color: #6e6e73;
+  color: #424245;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -345,7 +345,7 @@
 }
 
 .network-name {
-  color: white;
+  color: #1d1d1f;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -355,14 +355,14 @@
 .col-id {
   font-family: "Monaco", "Menlo", monospace;
   font-size: 0.85rem;
-  color: #888;
+  color: #424245;
 }
 
 .network-id {
-  background-color: #333;
+  background-color: rgba(120, 120, 128, 0.16);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  color: #888;
+  color: #3a3a3c;
   font-family: monospace;
   font-size: 0.8rem;
   overflow: hidden;
@@ -371,7 +371,7 @@
 }
 
 .col-driver {
-  color: #17a2b8;
+  color: #007aff;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -379,7 +379,7 @@
 }
 
 .col-scope {
-  color: #28a745;
+  color: #34c759;
   font-weight: 500;
   text-transform: capitalize;
   overflow: hidden;
@@ -388,7 +388,7 @@
 }
 
 .col-created {
-  color: #ccc;
+  color: #424245;
   font-size: 0.9rem;
 }
 
