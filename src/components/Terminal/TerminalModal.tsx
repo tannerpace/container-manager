@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useTerminal } from "../../hooks/useTerminal"
 import { Terminal } from "./Terminal"
 import "./TerminalModal.css"
 
@@ -15,17 +16,42 @@ export function TerminalModal({
   isOpen,
   onClose,
 }: TerminalModalProps) {
+  const { setTerminalModalOpen } = useTerminal()
+
+  useEffect(() => {
+    console.log("TerminalModal - setting isOpen to:", isOpen)
+    setTerminalModalOpen(isOpen)
+
+    // Add/remove fullscreen class to body for proper styling
+    if (isOpen) {
+      document.body.classList.add("terminal-modal-fullscreen")
+    } else {
+      document.body.classList.remove("terminal-modal-fullscreen")
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      setTerminalModalOpen(false)
+      document.body.classList.remove("terminal-modal-fullscreen")
+    }
+  }, [isOpen, setTerminalModalOpen])
+
   if (!isOpen) return null
+
+  const handleClose = () => {
+    setTerminalModalOpen(false)
+    onClose()
+  }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose()
+      handleClose()
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
-      onClose()
+      handleClose()
     }
   }
 
@@ -40,7 +66,8 @@ export function TerminalModal({
         <Terminal
           containerId={containerId}
           containerName={containerName}
-          onClose={onClose}
+          onClose={handleClose}
+          showHeader={false}
         />
       </div>
     </div>

@@ -215,6 +215,14 @@ export class DockerAPIClient {
     return this.makeRequest<ContainerStats>(`/containers/${id}/stats${query}`)
   }
 
+  // Get single stats reading (non-streaming)
+  async getStats(id: string): Promise<ContainerStats> {
+    console.log(`Getting single stats for container ${id}`)
+    const stats = await this.makeRequest<ContainerStats>(`/containers/${id}/stats?stream=false`)
+    console.log('Single stats received:', stats)
+    return stats
+  }
+
   // Container execution
   async createExec(id: string, options: {
     AttachStdin?: boolean
@@ -339,6 +347,7 @@ export class DockerAPIClient {
 
     const startStream = async () => {
       try {
+        console.log(`Starting stats stream for container ${id}`)
         const response = await fetch(`${this.baseURL}/containers/${id}/stats?stream=true`, {
           signal: controller?.signal
         })
@@ -347,6 +356,7 @@ export class DockerAPIClient {
           throw new Error(`Docker API error: ${response.status} ${response.statusText}`)
         }
 
+        console.log('Stats stream response received, starting to read...')
         const reader = response.body?.getReader()
         if (!reader) {
           throw new Error('Failed to get response reader')
@@ -370,9 +380,10 @@ export class DockerAPIClient {
             if (line.trim()) {
               try {
                 const stats = JSON.parse(line) as ContainerStats
+                console.log('Parsed stats from stream:', stats)
                 onData(stats)
               } catch (parseError) {
-                console.warn('Failed to parse stats JSON:', parseError)
+                console.warn('Failed to parse stats JSON:', parseError, 'Line:', line)
               }
             }
           }
@@ -422,23 +433,50 @@ export class DockerAPIClient {
 
   // Calculate CPU percentage from stats
   calculateCPUPercent(stats: ContainerStats): number {
-    const cpuDelta = stats.cpu_stats.cpu_usage.total_usage - stats.precpu_stats.cpu_usage.total_usage
-    const systemDelta = stats.cpu_stats.system_cpu_usage - stats.precpu_stats.system_cpu_usage
-    const onlineCPUs = stats.cpu_stats.online_cpus
+    try {
+      const cpuDelta = stats.cpu_stats.cpu_usage.total_usage - stats.precpu_stats.cpu_usage.total_usage
+      const systemDelta = stats.cpu_stats.system_cpu_usage - stats.precpu_stats.system_cpu_usage
+      const onlineCPUs = stats.cpu_stats.online_cpus || 1
 
-    if (systemDelta > 0 && cpuDelta > 0) {
-      return (cpuDelta / systemDelta) * onlineCPUs * 100
+      console.log('CPU Calculation Debug:', {
+        cpuDelta,
+        systemDelta,
+        onlineCPUs,
+        currentTotal: stats.cpu_stats.cpu_usage.total_usage,
+        prevTotal: stats.precpu_stats.cpu_usage.total_usage,
+        currentSystem: stats.cpu_stats.system_cpu_usage,
+        prevSystem: stats.precpu_stats.system_cpu_usage
+      })
+
+      if (systemDelta > 0 && cpuDelta >= 0) {
+        const cpuPercent = (cpuDelta / systemDelta) * onlineCPUs * 100
+        return Math.min(Math.max(cpuPercent, 0), 100) // Clamp between 0-100
+      }
+
+      return 0
+    } catch (error) {
+      console.error('Error calculating CPU percent:', error)
+      return 0
     }
-
-    return 0
   }
 
   // Calculate memory usage percentage
   calculateMemoryPercent(stats: ContainerStats): number {
-    if (stats.memory_stats.limit > 0) {
-      return (stats.memory_stats.usage / stats.memory_stats.limit) * 100
+    try {
+      if (stats.memory_stats.limit > 0 && stats.memory_stats.usage >= 0) {
+        const memoryPercent = (stats.memory_stats.usage / stats.memory_stats.limit) * 100
+        console.log('Memory Calculation Debug:', {
+          usage: stats.memory_stats.usage,
+          limit: stats.memory_stats.limit,
+          percent: memoryPercent
+        })
+        return Math.min(Math.max(memoryPercent, 0), 100) // Clamp between 0-100
+      }
+      return 0
+    } catch (error) {
+      console.error('Error calculating memory percent:', error)
+      return 0
     }
-    return 0
   }
 
   // Format bytes to human readable

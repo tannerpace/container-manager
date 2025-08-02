@@ -254,6 +254,22 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* Terminal container adjustments for modal */
+.terminal-modal-fullscreen .terminal-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-modal-fullscreen .terminal-content {
+  flex: 1;
+  height: 100%;
+}
+
+.terminal-modal-fullscreen .xterm-container {
+  height: 100% !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .terminal-header {

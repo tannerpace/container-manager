@@ -43,25 +43,28 @@ export const EnvironmentTab: React.FC<EnvironmentTabProps> = ({
         envVar.value.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string, label?: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      // You could add a toast notification here
+      // Log what was actually copied, not what the button represents
       console.log("Copied to clipboard:", text)
+      if (label) {
+        console.log(`Copied ${label}:`, text)
+      }
     } catch (err) {
       console.error("Failed to copy to clipboard:", err)
     }
   }
 
   const copyEnvVar = (key: string, value: string) => {
-    copyToClipboard(`${key}=${value}`)
+    copyToClipboard(`${key}=${value}`, `environment variable ${key}`)
   }
 
   const copyAllEnvVars = () => {
     const envString = filteredEnvVars
       .map((env) => `${env.key}=${env.value}`)
       .join("\n")
-    copyToClipboard(envString)
+    copyToClipboard(envString, "all environment variables")
   }
 
   const exportAsFile = () => {
@@ -189,21 +192,28 @@ export const EnvironmentTab: React.FC<EnvironmentTabProps> = ({
                     <button
                       onClick={() => copyEnvVar(envVar.key, envVar.value)}
                       className="row-action-btn copy-btn"
-                      title="Copy variable"
+                      title={`Copy full variable: ${envVar.key}=${envVar.value}`}
                     >
                       📋
                     </button>
                     <button
-                      onClick={() => copyToClipboard(envVar.key)}
+                      onClick={() =>
+                        copyToClipboard(envVar.key, `key "${envVar.key}"`)
+                      }
                       className="row-action-btn copy-key-btn"
-                      title="Copy key only"
+                      title={`Copy key only: ${envVar.key}`}
                     >
                       🔑
                     </button>
                     <button
-                      onClick={() => copyToClipboard(envVar.value)}
+                      onClick={() =>
+                        copyToClipboard(
+                          envVar.value,
+                          `value for "${envVar.key}"`
+                        )
+                      }
                       className="row-action-btn copy-value-btn"
-                      title="Copy value only"
+                      title={`Copy value only: ${envVar.value}`}
                     >
                       📄
                     </button>

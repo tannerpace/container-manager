@@ -50,9 +50,19 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
 
         // Start streaming stats if container is running
         if (details.State.Running) {
+          // First try to get a single stats reading
+          try {
+            const singleStats = await dockerAPI.getStats(containerId)
+            console.log("Single stats test successful:", singleStats)
+            setContainerStats(singleStats)
+          } catch (statsError) {
+            console.error("Single stats test failed:", statsError)
+          }
+
           const cleanup = await dockerAPI.streamStats(
             containerId,
             (stats) => {
+              console.log("Received new stats:", stats)
               setContainerStats(stats)
             },
             (error) => {
@@ -129,7 +139,10 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
       if (updatedDetails.State.Running && !statsCleanup) {
         const cleanup = await dockerAPI.streamStats(
           containerId,
-          (stats) => setContainerStats(stats),
+          (stats) => {
+            console.log("Received new stats after action:", stats)
+            setContainerStats(stats)
+          },
           (error) => console.error("Stats stream error:", error)
         )
         setStatsCleanup(() => cleanup)

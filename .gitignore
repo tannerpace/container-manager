@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+COMPLIANCE.md
+WTFPL_RESOLUTION.md

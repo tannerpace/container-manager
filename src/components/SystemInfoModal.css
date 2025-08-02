@@ -9,16 +9,16 @@
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.25rem);
 }
 
 .system-info-modal {
   background-color: #1e1e1e;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   border: 1px solid #333;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.3);
   width: 90%;
-  max-width: 800px;
+  max-width: 50rem;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
@@ -53,15 +53,15 @@
   border: 1px solid #444;
   color: #ccc;
   padding: 0.5rem;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
 }
 
 .copy-btn:hover {
@@ -87,15 +87,15 @@
   background-color: #2d2d2d;
   color: white;
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   font-size: 0.75rem;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s, visibility 0.2s;
   z-index: 1000;
-  margin-top: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-top: 0.3125rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
   border: 1px solid #444;
 }
 
@@ -106,7 +106,7 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border: 5px solid transparent;
+  border: 0.3125rem solid transparent;
   border-bottom-color: #2d2d2d;
   opacity: 0;
   visibility: hidden;
@@ -139,10 +139,10 @@
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #333;
-  border-top: 3px solid #0078d4;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.1875rem solid #333;
+  border-top: 0.1875rem solid #0078d4;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -164,7 +164,7 @@
 
 .info-section {
   background-color: #252526;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: 1.5rem;
   border: 1px solid #333;
 }
@@ -191,15 +191,15 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 0.5rem;
-  background-color: #1e1e1e;
-  border-radius: 6px;
+  background-color: #938686;
+  border-radius: 0.375rem;
   border: 1px solid #333;
 }
 
 .info-item .label {
   font-weight: 600;
   color: #17a2b8;
-  min-width: 120px;
+  min-width: 7.5rem;
   flex-shrink: 0;
 }
 
@@ -213,7 +213,7 @@
 .info-item .value.user-agent {
   font-family: "Monaco", "Menlo", monospace;
   font-size: 0.85rem;
-  max-width: 400px;
+  max-width: 25rem;
   word-break: break-all;
 }
 

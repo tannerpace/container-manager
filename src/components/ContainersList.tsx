@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
-import "./ContainersList.css"
+import { ActionButtonsList } from "./ActionButtonsList"
 import { TerminalModal } from "./Terminal/TerminalModal"
+import "./ContainersList.css"
 
 interface ContainersListProps {
   onContainerSelect: (containerId: string) => void
@@ -207,7 +208,6 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                 }
               }}
               style={{ cursor: "pointer" }}
-              title="Click to view container details"
             >
               <div className="col-name">
                 <div className="container-name">
@@ -255,105 +255,11 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
               </div>
 
               <div className="col-actions">
-                <div className="action-buttons">
-                  <button
-                    onClick={() => onContainerSelect(container.Id)}
-                    className="action-btn details-btn"
-                    data-tooltip="View details"
-                  >
-                    🔁
-                  </button>
-
-                  {container.State?.toLowerCase() === "running" ? (
-                    <>
-                      <button
-                        onClick={() => handleAction("terminal", container.Id)}
-                        className="action-btn terminal-btn"
-                        data-tooltip="Open terminal"
-                      >
-                        💻
-                      </button>
-                      <button
-                        onClick={() => handleAction("stop", container.Id)}
-                        className="action-btn stop-btn"
-                        data-tooltip="Stop container"
-                      >
-                        ⏹️
-                      </button>
-                      <button
-                        onClick={() => handleAction("restart", container.Id)}
-                        className="action-btn restart-btn"
-                        data-tooltip="Restart container"
-                      >
-                        🔄
-                      </button>
-                      <button
-                        onClick={() => handleAction("pause", container.Id)}
-                        className="action-btn pause-btn"
-                        data-tooltip="Pause container"
-                      >
-                        ⏸️
-                      </button>
-                    </>
-                  ) : container.State?.toLowerCase() === "paused" ? (
-                    <>
-                      <button
-                        onClick={() => handleAction("unpause", container.Id)}
-                        className="action-btn unpause-btn"
-                        data-tooltip="Unpause container"
-                      >
-                        ▶️
-                      </button>
-                      <button
-                        onClick={() => handleAction("stop", container.Id)}
-                        className="action-btn stop-btn"
-                        data-tooltip="Stop container"
-                      >
-                        ⏹️
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => handleAction("start", container.Id)}
-                      className="action-btn start-btn"
-                      data-tooltip="Start container"
-                    >
-                      ▶️
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => handleAction("rename", container.Id)}
-                    className="action-btn rename-btn"
-                    data-tooltip="Rename container"
-                  >
-                    ✏️
-                  </button>
-
-                  <button
-                    onClick={() => handleAction("export", container.Id)}
-                    className="action-btn export-btn"
-                    data-tooltip="Export as image"
-                  >
-                    📦
-                  </button>
-
-                  <button
-                    onClick={() => handleAction("copy", container.Id)}
-                    className="action-btn copy-btn"
-                    data-tooltip="Copy container"
-                  >
-                    �
-                  </button>
-
-                  <button
-                    onClick={() => handleAction("remove", container.Id)}
-                    className="action-btn remove-btn"
-                    data-tooltip="Remove container"
-                  >
-                    🗑️
-                  </button>
-                </div>
+                <ActionButtonsList
+                  container={container}
+                  onAction={handleAction}
+                  onContainerSelect={onContainerSelect}
+                />
               </div>
             </div>
           ))}

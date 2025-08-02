@@ -142,7 +142,7 @@
 .containers-loading p {
   font-size: 16px;
   font-weight: 500;
-  color: #6e6e73;
+  color: #48484a;
 }
 
 .loading-spinner {
@@ -173,7 +173,7 @@
 }
 
 .containers-error p {
-  color: #6e6e73;
+  color: #48484a;
   font-size: 16px;
   margin-bottom: 24px;
 }
@@ -206,7 +206,7 @@
   align-items: center;
   justify-content: center;
   height: 60%;
-  color: #6e6e73;
+  color: #48484a;
   text-align: center;
   font-family: var(--font-family-system);
 }
@@ -251,7 +251,7 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  color: #6e6e73;
+  color: #48484a;
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
@@ -387,7 +387,7 @@
 
 .container-id {
   font-size: 12px;
-  color: #8e8e93;
+  color: #48484a;
   font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
   font-weight: 500;
   overflow: hidden;
@@ -429,7 +429,7 @@
 
 .status-detail {
   font-size: 12px;
-  color: #8e8e93;
+  color: #48484a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -455,12 +455,12 @@
 }
 
 .port-type {
-  color: #8e8e93;
+  color: #48484a;
   font-weight: 400;
 }
 
 .no-ports {
-  color: #8e8e93;
+  color: #48484a;
   font-size: 14px;
 }
 
@@ -809,7 +809,7 @@
 }
 
 .modal-content input::placeholder {
-  color: #8e8e93;
+  color: #48484a;
 }
 
 .modal-footer {
@@ -864,7 +864,7 @@
 
 .btn-primary:disabled {
   background: rgba(120, 120, 128, 0.16);
-  color: #8e8e93;
+  color: #48484a;
   cursor: not-allowed;
   box-shadow: none;
   border-color: rgba(0, 0, 0, 0.08);
@@ -953,7 +953,7 @@
   .table-header {
     background: rgba(28, 28, 30, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .table-row {
@@ -966,7 +966,7 @@
   }
 
   .containers-table {
-    background: rgba(28, 28, 30, 0.7);
+    background: rgba(142, 142, 188, 0.7);
   }
 
   .container-name {
@@ -978,7 +978,7 @@
   }
 
   .container-ports {
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .status-running {
@@ -986,7 +986,7 @@
   }
 
   .status-exited {
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .status-created {
@@ -1040,7 +1040,7 @@
   }
 
   .containers-loading p {
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .containers-error h3 {
@@ -1048,11 +1048,11 @@
   }
 
   .containers-error p {
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .empty-state {
-    color: #8e8e93;
+    color: #a1a1a6;
   }
 
   .empty-state h3 {
@@ -1087,7 +1087,7 @@
     .col-status::before,
     .col-ports::before,
     .col-created::before {
-      color: #8e8e93;
+      color: #a1a1a6;
     }
 
     .col-actions {

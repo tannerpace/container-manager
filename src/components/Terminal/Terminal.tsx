@@ -9,92 +9,172 @@ interface TerminalProps {
   containerId: string
   containerName?: string
   onClose: () => void
+  showHeader?: boolean
 }
 
 export function Terminal({
   containerId,
   containerName,
   onClose,
+  showHeader = true,
 }: TerminalProps) {
   const terminalRef = useRef<HTMLDivElement>(null)
   const xtermRef = useRef<XTerm | null>(null)
   const fitAddonRef = useRef<FitAddon | null>(null)
-  const wsRef = useRef<WebSocket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const connectWebSocket = useCallback(
-    (execId: string) => {
-      if (!xtermRef.current) return
-
-      // Create WebSocket connection to Docker daemon
-      // Note: This is a simplified approach. In production, you'd want a WebSocket proxy server
-      const wsUrl = `ws://localhost:2375/exec/${execId}/start`
+  const executeCommand = useCallback(
+    async (command: string) => {
+      const terminal = xtermRef.current
+      if (!terminal) return
 
       try {
-        const ws = new WebSocket(wsUrl)
-        wsRef.current = ws
+        // Create a new exec instance for the command
+        const execResponse = await fetch(
+          `http://localhost:2375/containers/${containerId}/exec`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              AttachStdout: true,
+              AttachStderr: true,
+              Tty: false,
+              Cmd: ["/bin/sh", "-c", command],
+            }),
+          }
+        )
 
-        ws.onopen = () => {
-          setIsConnected(true)
-          setIsConnecting(false)
-          setError(null)
+        if (!execResponse.ok) {
+          throw new Error(
+            `Failed to create exec instance: ${execResponse.statusText}`
+          )
+        }
 
-          // Start the exec instance
-          ws.send(
-            JSON.stringify({
+        const { Id: newExecId } = await execResponse.json()
+
+        // Start the exec instance and get output
+        const startResponse = await fetch(
+          `http://localhost:2375/exec/${newExecId}/start`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Detach: false,
+              Tty: false,
+            }),
+          }
+        )
+
+        if (startResponse.ok) {
+          const output = await startResponse.text()
+          if (output) {
+            terminal.writeln(output)
+          }
+        }
+      } catch (err) {
+        console.error("Command execution error:", err)
+        terminal.writeln(
+          `\x1b[31mError: ${
+            err instanceof Error ? err.message : "Command failed"
+          }\x1b[0m`
+        )
+      }
+
+      terminal.write("$ ")
+    },
+    [containerId]
+  )
+
+  const startExecInstance = useCallback(
+    async (execId: string) => {
+      if (!xtermRef.current) return
+
+      setIsConnecting(true)
+      setError(null)
+
+      try {
+        // Start the exec instance via HTTP POST
+        const startResponse = await fetch(
+          `http://localhost:2375/exec/${execId}/start`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
               Detach: false,
               Tty: true,
-            })
-          )
-
-          // Welcome message
-          xtermRef.current?.writeln(
-            "\x1b[32m✓ Connected to container terminal\x1b[0m"
-          )
-          xtermRef.current?.writeln(
-            "\x1b[90mContainer: " +
-              (containerName || containerId.substring(0, 12)) +
-              "\x1b[0m"
-          )
-          xtermRef.current?.writeln("")
-        }
-
-        ws.onmessage = (event) => {
-          if (xtermRef.current && event.data) {
-            xtermRef.current.write(event.data)
+            }),
           }
+        )
+
+        if (!startResponse.ok) {
+          throw new Error(
+            `Failed to start exec instance: ${startResponse.statusText}`
+          )
         }
 
-        ws.onclose = () => {
-          setIsConnected(false)
-          if (xtermRef.current) {
-            xtermRef.current.writeln("\x1b[31m\r\n✗ Connection closed\x1b[0m")
-          }
-        }
+        // Since Docker API doesn't support WebSocket directly, we'll simulate terminal functionality
+        setIsConnected(true)
+        setIsConnecting(false)
 
-        ws.onerror = (error) => {
-          console.error("WebSocket error:", error)
-          setError("WebSocket connection failed")
-          setIsConnecting(false)
-          setIsConnected(false)
-        }
+        // Welcome message
+        xtermRef.current?.writeln(
+          "\x1b[32m✓ Connected to container terminal\x1b[0m"
+        )
+        xtermRef.current?.writeln(
+          "\x1b[90mContainer: " +
+            (containerName || containerId.substring(0, 12)) +
+            "\x1b[0m"
+        )
+        xtermRef.current?.writeln("")
+        xtermRef.current?.write("$ ")
 
         // Handle terminal input
+        let currentLine = ""
+
         xtermRef.current.onData((data) => {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(data)
+          const terminal = xtermRef.current
+          if (!terminal) return
+
+          if (data === "\r" || data === "\n") {
+            // Enter key pressed - execute command
+            terminal.writeln("")
+            if (currentLine.trim()) {
+              executeCommand(currentLine.trim())
+            } else {
+              terminal.write("$ ")
+            }
+            currentLine = ""
+          } else if (data === "\x7f" || data === "\b") {
+            // Backspace
+            if (currentLine.length > 0) {
+              currentLine = currentLine.slice(0, -1)
+              terminal.write("\b \b")
+            }
+          } else if (data >= " " || data === "\t") {
+            // Printable characters and tab
+            currentLine += data
+            terminal.write(data)
           }
         })
       } catch (err) {
-        console.error("Failed to create WebSocket:", err)
-        setError("Failed to create WebSocket connection")
+        console.error("Failed to start exec instance:", err)
+        setError(
+          err instanceof Error ? err.message : "Failed to start exec instance"
+        )
         setIsConnecting(false)
       }
     },
-    [containerName, containerId]
+    [containerName, containerId, executeCommand]
   )
+
   const connectToContainer = useCallback(async () => {
     if (!xtermRef.current) return
 
@@ -128,8 +208,8 @@ export function Terminal({
 
       const { Id: execId } = await response.json()
 
-      // Start the exec instance and connect via WebSocket
-      connectWebSocket(execId)
+      // Start the exec instance
+      startExecInstance(execId)
     } catch (err) {
       console.error("Failed to connect to container:", err)
       setError(
@@ -137,7 +217,7 @@ export function Terminal({
       )
       setIsConnecting(false)
     }
-  }, [containerId, connectWebSocket])
+  }, [containerId, startExecInstance])
   useEffect(() => {
     if (!terminalRef.current) return
 
@@ -205,17 +285,11 @@ export function Terminal({
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize)
-      if (wsRef.current) {
-        wsRef.current.close()
-      }
       xterm.dispose()
     }
   }, [containerId, connectToContainer])
 
   const handleReconnect = () => {
-    if (wsRef.current) {
-      wsRef.current.close()
-    }
     connectToContainer()
   }
 
@@ -227,42 +301,44 @@ export function Terminal({
 
   return (
     <div className="terminal-container">
-      <div className="terminal-header">
-        <div className="terminal-title">
-          <div className="terminal-icon">💻</div>
-          <span>
-            Terminal - {containerName || containerId.substring(0, 12)}
-          </span>
-          {isConnecting && (
-            <div className="connecting-indicator">Connecting...</div>
-          )}
-          {isConnected && <div className="connected-indicator">●</div>}
+      {showHeader && (
+        <div className="terminal-header">
+          <div className="terminal-title">
+            <div className="terminal-icon">💻</div>
+            <span>
+              Terminal - {containerName || containerId.substring(0, 12)}
+            </span>
+            {isConnecting && (
+              <div className="connecting-indicator">Connecting...</div>
+            )}
+            {isConnected && <div className="connected-indicator">●</div>}
+          </div>
+          <div className="terminal-actions">
+            <button
+              onClick={handleFitToWindow}
+              className="terminal-action-btn"
+              data-tooltip="Fit to window"
+            >
+              ⤢
+            </button>
+            <button
+              onClick={handleReconnect}
+              className="terminal-action-btn"
+              data-tooltip="Reconnect"
+              disabled={isConnecting}
+            >
+              🔄
+            </button>
+            <button
+              onClick={onClose}
+              className="terminal-action-btn close-btn"
+              data-tooltip="Close terminal"
+            >
+              ✕
+            </button>
+          </div>
         </div>
-        <div className="terminal-actions">
-          <button
-            onClick={handleFitToWindow}
-            className="terminal-action-btn"
-            data-tooltip="Fit to window"
-          >
-            ⤢
-          </button>
-          <button
-            onClick={handleReconnect}
-            className="terminal-action-btn"
-            data-tooltip="Reconnect"
-            disabled={isConnecting}
-          >
-            🔄
-          </button>
-          <button
-            onClick={onClose}
-            className="terminal-action-btn close-btn"
-            data-tooltip="Close terminal"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
+      )}
 
       {error && (
         <div className="terminal-error">

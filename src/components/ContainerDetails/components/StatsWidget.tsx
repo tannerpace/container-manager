@@ -8,10 +8,31 @@ interface StatsWidgetProps {
 }
 
 export const StatsWidget: React.FC<StatsWidgetProps> = ({ stats }) => {
+  // Debug logging
+  console.log("StatsWidget received stats:", stats)
+
   const cpuPercent = dockerAPI.calculateCPUPercent(stats)
   const memoryPercent = dockerAPI.calculateMemoryPercent(stats)
   const memoryUsage = dockerAPI.formatBytes(stats.memory_stats.usage)
   const memoryLimit = dockerAPI.formatBytes(stats.memory_stats.limit)
+
+  // Debug the calculations
+  console.log("CPU calculation:", {
+    cpuPercent,
+    totalUsage: stats.cpu_stats.cpu_usage.total_usage,
+    preTotalUsage: stats.precpu_stats.cpu_usage.total_usage,
+    systemUsage: stats.cpu_stats.system_cpu_usage,
+    preSystemUsage: stats.precpu_stats.system_cpu_usage,
+    onlineCpus: stats.cpu_stats.online_cpus,
+  })
+
+  console.log("Memory calculation:", {
+    memoryPercent,
+    usage: stats.memory_stats.usage,
+    limit: stats.memory_stats.limit,
+    formattedUsage: memoryUsage,
+    formattedLimit: memoryLimit,
+  })
 
   // Calculate network I/O
   const networkRx = Object.values(stats.networks).reduce(
