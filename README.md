@@ -41,12 +41,41 @@ cd container-manager
 npm install
 ```
 
-3. Start the development server:
+3. **Enable Docker API access** (Required):
+   
+   **For Docker Desktop:**
+   - Open Docker Desktop
+   - Go to Settings → General
+   - Enable "Expose daemon on tcp://localhost:2375 without TLS"
+   - Click "Apply & Restart"
+   
+   **For Docker on Linux:**
+   - Edit `/etc/docker/daemon.json`:
+     ```json
+     {
+       "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
+     }
+     ```
+   - Restart Docker: `sudo systemctl restart docker`
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser
+5. Open [http://localhost:5173](http://localhost:5173) in your browser
+
+**Note:** If you see a connection error, the app will show a setup guide with detailed instructions.
+
+### CORS Issues
+
+The Docker API doesn't set CORS headers. If you can't connect after enabling the API:
+
+- **Development**: Use Chrome with `--disable-web-security --user-data-dir=/tmp/chrome_dev`
+- **Alternative**: Install a CORS browser extension  
+- **Production**: Use a proxy server
+
+See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed setup instructions.
 
 ### Building for Production
 

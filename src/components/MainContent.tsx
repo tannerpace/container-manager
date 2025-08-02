@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useDocker } from '../context/DockerContext'
 import { ContainersList } from './ContainersList'
+import { DockerSetupGuide } from './DockerSetupGuide'
 import { ImagesList } from './ImagesList'
 import './MainContent.css'
 import { NetworksList } from './NetworksList'
 import { VolumesList } from './VolumesList'
-import { DockerSetupGuide } from './DockerSetupGuide'
 
 interface MainContentProps {
   activeTab: 'containers' | 'images' | 'volumes' | 'networks'
