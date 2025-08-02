@@ -332,9 +332,9 @@
   border-bottom: none;
 }
 
-/* Ensure all grid items handle overflow properly */
-.table-row > *,
-.table-header > * {
+/* Ensure all grid items handle overflow properly, except actions column for tooltips */
+.table-row > *:not(.col-actions),
+.table-header > *:not(.col-actions) {
   min-width: 0;
   overflow: hidden;
 }
@@ -524,6 +524,7 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: 0.3s; /* Add delay for better UX */
   z-index: 1000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
@@ -863,6 +864,69 @@
   border-color: rgba(0, 0, 0, 0.08);
 }
 
+/* Remove confirmation modal styles */
+.warning-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.warning-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.warning-text {
+  flex: 1;
+}
+
+.warning-text p {
+  margin: 0 0 12px 0;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.container-info {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 12px;
+  border-radius: 6px;
+  font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 12px 0;
+  color: #424245;
+}
+
+.danger-note {
+  color: #d70015;
+  font-size: 14px;
+  margin-top: 12px !important;
+}
+
+.btn-danger {
+  background: linear-gradient(145deg, #ff453a, #d70015);
+  color: white;
+  border: 1px solid rgba(255, 69, 58, 0.3);
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(145deg, #d70015, #a50000);
+  box-shadow: 0 2px 8px rgba(255, 69, 58, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger:active {
+  background: linear-gradient(145deg, #a50000, #8b0000);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .containers-list {
@@ -1024,4 +1088,9 @@
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
   }
+}
+
+.col-actions {
+  position: relative;
+  overflow: visible; /* Allow tooltips to overflow */
 }

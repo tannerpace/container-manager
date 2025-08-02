@@ -9,7 +9,7 @@ import { VolumesList } from "./VolumesList"
 
 interface MainContentProps {
   activeTab: "containers" | "images" | "volumes" | "networks"
-  onContainerSelect?: (containerId: string) => void
+  onContainerSelect: (containerId: string) => void
 }
 
 export function MainContent({

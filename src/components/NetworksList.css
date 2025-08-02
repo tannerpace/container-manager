@@ -548,8 +548,6 @@
     content: "Created: ";
   }
 
-  .col-actions {
-  }
 }
 
 /* Dark mode support */
@@ -598,6 +596,11 @@
 
   .network-scope {
     color: #8e8e93;
+  }
+
+  .network-id {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e5e5e7; /* High contrast white for dark mode */
   }
 
   .action-btn {

@@ -248,3 +248,95 @@
 .progress-fill.memory[style*="width: 2"] {
   background: #007acc; /* Low Memory - Blue */
 }
+
+/* Dark mode support for accessibility */
+@media (prefers-color-scheme: dark) {
+  .stats-widget {
+    background: #1c1c1e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stats-title {
+    color: #f2f2f7; /* High contrast white */
+  }
+
+  .stat-card {
+    background: #2c2c2e; /* Dark card background */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stat-card:hover {
+    border-color: #0a84ff;
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.2);
+  }
+
+  .stat-label {
+    color: #8e8e93; /* Accessible gray for labels */
+  }
+
+  .stat-value {
+    color: #f2f2f7; /* High contrast white for values */
+  }
+
+  .stat-details {
+    color: #8e8e93; /* Accessible gray for details */
+  }
+
+  .io-direction {
+    color: #8e8e93; /* Accessible gray */
+  }
+
+  .io-value {
+    color: #f2f2f7; /* High contrast white */
+  }
+
+  .progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Maintain color coding with better contrast for dark mode */
+  .stat-card:nth-child(1) .stat-value {
+    color: #30d158; /* CPU - Brighter green for dark mode */
+  }
+
+  .stat-card:nth-child(2) .stat-value {
+    color: #64d2ff; /* Memory - Brighter blue for dark mode */
+  }
+
+  .stat-card:nth-child(3) .stat-icon,
+  .stat-card:nth-child(3) .io-direction {
+    color: #5ac8fa; /* Network - Brighter teal */
+  }
+
+  .stat-card:nth-child(4) .stat-icon,
+  .stat-card:nth-child(4) .io-direction {
+    color: #ff9f0a; /* Disk - Brighter orange */
+  }
+
+  .stat-card:nth-child(5) .stat-value {
+    color: #bf5af2; /* Processes - Brighter purple */
+  }
+
+  .stat-card:nth-child(6) .stat-value {
+    color: #66d4cf; /* PID - Brighter teal */
+  }
+
+  /* Enhanced progress bar gradients for dark mode */
+  .progress-fill.cpu {
+    background: linear-gradient(90deg, #30d158, #ffcc02, #ff453a);
+  }
+
+  .progress-fill.memory {
+    background: linear-gradient(90deg, #0a84ff, #5ac8fa);
+  }
+
+  /* Shimmer effect adjustment for dark mode */
+  .progress-fill::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+  }
+}

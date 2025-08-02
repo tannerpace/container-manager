@@ -4,7 +4,7 @@ import "./ContainersList.css"
 import { TerminalModal } from "./Terminal/TerminalModal"
 
 interface ContainersListProps {
-  onContainerSelect?: (containerId: string) => void
+  onContainerSelect: (containerId: string) => void
 }
 
 export function ContainersList({ onContainerSelect }: ContainersListProps) {
@@ -32,6 +32,10 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
   const [renameModalVisible, setRenameModalVisible] = useState(false)
   const [currentContainer, setCurrentContainer] = useState<string | null>(null)
   const [newContainerName, setNewContainerName] = useState("")
+  const [removeModalVisible, setRemoveModalVisible] = useState(false)
+  const [containerToRemove, setContainerToRemove] = useState<string | null>(
+    null
+  )
   const [terminalModalVisible, setTerminalModalVisible] = useState(false)
   const [terminalContainerId, setTerminalContainerId] = useState<string | null>(
     null
@@ -68,9 +72,8 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
         }
         break
       case "remove":
-        if (confirm("Are you sure you want to remove this container?")) {
-          await removeContainer(containerId)
-        }
+        setContainerToRemove(containerId)
+        setRemoveModalVisible(true)
         break
       case "copy":
         await copyContainer(containerId)
@@ -98,6 +101,14 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       setRenameModalVisible(false)
       setCurrentContainer(null)
       setNewContainerName("")
+    }
+  }
+
+  const handleRemove = async () => {
+    if (containerToRemove) {
+      await removeContainer(containerToRemove)
+      setRemoveModalVisible(false)
+      setContainerToRemove(null)
     }
   }
 
@@ -232,7 +243,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
               <div className="col-actions">
                 <div className="action-buttons">
                   <button
-                    onClick={() => onContainerSelect?.(container.Id)}
+                    onClick={() => onContainerSelect(container.Id)}
                     className="action-btn details-btn"
                     data-tooltip="View details"
                   >
@@ -386,6 +397,60 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
         </div>
       )}
 
+      {/* Remove Confirmation Modal */}
+      {removeModalVisible && containerToRemove && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Remove Container</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setRemoveModalVisible(false)
+                  setContainerToRemove(null)
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-content">
+              <div className="warning-message">
+                <div className="warning-icon">⚠️</div>
+                <div className="warning-text">
+                  <p>Are you sure you want to remove this container?</p>
+                  <div className="container-info">
+                    <strong>Container ID:</strong> {containerToRemove}
+                    <br />
+                    <strong>Name:</strong>{" "}
+                    {containers
+                      .find((c) => c.Id === containerToRemove)
+                      ?.Names[0]?.replace("/", "") || "unnamed"}
+                  </div>
+                  <p className="danger-note">
+                    <strong>Warning:</strong> This action cannot be undone. All
+                    data in this container will be permanently lost.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setRemoveModalVisible(false)
+                  setContainerToRemove(null)
+                }}
+              >
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={handleRemove}>
+                Remove Container
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Terminal Modal */}
       {terminalModalVisible && terminalContainerId && (
         <TerminalModal
@@ -398,6 +463,49 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             setTerminalContainerName("")
           }}
         />
+      )}
+
+      {/* Remove Confirmation Modal */}
+      {removeModalVisible && containerToRemove && (
+        <div className="modal-overlay">
+          <div className="modal remove-confirmation-modal">
+            <div className="modal-header">
+              <h3>Remove Container</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setRemoveModalVisible(false)
+                  setContainerToRemove(null)
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-content">
+              <p>
+                Are you sure you want to remove the container{" "}
+                <strong>
+                  {containers.find((c) => c.Id === containerToRemove)?.Names[0]}
+                </strong>
+                ? This action cannot be undone.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setRemoveModalVisible(false)
+                  setContainerToRemove(null)
+                }}
+              >
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={handleRemove}>
+                Remove Container
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
