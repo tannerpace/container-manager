@@ -41,7 +41,7 @@ export function VolumesList() {
     <div className="volumes-list">
       <div className="volumes-header">
         <div className="header-content">
-          <h2>Volumes ({volumes.length})</h2>
+          <h2>Volumes ({filteredVolumes.length})</h2>
           <div className="header-actions">
             <button
               onClick={handleRefresh}
@@ -55,7 +55,16 @@ export function VolumesList() {
         </div>
       </div>
 
-      {volumes.length === 0 ? (
+      {filteredVolumes.length === 0 && volumes.length > 0 ? (
+        <div className="volumes-empty">
+          <div className="empty-icon">🔍</div>
+          <h3>No volumes match your search</h3>
+          <p>
+            Try adjusting your search term or clear the search to see all
+            volumes.
+          </p>
+        </div>
+      ) : filteredVolumes.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">💾</div>
           <h3>No volumes found</h3>

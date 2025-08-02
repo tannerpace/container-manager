@@ -47,7 +47,7 @@ export function NetworksList() {
     <div className="networks-list">
       <div className="networks-header">
         <div className="header-content">
-          <h2>Networks ({networks.length})</h2>
+          <h2>Networks ({filteredNetworks.length})</h2>
           <div className="header-actions">
             <button
               onClick={handleRefresh}
@@ -61,7 +61,16 @@ export function NetworksList() {
         </div>
       </div>
 
-      {networks.length === 0 ? (
+      {filteredNetworks.length === 0 && networks.length > 0 ? (
+        <div className="networks-empty">
+          <div className="empty-icon">🔍</div>
+          <h3>No networks match your search</h3>
+          <p>
+            Try adjusting your search term or clear the search to see all
+            networks.
+          </p>
+        </div>
+      ) : filteredNetworks.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">🌐</div>
           <h3>No networks found</h3>

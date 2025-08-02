@@ -64,7 +64,7 @@ export function ImagesList() {
     <div className="images-list">
       <div className="images-header">
         <div className="header-content">
-          <h2>Images ({images.length})</h2>
+          <h2>Images ({filteredImages.length})</h2>
           <div className="header-actions">
             <button
               onClick={() => handleAction("refresh", "")}
@@ -77,7 +77,16 @@ export function ImagesList() {
         </div>
       </div>
 
-      {images.length === 0 ? (
+      {filteredImages.length === 0 && images.length > 0 ? (
+        <div className="images-empty">
+          <div className="empty-icon">🔍</div>
+          <h3>No images match your search</h3>
+          <p>
+            Try adjusting your search term or clear the search to see all
+            images.
+          </p>
+        </div>
+      ) : filteredImages.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">💿</div>
           <h3>No images found</h3>
