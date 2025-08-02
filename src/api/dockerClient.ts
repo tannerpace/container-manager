@@ -173,6 +173,28 @@ export class DockerAPIClient {
     return container
   }
 
+  /**
+   * Open terminal connection to a running container
+   */
+  async openTerminal(containerId: string, shell: string = '/bin/sh'): Promise<{ execId: string, wsUrl: string }> {
+    // Create exec instance for interactive terminal
+    const exec = await this.createExec(containerId, {
+      AttachStdin: true,
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true,
+      Cmd: [shell]
+    })
+
+    // Generate WebSocket URL for terminal connection
+    const wsUrl = this.baseURL.replace('http://', 'ws://').replace('https://', 'wss://')
+
+    return {
+      execId: exec.Id,
+      wsUrl: `${wsUrl}/exec/${exec.Id}/start`
+    }
+  }
+
   // Container inspection and monitoring
   async getContainerLogs(id: string, options: LogOptions = {}): Promise<string> {
     const params = new URLSearchParams()
@@ -428,6 +450,43 @@ export class DockerAPIClient {
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
+  }
+
+  /**
+   * Copy/duplicate a container by creating a new one from the same image
+   */
+  async copyContainer(containerId: string, newContainerName?: string): Promise<{ Id: string }> {
+    // First, get the container details to extract the image
+    const containerDetails = await this.getContainer(containerId)
+
+    // Generate a new container name if not provided
+    const baseName = containerDetails.Name.replace('/', '')
+    const finalName = newContainerName || `${baseName}_copy_${Date.now()}`
+
+    // Create the new container from the same image
+    const createConfig = {
+      Image: containerDetails.Config.Image,
+      AttachStdin: false,
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true,
+      OpenStdin: false,
+      StdinOnce: false,
+      // Copy some basic configuration
+      Env: containerDetails.Config.Env,
+      Cmd: containerDetails.Config.Cmd,
+      WorkingDir: containerDetails.Config.WorkingDir,
+      ExposedPorts: containerDetails.Config.ExposedPorts,
+      // Add the new name
+      name: finalName
+    }
+
+    const response = await this.makeRequest<{ Id: string }>('/containers/create', {
+      method: 'POST',
+      body: JSON.stringify(createConfig)
+    })
+
+    return response
   }
 }
 

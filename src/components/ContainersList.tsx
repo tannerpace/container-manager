@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
 import "./ContainersList.css"
+import { TerminalModal } from "./Terminal/TerminalModal"
 
 interface ContainersListProps {
   onContainerSelect?: (containerId: string) => void
@@ -22,6 +23,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     exportContainer,
     removeContainer,
     refreshContainers,
+    copyContainer,
   } = useDocker()
 
   // Filter containers based on search term
@@ -30,6 +32,11 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
   const [renameModalVisible, setRenameModalVisible] = useState(false)
   const [currentContainer, setCurrentContainer] = useState<string | null>(null)
   const [newContainerName, setNewContainerName] = useState("")
+  const [terminalModalVisible, setTerminalModalVisible] = useState(false)
+  const [terminalContainerId, setTerminalContainerId] = useState<string | null>(
+    null
+  )
+  const [terminalContainerName, setTerminalContainerName] = useState<string>("")
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
@@ -65,6 +72,20 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
           await removeContainer(containerId)
         }
         break
+      case "copy":
+        await copyContainer(containerId)
+        break
+      case "terminal": {
+        const container = containers.find((c) => c.Id === containerId)
+        if (container) {
+          setTerminalContainerId(containerId)
+          setTerminalContainerName(
+            container.Names[0]?.replace("/", "") || containerId.slice(0, 12)
+          )
+          setTerminalModalVisible(true)
+        }
+        break
+      }
       case "refresh":
         await refreshContainers()
         break
@@ -218,8 +239,15 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     📋
                   </button>
 
-                  {container.State === "running" ? (
+                  {container.State?.toLowerCase() === "running" ? (
                     <>
+                      <button
+                        onClick={() => handleAction("terminal", container.Id)}
+                        className="action-btn terminal-btn"
+                        data-tooltip="Open terminal"
+                      >
+                        💻
+                      </button>
                       <button
                         onClick={() => handleAction("stop", container.Id)}
                         className="action-btn stop-btn"
@@ -242,7 +270,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                         ⏸️
                       </button>
                     </>
-                  ) : container.State === "paused" ? (
+                  ) : container.State?.toLowerCase() === "paused" ? (
                     <>
                       <button
                         onClick={() => handleAction("unpause", container.Id)}
@@ -283,6 +311,14 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     data-tooltip="Export as image"
                   >
                     📦
+                  </button>
+
+                  <button
+                    onClick={() => handleAction("copy", container.Id)}
+                    className="action-btn copy-btn"
+                    data-tooltip="Copy container"
+                  >
+                    📋
                   </button>
 
                   <button
@@ -348,6 +384,20 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Terminal Modal */}
+      {terminalModalVisible && terminalContainerId && (
+        <TerminalModal
+          containerId={terminalContainerId}
+          containerName={terminalContainerName}
+          isOpen={terminalModalVisible}
+          onClose={() => {
+            setTerminalModalVisible(false)
+            setTerminalContainerId(null)
+            setTerminalContainerName("")
+          }}
+        />
       )}
     </div>
   )

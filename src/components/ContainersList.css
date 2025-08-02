@@ -588,6 +588,19 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* Terminal button styling */
+.terminal-btn {
+  background: linear-gradient(145deg, #5856d6, #4c4aba);
+  color: white;
+  border-color: rgba(88, 86, 214, 0.3);
+}
+
+.terminal-btn:hover {
+  background: linear-gradient(145deg, #4c4aba, #423fa3);
+  box-shadow: 0 2px 8px rgba(88, 86, 214, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 .pause-btn {
   background: linear-gradient(145deg, #ff9f0a, #ffc107);
   color: #1d1d1f;
@@ -979,6 +992,17 @@
   .loading-spinner {
     border: 3px solid rgba(10, 132, 255, 0.2);
     border-top: 3px solid #0a84ff;
+  }
+
+  /* Terminal button dark mode */
+  .terminal-btn {
+    background: linear-gradient(145deg, #6366f1, #4f46e5);
+  }
+
+  .terminal-btn:hover {
+    background: linear-gradient(145deg, #4f46e5, #4338ca);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   /* Mobile responsive dark mode */

@@ -367,6 +367,77 @@ export function DockerProvider({ children }: DockerProviderProps) {
     }
   }
 
+  const openTerminal = async (containerId: string) => {
+    try {
+      // For now, we'll open a new browser tab/window to a terminal interface
+      // In a real implementation, this would open a WebSocket-based terminal
+      const terminalUrl = `/terminal/${containerId}`
+      window.open(
+        terminalUrl,
+        "_blank",
+        "width=800,height=600,scrollbars=yes,resizable=yes"
+      )
+
+      // Alternative: For now, show alert with instructions
+      alert(
+        `Terminal access for container ${containerId}\n\nIn a full implementation, this would open an interactive terminal.\n\nFor now, you can use:\n\`docker exec -it ${containerId} /bin/sh\``
+      )
+    } catch (error) {
+      console.error("Error opening terminal:", error)
+      alert("Failed to open terminal connection")
+    }
+  }
+
+  const copyContainer = async (
+    containerId: string,
+    newContainerName?: string
+  ) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      // Get the original container details
+      const containerDetails = await makeDockerAPICall(
+        `/containers/${containerId}/json`
+      )
+
+      // Generate a new container name if not provided
+      const originalName = containerDetails.Name.replace("/", "")
+      const finalName = newContainerName || `${originalName}_copy_${Date.now()}`
+
+      // Create the new container from the same image with similar config
+      const createConfig = {
+        Image: containerDetails.Config.Image,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        // Copy some basic configuration
+        Env: containerDetails.Config.Env,
+        Cmd: containerDetails.Config.Cmd,
+        WorkingDir: containerDetails.Config.WorkingDir,
+        ExposedPorts: containerDetails.Config.ExposedPorts,
+        name: finalName,
+      }
+
+      await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      // Refresh containers to show the new container
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error copying container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
   // Search/filter utility functions
   const setSearchTerm = (term: string) => {
     dispatch({ type: "SET_SEARCH_TERM", payload: term })
@@ -401,6 +472,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
     removeImage,
     createContainer,
     runContainer,
+    copyContainer,
+    openTerminal,
     setSearchTerm,
     filterContainers,
     filterImages,
