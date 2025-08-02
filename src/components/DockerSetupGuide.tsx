@@ -22,28 +22,51 @@ export function DockerSetupGuide({ onClose }: DockerSetupGuideProps) {
           </p>
 
           <div className="setup-section recommended">
-            <h3>🍎 macOS (Recommended - No sudo)</h3>
+            <h3>🍎 macOS with Colima (Recommended)</h3>
             <div className="alternatives">
               <div className="alternative">
-                <h4>Colima (Lightweight & Fast)</h4>
-                <pre>{`# Install via Homebrew
-brew install colima
+                <h4>Option 1: Colima with TCP API (Easiest)</h4>
+                <pre>{`# Stop current Colima instance
+colima stop
 
-# Start with API enabled
+# Start with TCP API enabled
 colima start --api --cpu 2 --memory 4
 
-# Verify it's running
+# Verify API is accessible
 curl http://localhost:2375/version`}</pre>
+                <p>
+                  This exposes Docker API on <code>localhost:2375</code> for
+                  direct connection.
+                </p>
               </div>
               <div className="alternative">
-                <h4>OrbStack (Modern Docker Alternative)</h4>
-                <pre>{`# Install via Homebrew
-brew install orbstack
+                <h4>Option 2: Colima + socat Proxy (If Option 1 fails)</h4>
+                <pre>{`# Install socat (if not already installed)
+brew install socat
 
-# Start OrbStack
-orb start
+# Start Colima normally
+colima start
 
-# API automatically available at localhost:2375`}</pre>
+# Create TCP proxy to Unix socket
+socat TCP-LISTEN:2375,reuseaddr,fork UNIX-CONNECT:/Users/$USER/.colima/default/docker.sock &
+
+# Verify proxy works
+curl http://localhost:2375/version`}</pre>
+                <p>
+                  This creates a TCP-to-Unix-socket bridge for browser/Electron
+                  access.
+                </p>
+              </div>
+              <div className="alternative">
+                <h4>Option 3: Electron Native Socket (Advanced)</h4>
+                <pre>{`# For Electron apps, you can directly access:
+# Unix Socket: /Users/$USER/.colima/default/docker.sock
+
+# In Electron main process, use Node.js HTTP over Unix socket
+# No additional setup needed - just configure the path`}</pre>
+                <p>
+                  Electron can access Unix sockets directly via Node.js APIs.
+                </p>
               </div>
             </div>
           </div>
@@ -178,27 +201,33 @@ docker context use remote`}</pre>
           </div>
 
           <div className="setup-section troubleshooting">
-            <h3>🔧 Troubleshooting</h3>
+            <h3>🔧 Troubleshooting Colima</h3>
             <ul>
               <li>
-                <strong>Colima not starting:</strong> Try{" "}
-                <code>colima delete</code> then <code>colima start --api</code>
+                <strong>Colima --api flag not working:</strong> Try stopping and
+                restarting: <code>colima stop && colima start --api</code>
               </li>
               <li>
-                <strong>Port already in use:</strong> Check if another Docker
-                service is running
+                <strong>Port 2375 not accessible:</strong> Check if Colima
+                started with API: <code>colima status</code> should show TCP
+                listening
               </li>
               <li>
-                <strong>Connection refused:</strong> Ensure your Docker service
-                is running
+                <strong>Connection refused:</strong> Ensure Colima is running:{" "}
+                <code>colima status</code>
               </li>
               <li>
-                <strong>API not responding:</strong> Verify port 2375 is open:{" "}
-                <code>lsof -i :2375</code>
+                <strong>socat proxy issues:</strong> Kill existing proxy:{" "}
+                <code>pkill socat</code> then restart the socat command
               </li>
               <li>
-                <strong>Rootless Docker issues:</strong> Check{" "}
-                <code>$XDG_RUNTIME_DIR</code> is set
+                <strong>Socket permission denied:</strong> Check socket path:{" "}
+                <code>ls -la /Users/$USER/.colima/default/docker.sock</code>
+              </li>
+              <li>
+                <strong>For Electron apps:</strong> Configure Docker client to
+                use Unix socket directly:
+                <code>/Users/$USER/.colima/default/docker.sock</code>
               </li>
             </ul>
           </div>

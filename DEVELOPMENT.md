@@ -42,6 +42,15 @@ This project includes comprehensive VS Code tasks to streamline development. Acc
 | 🐋 List Docker Containers  | -             | Show all Docker containers   |
 | 📊 Docker System Info      | -             | Display Docker disk usage    |
 
+### ⚡ Electron Tasks
+
+| Task                  | Shortcut      | Description                        |
+| --------------------- | ------------- | ---------------------------------- |
+| 🔧 Build Electron     | -             | Compile Electron main process      |
+| ⚡ Start Electron App | `Cmd+Shift+E` | Build and launch Electron app      |
+| 🚀 Start Electron Dev | -             | Start Electron in development mode |
+| 📦 Package Electron   | -             | Package app for distribution       |
+
 ### 🚀 Quick Setup Task
 
 | Task              | Description                                               |
@@ -158,6 +167,32 @@ npm run build
 1. Clean build: Run "🧹 Clean Build" task
 2. Fresh install: Run "🔄 Fresh Install" task
 3. Check for dependency conflicts
+
+### Electron Development Issues
+
+1. **Module not found errors**: Run "🔧 Build Electron" task
+2. **Main process crashes**: Check Electron logs in terminal
+3. **IPC communication fails**: Verify preload script is loaded
+4. **Native dependencies**: May need to rebuild for Electron
+
+### Docker Socket Access Issues (Electron)
+
+1. **Unix socket permission denied**:
+
+   ```bash
+   sudo chmod 666 /var/run/docker.sock
+   # OR add user to docker group
+   sudo usermod -aG docker $USER
+   ```
+
+2. **Colima socket not found**:
+
+   ```bash
+   colima start
+   ls -la ~/.colima/default/docker.sock
+   ```
+
+3. **Bridge connection fails**: Check if Docker daemon is running
 
 ## VS Code Extensions
 

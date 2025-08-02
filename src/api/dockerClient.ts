@@ -106,6 +106,20 @@ export class DockerAPIClient {
     })
   }
 
+  async exportContainer(id: string, repo: string = '', tag: string = 'latest'): Promise<{ Id: string }> {
+    const params = new URLSearchParams()
+    params.append('container', id)
+    if (repo) {
+      params.append('repo', repo)
+      if (tag) {
+        params.append('tag', tag)
+      }
+    }
+
+    const query = params.toString() ? `?${params.toString()}` : ''
+    return this.makeRequest<{ Id: string }>(`/commit${query}`, { method: 'POST' })
+  }
+
   // Container inspection and monitoring
   async getContainerLogs(id: string, options: LogOptions = {}): Promise<string> {
     const params = new URLSearchParams()

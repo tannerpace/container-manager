@@ -20,6 +20,20 @@ export const DOCKER_CONFIGS = {
     retryAttempts: 3,
   },
 
+  // Colima with TCP API enabled
+  colimaTCP: {
+    apiUrl: 'http://localhost:2375',
+    timeout: 10000,
+    retryAttempts: 3,
+  },
+
+  // Colima via Unix socket (for Electron apps)
+  colimaSocket: {
+    apiUrl: 'unix:///Users/' + (process.env.USER || 'user') + '/.colima/default/docker.sock',
+    timeout: 10000,
+    retryAttempts: 3,
+  },
+
   // Docker Desktop with TLS
   desktopTLS: {
     apiUrl: 'https://localhost:2376',
@@ -27,9 +41,9 @@ export const DOCKER_CONFIGS = {
     retryAttempts: 3,
   },
 
-  // Unix socket (requires proxy server for browser access)
-  unix: {
-    apiUrl: 'http://localhost:8080', // Proxy server URL
+  // Unix socket via socat proxy
+  socketProxy: {
+    apiUrl: 'http://localhost:2375', // socat proxy URL
     timeout: 10000,
     retryAttempts: 3,
   },
@@ -44,33 +58,50 @@ export const DOCKER_CONFIGS = {
 
 // Current configuration - modify this based on your Docker setup
 export const getCurrentDockerConfig = (): DockerConfig => {
-  // Try to detect the environment and return appropriate config
+  // Check if we're in Electron environment
+  const isElectron = typeof window !== 'undefined' &&
+    typeof (window as any).electronAPI !== 'undefined'
 
-  // For development, we'll start with Docker Desktop without TLS
-  return DOCKER_CONFIGS.desktop
+  // Check if we're in Node.js environment (Electron main process)
+  const isNodeJS = typeof process !== 'undefined' && process.versions?.node
+
+  if (isElectron) {
+    // In Electron renderer, use the bridge endpoint
+    return DOCKER_CONFIGS.colimaTCP
+  }
+
+  if (isNodeJS) {
+    // In Electron main process, we can use Unix sockets directly
+    return DOCKER_CONFIGS.colimaSocket
+  }
+
+  // For browser environment, try TCP endpoints
+  return DOCKER_CONFIGS.colimaTCP
 }
 
 /**
  * Instructions for enabling Docker API access:
  * 
- * 1. Docker Desktop:
+ * 1. Colima (Recommended for macOS):
+ *    Option 1: colima start --api --cpu 2 --memory 4
+ *    Option 2: colima start + socat TCP-LISTEN:2375,reuseaddr,fork UNIX-CONNECT:/Users/$USER/.colima/default/docker.sock &
+ *    Option 3: For Electron apps, use Unix socket directly
+ * 
+ * 2. Docker Desktop:
  *    - Go to Settings > General
  *    - Enable "Expose daemon on tcp://localhost:2375 without TLS"
  *    - Restart Docker Desktop
  * 
- * 2. Docker on Linux:
- *    - Edit /etc/docker/daemon.json:
- *      {
- *        "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
- *      }
- *    - Restart Docker: sudo systemctl restart docker
+ * 3. OrbStack (Alternative):
+ *    - brew install orbstack && orb start
+ *    - API automatically available on localhost:2375
  * 
- * 3. For production environments:
+ * 4. For production environments:
  *    - Use TLS authentication
  *    - Restrict access to specific IPs
  *    - Consider using a proxy server
  * 
- * 4. CORS Issues:
+ * 5. CORS Issues (Browser only):
  *    - The Docker API doesn't set CORS headers
  *    - You may need to use a proxy server or browser extension
  *    - For development, you can disable CORS in Chrome:

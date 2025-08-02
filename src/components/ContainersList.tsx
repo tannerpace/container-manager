@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useDocker } from "../context/DockerContext"
 import "./ContainersList.css"
 
@@ -12,9 +13,18 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     error,
     startContainer,
     stopContainer,
+    restartContainer,
+    pauseContainer,
+    unpauseContainer,
+    renameContainer,
+    exportContainer,
     removeContainer,
     refreshContainers,
   } = useDocker()
+
+  const [renameModalVisible, setRenameModalVisible] = useState(false)
+  const [currentContainer, setCurrentContainer] = useState<string | null>(null)
+  const [newContainerName, setNewContainerName] = useState("")
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
@@ -24,6 +34,27 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       case "stop":
         await stopContainer(containerId)
         break
+      case "restart":
+        await restartContainer(containerId)
+        break
+      case "pause":
+        await pauseContainer(containerId)
+        break
+      case "unpause":
+        await unpauseContainer(containerId)
+        break
+      case "rename": {
+        setCurrentContainer(containerId)
+        const container = containers.find((c) => c.Id === containerId)
+        setNewContainerName(container?.Names[0]?.replace("/", "") || "")
+        setRenameModalVisible(true)
+        break
+      }
+      case "export":
+        if (confirm("Export this container as an image?")) {
+          await exportContainer(containerId)
+        }
+        break
       case "remove":
         if (confirm("Are you sure you want to remove this container?")) {
           await removeContainer(containerId)
@@ -32,6 +63,15 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       case "refresh":
         await refreshContainers()
         break
+    }
+  }
+
+  const handleRename = async () => {
+    if (currentContainer && newContainerName.trim()) {
+      await renameContainer(currentContainer, newContainerName.trim())
+      setRenameModalVisible(false)
+      setCurrentContainer(null)
+      setNewContainerName("")
     }
   }
 
@@ -164,13 +204,46 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                   </button>
 
                   {container.State === "running" ? (
-                    <button
-                      onClick={() => handleAction("stop", container.Id)}
-                      className="action-btn stop-btn"
-                      title="Stop container"
-                    >
-                      ⏹️
-                    </button>
+                    <>
+                      <button
+                        onClick={() => handleAction("stop", container.Id)}
+                        className="action-btn stop-btn"
+                        title="Stop container"
+                      >
+                        ⏹️
+                      </button>
+                      <button
+                        onClick={() => handleAction("restart", container.Id)}
+                        className="action-btn restart-btn"
+                        title="Restart container"
+                      >
+                        🔄
+                      </button>
+                      <button
+                        onClick={() => handleAction("pause", container.Id)}
+                        className="action-btn pause-btn"
+                        title="Pause container"
+                      >
+                        ⏸️
+                      </button>
+                    </>
+                  ) : container.State === "paused" ? (
+                    <>
+                      <button
+                        onClick={() => handleAction("unpause", container.Id)}
+                        className="action-btn unpause-btn"
+                        title="Unpause container"
+                      >
+                        ▶️
+                      </button>
+                      <button
+                        onClick={() => handleAction("stop", container.Id)}
+                        className="action-btn stop-btn"
+                        title="Stop container"
+                      >
+                        ⏹️
+                      </button>
+                    </>
                   ) : (
                     <button
                       onClick={() => handleAction("start", container.Id)}
@@ -180,6 +253,22 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                       ▶️
                     </button>
                   )}
+
+                  <button
+                    onClick={() => handleAction("rename", container.Id)}
+                    className="action-btn rename-btn"
+                    title="Rename container"
+                  >
+                    ✏️
+                  </button>
+
+                  <button
+                    onClick={() => handleAction("export", container.Id)}
+                    className="action-btn export-btn"
+                    title="Export as image"
+                  >
+                    📦
+                  </button>
 
                   <button
                     onClick={() => handleAction("remove", container.Id)}
@@ -192,6 +281,57 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Rename Modal */}
+      {renameModalVisible && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Rename Container</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setRenameModalVisible(false)
+                  setCurrentContainer(null)
+                  setNewContainerName("")
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-content">
+              <label htmlFor="container-name">New container name:</label>
+              <input
+                id="container-name"
+                type="text"
+                value={newContainerName}
+                onChange={(e) => setNewContainerName(e.target.value)}
+                placeholder="Enter new container name"
+                autoFocus
+              />
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setRenameModalVisible(false)
+                  setCurrentContainer(null)
+                  setNewContainerName("")
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleRename}
+                disabled={!newContainerName.trim()}
+              >
+                Rename
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
