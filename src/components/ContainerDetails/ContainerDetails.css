@@ -110,7 +110,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden;
+  min-height: 0; /* Important for proper flexbox scrolling */
 }
 
 .tab-nav {
@@ -154,10 +154,12 @@
 
 .tab-content {
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 1.5rem;
   background: var(--bg-primary, #ffffff);
   color: var(--text-primary, #212529);
+  min-height: 0; /* Important for proper flexbox scrolling */
 }
 
 /* Common Tab Styles */

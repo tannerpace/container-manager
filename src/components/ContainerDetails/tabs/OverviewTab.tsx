@@ -305,11 +305,28 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ container }) => {
                     <div className="port-arrow">→</div>
                     <div className="host-ports">
                       {hostPorts && hostPorts.length > 0 ? (
-                        hostPorts.map((hp, idx) => (
-                          <div key={idx} className="host-port">
-                            {hp.HostIp || "0.0.0.0"}:{hp.HostPort}
-                          </div>
-                        ))
+                        hostPorts.map((hp, idx) => {
+                          const hostAddress = hp.HostIp || "localhost"
+                          const hostPort = hp.HostPort
+                          const url = `http://${
+                            hostAddress === "0.0.0.0"
+                              ? "localhost"
+                              : hostAddress
+                          }:${hostPort}`
+
+                          return (
+                            <a
+                              key={idx}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="host-port"
+                              title={`Open ${url} in new tab`}
+                            >
+                              {hostAddress}:{hostPort}
+                            </a>
+                          )
+                        })
                       ) : (
                         <div className="host-port unpublished">
                           Not published

@@ -1,6 +1,19 @@
 /* Overview Tab Styles */
 .overview-tab {
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Ensure all sections are properly spaced and visible */
+.tab-section {
+  margin-bottom: 1.5rem;
+}
+
+.tab-section:last-child {
+  margin-bottom: 2rem; /* Extra bottom margin for last section */
+  padding-bottom: 1rem; /* Ensure content isn't cut off */
 }
 
 /* Port Mappings */
@@ -8,6 +21,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-bottom: 1rem; /* Ensure spacing from bottom edge */
 }
 
 .port-mapping {
@@ -20,6 +34,14 @@
   border-radius: 6px;
   font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.port-mapping:hover {
+  background: #e9ecef;
+  border-color: #007acc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.1);
 }
 
 .container-port {
@@ -51,11 +73,58 @@
   border-radius: 4px;
   font-weight: 600;
   text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.host-port:hover {
+  background: #218838;
+  text-decoration: none;
+  color: white;
 }
 
 .host-port.unpublished {
   background: #6c757d;
   font-style: italic;
+  cursor: default;
+}
+
+.host-port.unpublished:hover {
+  background: #6c757d;
+}
+
+/* Dark mode support for port mappings */
+[data-theme="dark"] .port-mapping {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #404040);
+}
+
+[data-theme="dark"] .port-mapping:hover {
+  background: var(--bg-tertiary, #3e3e3e);
+  border-color: var(--accent-color, #4da6d9);
+  box-shadow: 0 2px 8px rgba(77, 166, 217, 0.1);
+}
+
+[data-theme="dark"] .container-port {
+  background: var(--accent-color, #4da6d9);
+}
+
+[data-theme="dark"] .host-port {
+  background: #32d74b; /* Apple's green for dark mode */
+}
+
+[data-theme="dark"] .host-port:hover {
+  background: #30cb4a;
+}
+
+[data-theme="dark"] .host-port.unpublished {
+  background: #8e8e93; /* Apple's gray for dark mode */
+}
+
+[data-theme="dark"] .host-port.unpublished:hover {
+  background: #8e8e93;
 }
 
 /* Badge Extensions */
