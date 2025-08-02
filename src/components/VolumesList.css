@@ -279,36 +279,40 @@
 
 /* Column flex basis for VolumesList */
 .volumes-list .table-header > *:nth-child(1),
-.volumes-list .table-row > *:nth-child(1) { /* Name */
+.volumes-list .table-row > *:nth-child(1) {
+  /* Name */
   flex: 0 0 200px;
   min-width: 150px;
 }
 
 .volumes-list .table-header > *:nth-child(2),
-.volumes-list .table-row > *:nth-child(2) { /* Driver */
+.volumes-list .table-row > *:nth-child(2) {
+  /* Driver */
   flex: 0 0 120px;
   min-width: 100px;
 }
 
 .volumes-list .table-header > *:nth-child(3),
-.volumes-list .table-row > *:nth-child(3) { /* Mount Point */
+.volumes-list .table-row > *:nth-child(3) {
+  /* Mount Point */
   flex: 1 1 300px;
   min-width: 250px;
 }
 
 .volumes-list .table-header > *:nth-child(4),
-.volumes-list .table-row > *:nth-child(4) { /* Created */
+.volumes-list .table-row > *:nth-child(4) {
+  /* Created */
   flex: 0 0 150px;
   min-width: 120px;
 }
 
 .volumes-list .table-header > *:nth-child(5),
-.volumes-list .table-row > *:nth-child(5) { /* Actions */
+.volumes-list .table-row > *:nth-child(5) {
+  /* Actions */
   flex: 0 0 140px;
   min-width: 140px;
   display: flex;
   justify-content: flex-end;
-}
   min-height: var(--min-row-height);
 }
 

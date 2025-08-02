@@ -281,42 +281,47 @@
 
 /* Column flex basis for ContainersList */
 .table-header > *:nth-child(1),
-.table-row > *:nth-child(1) { /* Name */
+.table-row > *:nth-child(1) {
+  /* Name */
   flex: 0 0 200px;
   min-width: 150px;
 }
 
 .table-header > *:nth-child(2),
-.table-row > *:nth-child(2) { /* Image */
+.table-row > *:nth-child(2) {
+  /* Image */
   flex: 1 1 250px;
   min-width: 200px;
 }
 
 .table-header > *:nth-child(3),
-.table-row > *:nth-child(3) { /* Status */
+.table-row > *:nth-child(3) {
+  /* Status */
   flex: 0 0 120px;
   min-width: 100px;
 }
 
 .table-header > *:nth-child(4),
-.table-row > *:nth-child(4) { /* Ports */
+.table-row > *:nth-child(4) {
+  /* Ports */
   flex: 0 0 150px;
   min-width: 120px;
 }
 
 .table-header > *:nth-child(5),
-.table-row > *:nth-child(5) { /* Created */
+.table-row > *:nth-child(5) {
+  /* Created */
   flex: 0 0 120px;
   min-width: 100px;
 }
 
 .table-header > *:nth-child(6),
-.table-row > *:nth-child(6) { /* Actions */
+.table-row > *:nth-child(6) {
+  /* Actions */
   flex: 0 0 140px;
   min-width: 140px;
   display: flex;
   justify-content: flex-end;
-}
   font-family: var(--font-family-system);
   min-height: var(--min-row-height);
 }
