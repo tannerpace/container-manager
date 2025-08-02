@@ -1,6 +1,7 @@
 import { useState } from "react"
 import "./App.css"
 import { ContainerDetails } from "./components/ContainerDetails/ContainerDetails"
+import { ErrorBoundary } from "./components/ErrorBoundary"
 import { Header } from "./components/Header"
 import { MainContent } from "./components/MainContent"
 import { Sidebar } from "./components/Sidebar"
@@ -44,11 +45,13 @@ function AppContent() {
 
 function App() {
   return (
-    <DockerProvider>
-      <TerminalProvider>
-        <AppContent />
-      </TerminalProvider>
-    </DockerProvider>
+    <ErrorBoundary>
+      <DockerProvider>
+        <TerminalProvider>
+          <AppContent />
+        </TerminalProvider>
+      </DockerProvider>
+    </ErrorBoundary>
   )
 }
 

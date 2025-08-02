@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { dockerTerminalActions } from "../utils/terminalUtils"
 import "./DockerSetupGuide.css"
+import { WhaleIcon } from "./WhaleIcon"
 
 interface DockerSetupGuideProps {
   onClose: () => void
@@ -95,7 +96,9 @@ docker ps
     <div className="setup-guide-overlay">
       <div className="setup-guide-modal">
         <div className="setup-guide-header">
-          <h2>🐳 Docker API Setup Required</h2>
+          <h2>
+            <WhaleIcon size={28} alt="Docker whale" /> Docker API Setup Required
+          </h2>
           <button className="close-btn" onClick={onClose}>
             ✕
           </button>

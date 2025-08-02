@@ -28,11 +28,16 @@
 }
 
 .logo-icon {
-  font-size: 1.75rem;
-  background: linear-gradient(145deg, #007aff, #0056cc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon img {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
 }
 
 .logo h1 {
