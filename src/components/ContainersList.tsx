@@ -122,6 +122,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
               onClick={() => handleAction("refresh", "")}
               className="refresh-btn"
               disabled={loading}
+              data-tooltip="Refresh containers list"
             >
               🔄 Refresh
             </button>
@@ -198,7 +199,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                   <button
                     onClick={() => onContainerSelect?.(container.Id)}
                     className="action-btn details-btn"
-                    title="View details"
+                    data-tooltip="View details"
                   >
                     📋
                   </button>
@@ -208,21 +209,21 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                       <button
                         onClick={() => handleAction("stop", container.Id)}
                         className="action-btn stop-btn"
-                        title="Stop container"
+                        data-tooltip="Stop container"
                       >
                         ⏹️
                       </button>
                       <button
                         onClick={() => handleAction("restart", container.Id)}
                         className="action-btn restart-btn"
-                        title="Restart container"
+                        data-tooltip="Restart container"
                       >
                         🔄
                       </button>
                       <button
                         onClick={() => handleAction("pause", container.Id)}
                         className="action-btn pause-btn"
-                        title="Pause container"
+                        data-tooltip="Pause container"
                       >
                         ⏸️
                       </button>
@@ -232,14 +233,14 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                       <button
                         onClick={() => handleAction("unpause", container.Id)}
                         className="action-btn unpause-btn"
-                        title="Unpause container"
+                        data-tooltip="Unpause container"
                       >
                         ▶️
                       </button>
                       <button
                         onClick={() => handleAction("stop", container.Id)}
                         className="action-btn stop-btn"
-                        title="Stop container"
+                        data-tooltip="Stop container"
                       >
                         ⏹️
                       </button>
@@ -248,7 +249,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     <button
                       onClick={() => handleAction("start", container.Id)}
                       className="action-btn start-btn"
-                      title="Start container"
+                      data-tooltip="Start container"
                     >
                       ▶️
                     </button>
@@ -257,7 +258,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                   <button
                     onClick={() => handleAction("rename", container.Id)}
                     className="action-btn rename-btn"
-                    title="Rename container"
+                    data-tooltip="Rename container"
                   >
                     ✏️
                   </button>
@@ -265,7 +266,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                   <button
                     onClick={() => handleAction("export", container.Id)}
                     className="action-btn export-btn"
-                    title="Export as image"
+                    data-tooltip="Export as image"
                   >
                     📦
                   </button>
@@ -273,7 +274,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                   <button
                     onClick={() => handleAction("remove", container.Id)}
                     className="action-btn remove-btn"
-                    title="Remove container"
+                    data-tooltip="Remove container"
                   >
                     🗑️
                   </button>

@@ -42,12 +42,28 @@ export class DockerAPIClient {
         throw new Error(`Docker API error: ${response.status} ${response.statusText}`)
       }
 
+      // Handle empty responses
+      const text = await response.text()
+      if (!text || text.trim() === '') {
+        // Return appropriate empty response based on content type
+        const contentType = response.headers.get('content-type')
+        if (contentType?.includes('application/json')) {
+          return [] as T // Return empty array for JSON responses
+        }
+        return '' as T // Return empty string for text responses
+      }
+
       // Handle different response types
       const contentType = response.headers.get('content-type')
       if (contentType?.includes('application/json')) {
-        return await response.json()
+        try {
+          return JSON.parse(text)
+        } catch (parseError) {
+          console.error('Failed to parse JSON response:', text, parseError)
+          throw new Error('Invalid JSON response from Docker API')
+        }
       } else {
-        return await response.text() as T
+        return text as T
       }
     } catch (error) {
       if (error instanceof Error) {

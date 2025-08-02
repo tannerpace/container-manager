@@ -37,9 +37,9 @@ export function Header() {
           </span>
         </div>
 
-        <button className="settings-btn" title="Settings">
+        {/* <button className="settings-btn" title="Settings">
           ⚙️
-        </button>
+        </button> */}
       </div>
     </header>
   )

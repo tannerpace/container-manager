@@ -1,4 +1,5 @@
-import { useDocker } from '../context/DockerContext'
+import { useDocker } from "../context/DockerContext"
+import "./VolumesList.css"
 
 export function VolumesList() {
   const { volumes, loading, error, refreshVolumes } = useDocker()
@@ -21,7 +22,11 @@ export function VolumesList() {
       <div className="volumes-error">
         <h3>Error loading volumes</h3>
         <p>{error}</p>
-        <button onClick={handleRefresh} className="retry-btn">
+        <button
+          onClick={handleRefresh}
+          className="retry-btn"
+          data-tooltip="Retry loading volumes"
+        >
           Retry
         </button>
       </div>
@@ -34,10 +39,11 @@ export function VolumesList() {
         <div className="header-content">
           <h2>Volumes ({volumes.length})</h2>
           <div className="header-actions">
-            <button 
-              onClick={handleRefresh} 
+            <button
+              onClick={handleRefresh}
               className="refresh-btn"
               disabled={loading}
+              data-tooltip="Refresh volumes list"
             >
               🔄 Refresh
             </button>
@@ -60,30 +66,30 @@ export function VolumesList() {
             <div className="col-created">Created</div>
             <div className="col-actions">Actions</div>
           </div>
-          
+
           {volumes.map((volume) => (
             <div key={volume.Name} className="table-row">
               <div className="col-name">
                 <div className="volume-name">{volume.Name}</div>
               </div>
-              
+
               <div className="col-driver">
                 <span className="volume-driver">{volume.Driver}</span>
               </div>
-              
+
               <div className="col-mountpoint">
                 <span className="mountpoint">{volume.Mountpoint}</span>
               </div>
-              
+
               <div className="col-created">
                 {new Date(volume.CreatedAt).toLocaleDateString()}
               </div>
-              
+
               <div className="col-actions">
                 <div className="action-buttons">
                   <button
                     className="action-btn remove-btn"
-                    title="Remove volume"
+                    data-tooltip="Remove volume"
                   >
                     🗑️
                   </button>

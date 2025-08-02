@@ -92,6 +92,7 @@ interface DockerState {
   loading: boolean
   error: string | null
   connected: boolean
+  searchTerm: string
 }
 
 type DockerAction =
@@ -102,6 +103,7 @@ type DockerAction =
   | { type: "SET_IMAGES"; payload: DockerImage[] }
   | { type: "SET_VOLUMES"; payload: DockerVolume[] }
   | { type: "SET_NETWORKS"; payload: DockerNetwork[] }
+  | { type: "SET_SEARCH_TERM"; payload: string }
 
 const initialState: DockerState = {
   containers: [],
@@ -111,6 +113,7 @@ const initialState: DockerState = {
   loading: false,
   error: null,
   connected: false,
+  searchTerm: "",
 }
 
 function dockerReducer(state: DockerState, action: DockerAction): DockerState {
@@ -129,6 +132,8 @@ function dockerReducer(state: DockerState, action: DockerAction): DockerState {
       return { ...state, volumes: action.payload, loading: false }
     case "SET_NETWORKS":
       return { ...state, networks: action.payload, loading: false }
+    case "SET_SEARCH_TERM":
+      return { ...state, searchTerm: action.payload }
     default:
       return state
   }
@@ -148,6 +153,17 @@ interface DockerContextType extends DockerState {
   exportContainer: (id: string, tag?: string) => Promise<void>
   removeContainer: (id: string) => Promise<void>
   removeImage: (id: string) => Promise<void>
+  setSearchTerm: (term: string) => void
+  filterContainers: (
+    containers: DockerContainer[],
+    searchTerm: string
+  ) => DockerContainer[]
+  filterImages: (images: DockerImage[], searchTerm: string) => DockerImage[]
+  filterVolumes: (volumes: DockerVolume[], searchTerm: string) => DockerVolume[]
+  filterNetworks: (
+    networks: DockerNetwork[],
+    searchTerm: string
+  ) => DockerNetwork[]
 }
 
 const DockerContext = createContext<DockerContextType | undefined>(undefined)
@@ -191,7 +207,19 @@ export function DockerProvider({ children }: DockerProviderProps) {
         )
       }
 
-      return await response.json()
+      // Handle empty responses
+      const text = await response.text()
+      if (!text || text.trim() === "") {
+        // Return empty array for JSON responses that should contain arrays
+        return []
+      }
+
+      try {
+        return JSON.parse(text)
+      } catch (parseError) {
+        console.error("Failed to parse JSON response:", text, parseError)
+        throw new Error("Invalid JSON response from Docker API")
+      }
     } catch (error) {
       if (error instanceof Error) {
         if (
@@ -223,6 +251,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
         payload: error instanceof Error ? error.message : "Unknown error",
       })
       dispatch({ type: "SET_CONNECTED", payload: false })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -239,6 +269,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -256,6 +288,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -272,6 +306,8 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -287,6 +323,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -302,6 +339,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -317,6 +355,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -332,6 +371,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -347,6 +387,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -367,6 +408,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -386,6 +428,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -401,6 +444,7 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
   }
 
@@ -416,7 +460,72 @@ export function DockerProvider({ children }: DockerProviderProps) {
         type: "SET_ERROR",
         payload: error instanceof Error ? error.message : "Unknown error",
       })
+      dispatch({ type: "SET_LOADING", payload: false })
     }
+  }
+
+  // Search/filter utility functions
+  const filterContainers = (
+    containers: DockerContainer[],
+    searchTerm: string
+  ): DockerContainer[] => {
+    if (!searchTerm.trim()) return containers
+    const term = searchTerm.toLowerCase()
+    return containers.filter(
+      (container) =>
+        container.Names.some((name) => name.toLowerCase().includes(term)) ||
+        container.Image.toLowerCase().includes(term) ||
+        container.Id.toLowerCase().includes(term) ||
+        container.State.toLowerCase().includes(term) ||
+        container.Status.toLowerCase().includes(term)
+    )
+  }
+
+  const filterImages = (
+    images: DockerImage[],
+    searchTerm: string
+  ): DockerImage[] => {
+    if (!searchTerm.trim()) return images
+    const term = searchTerm.toLowerCase()
+    return images.filter(
+      (image) =>
+        image.Id.toLowerCase().includes(term) ||
+        (image.RepoTags &&
+          image.RepoTags.some((tag) => tag.toLowerCase().includes(term))) ||
+        (image.RepoDigests &&
+          image.RepoDigests.some((digest) =>
+            digest.toLowerCase().includes(term)
+          ))
+    )
+  }
+
+  const filterVolumes = (
+    volumes: DockerVolume[],
+    searchTerm: string
+  ): DockerVolume[] => {
+    if (!searchTerm.trim()) return volumes
+    const term = searchTerm.toLowerCase()
+    return volumes.filter(
+      (volume) =>
+        volume.Name.toLowerCase().includes(term) ||
+        volume.Driver.toLowerCase().includes(term) ||
+        volume.Mountpoint.toLowerCase().includes(term)
+    )
+  }
+
+  const filterNetworks = (
+    networks: DockerNetwork[],
+    searchTerm: string
+  ): DockerNetwork[] => {
+    if (!searchTerm.trim()) return networks
+    const term = searchTerm.toLowerCase()
+    return networks.filter(
+      (network) =>
+        network.Name.toLowerCase().includes(term) ||
+        network.Id.toLowerCase().includes(term) ||
+        network.Driver.toLowerCase().includes(term) ||
+        network.Scope.toLowerCase().includes(term)
+    )
   }
 
   useEffect(() => {
@@ -430,6 +539,10 @@ export function DockerProvider({ children }: DockerProviderProps) {
 
     initializeData()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const setSearchTerm = (term: string) => {
+    dispatch({ type: "SET_SEARCH_TERM", payload: term })
+  }
 
   const contextValue: DockerContextType = {
     ...state,
@@ -446,6 +559,11 @@ export function DockerProvider({ children }: DockerProviderProps) {
     exportContainer,
     removeContainer,
     removeImage,
+    setSearchTerm,
+    filterContainers,
+    filterImages,
+    filterVolumes,
+    filterNetworks,
   }
 
   return (

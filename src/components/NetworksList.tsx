@@ -1,4 +1,5 @@
-import { useDocker } from '../context/DockerContext'
+import { useDocker } from "../context/DockerContext"
+import "./NetworksList.css"
 
 export function NetworksList() {
   const { networks, loading, error, refreshNetworks } = useDocker()
@@ -21,7 +22,11 @@ export function NetworksList() {
       <div className="networks-error">
         <h3>Error loading networks</h3>
         <p>{error}</p>
-        <button onClick={handleRefresh} className="retry-btn">
+        <button
+          onClick={handleRefresh}
+          className="retry-btn"
+          data-tooltip="Retry loading networks"
+        >
           Retry
         </button>
       </div>
@@ -34,10 +39,11 @@ export function NetworksList() {
         <div className="header-content">
           <h2>Networks ({networks.length})</h2>
           <div className="header-actions">
-            <button 
-              onClick={handleRefresh} 
+            <button
+              onClick={handleRefresh}
               className="refresh-btn"
               disabled={loading}
+              data-tooltip="Refresh networks list"
             >
               🔄 Refresh
             </button>
@@ -61,34 +67,36 @@ export function NetworksList() {
             <div className="col-created">Created</div>
             <div className="col-actions">Actions</div>
           </div>
-          
+
           {networks.map((network) => (
             <div key={network.Id} className="table-row">
               <div className="col-name">
                 <div className="network-name">{network.Name}</div>
               </div>
-              
+
               <div className="col-id">
-                <span className="network-id">{network.Id.substring(0, 12)}</span>
+                <span className="network-id">
+                  {network.Id.substring(0, 12)}
+                </span>
               </div>
-              
+
               <div className="col-driver">
                 <span className="network-driver">{network.Driver}</span>
               </div>
-              
+
               <div className="col-scope">
                 <span className="network-scope">{network.Scope}</span>
               </div>
-              
+
               <div className="col-created">
                 {new Date(network.Created).toLocaleDateString()}
               </div>
-              
+
               <div className="col-actions">
                 <div className="action-buttons">
                   <button
                     className="action-btn remove-btn"
-                    title="Remove network"
+                    data-tooltip="Remove network"
                   >
                     🗑️
                   </button>

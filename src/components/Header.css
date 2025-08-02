@@ -44,7 +44,12 @@
   position: relative;
 }
 
+.search-container form {
+  width: 100%;
+}
+
 .search-input {
+  position: relative;
   width: 100%;
   padding: 0.5rem 1rem;
   border: 1px solid #444;
@@ -64,6 +69,48 @@
   color: #888;
 }
 
+/* Tooltip for search input */
+.search-input::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2d2d2d;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+  margin-top: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #444;
+}
+
+.search-input::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: #2d2d2d;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+}
+
+.search-input:hover::after,
+.search-input:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -71,10 +118,54 @@
 }
 
 .status-indicator {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
+}
+
+.status-indicator::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2d2d2d;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+  margin-top: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #444;
+  max-width: 300px;
+  white-space: normal;
+}
+
+.status-indicator::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: #2d2d2d;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+}
+
+.status-indicator:hover::after,
+.status-indicator:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
 
 .status-dot {
@@ -93,6 +184,7 @@
 }
 
 .settings-btn {
+  position: relative;
   background: none;
   border: none;
   color: white;
@@ -105,4 +197,45 @@
 
 .settings-btn:hover {
   background-color: #333;
+}
+
+.settings-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2d2d2d;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+  margin-top: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #444;
+}
+
+.settings-btn::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: #2d2d2d;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+}
+
+.settings-btn:hover::after,
+.settings-btn:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
