@@ -9,7 +9,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     chunkSizeWarningLimit: 1000, // Increase chunk size warning limit
-    cssMinify: false, // Disable CSS minification to avoid syntax errors
+    cssMinify: 'esbuild', // Use esbuild for CSS minification (but configured to be less aggressive)
     rollupOptions: {
       output: {
         manualChunks: {
@@ -29,7 +29,7 @@ export default defineConfig({
   },
   esbuild: {
     legalComments: 'none',
-    minifyIdentifiers: true,
+    minifyIdentifiers: false, // Disable identifier minification to preserve CSS variables
     minifySyntax: true,
     minifyWhitespace: true,
     target: 'es2020'
