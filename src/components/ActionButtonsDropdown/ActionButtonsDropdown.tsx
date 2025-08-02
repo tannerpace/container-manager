@@ -1,26 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
+import type { DockerContainer } from "../../types/dockerTypes"
 import { dockerTerminalActions } from "../../utils/terminalUtils"
 import "./ActionButtonsDropdown.css"
-
-interface DockerContainer {
-  Id: string
-  Names: string[]
-  Image: string
-  ImageID: string
-  Command: string
-  Created: number
-  Ports: any[]
-  Labels: Record<string, string>
-  State: string
-  Status: string
-  HostConfig: {
-    NetworkMode: string
-  }
-  NetworkSettings: {
-    Networks: Record<string, any>
-  }
-  Mounts: any[]
-}
 
 interface ActionButtonsDropdownProps {
   container: DockerContainer
