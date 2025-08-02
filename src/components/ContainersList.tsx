@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
-import { ActionButtonsDropdown } from "./ActionButtonsDropdown"
+import type { DockerContainer } from "../types/dockerTypes"
+import { ActionModal } from "./ActionModal"
 import "./ContainersList.css"
+import { HamburgerButton } from "./HamburgerButton"
 import { TerminalModal } from "./Terminal/TerminalModal"
 
 // Hot reloading should work now! 🔥 Hamburger menu restored!
@@ -44,6 +46,12 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     null
   )
   const [terminalContainerName, setTerminalContainerName] = useState<string>("")
+
+  // Action modal state
+  const [actionModalVisible, setActionModalVisible] = useState(false)
+  const [actionModalContainer, setActionModalContainer] =
+    useState<DockerContainer | null>(null)
+  const [actionModalPosition, setActionModalPosition] = useState({ x: 0, y: 0 })
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
@@ -113,6 +121,27 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       setRemoveModalVisible(false)
       setContainerToRemove(null)
     }
+  }
+
+  const handleActionButtonClick = (
+    event: React.MouseEvent,
+    container: DockerContainer
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const scrollY = window.scrollY || document.documentElement.scrollTop
+    const scrollX = window.scrollX || document.documentElement.scrollLeft
+
+    setActionModalPosition({
+      x: rect.left + scrollX - 180, // Position to the left of the button
+      y: rect.bottom + scrollY + 5, // Position below the button
+    })
+    setActionModalContainer(container)
+    setActionModalVisible(true)
+  }
+
+  const handleCloseActionModal = () => {
+    setActionModalVisible(false)
+    setActionModalContainer(null)
   }
 
   const getStatusColor = (state: string) => {
@@ -228,9 +257,8 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             </div>
 
             <div className="col-actions">
-              <ActionButtonsDropdown
-                container={container}
-                onAction={handleAction}
+              <HamburgerButton
+                onClick={(event) => handleActionButtonClick(event, container)}
               />
             </div>
           </div>
@@ -401,6 +429,15 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
           }}
         />
       )}
+
+      {/* Action Modal */}
+      <ActionModal
+        container={actionModalContainer}
+        isOpen={actionModalVisible}
+        position={actionModalPosition}
+        onAction={handleAction}
+        onClose={handleCloseActionModal}
+      />
     </div>
   )
 }

@@ -33,6 +33,7 @@
     inset 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
   padding: 0.75rem;
   min-height: 0;
+  max-height: calc(100vh - 3rem - 1.5rem); /* Adjust for header and padding */
 }
 
 .sidebar {
