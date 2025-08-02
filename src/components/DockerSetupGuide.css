@@ -1,0 +1,147 @@
+.setup-guide-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.setup-guide-modal {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: white;
+}
+
+.setup-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.setup-guide-header h2 {
+  margin: 0;
+  color: #0078d4;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #333;
+  color: white;
+}
+
+.setup-guide-content {
+  padding: 1.5rem;
+}
+
+.setup-guide-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #cccccc;
+}
+
+.setup-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #252526;
+}
+
+.setup-section h3 {
+  margin: 0 0 1rem 0;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.setup-section ol,
+.setup-section ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.setup-section li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  color: #cccccc;
+}
+
+.setup-section code {
+  background-color: #333;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.9rem;
+  color: #4fc3f7;
+}
+
+.setup-section pre {
+  background-color: #333;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.9rem;
+  color: #4fc3f7;
+}
+
+.setup-section.warning {
+  border-left: 4px solid #ffc107;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.setup-section.warning h3 {
+  color: #ffc107;
+}
+
+.setup-section.security {
+  border-left: 4px solid #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.setup-section.security h3 {
+  color: #dc3545;
+}
+
+.setup-guide-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.retry-btn {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+  background-color: #106ebe;
+}

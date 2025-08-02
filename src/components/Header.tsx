@@ -1,6 +1,9 @@
+import { useDocker } from '../context/DockerContext'
 import './Header.css'
 
 export function Header() {
+  const { connected, error } = useDocker()
+
   return (
     <header className="header">
       <div className="header-left">
@@ -22,8 +25,8 @@ export function Header() {
       
       <div className="header-right">
         <div className="status-indicator">
-          <div className="status-dot running"></div>
-          <span>Docker Running</span>
+          <div className={`status-dot ${connected ? 'running' : 'stopped'}`}></div>
+          <span>{connected ? 'Docker Connected' : error ? 'Docker Error' : 'Docker Disconnected'}</span>
         </div>
         
         <button className="settings-btn" title="Settings">

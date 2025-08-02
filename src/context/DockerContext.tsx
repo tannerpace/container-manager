@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react'
+import { getCurrentDockerConfig } from '../config/docker'
 
 // Docker API types
 export interface DockerContainer {
@@ -161,55 +162,61 @@ interface DockerProviderProps {
 export function DockerProvider({ children }: DockerProviderProps) {
   const [state, dispatch] = useReducer(dockerReducer, initialState)
 
-  // Mock Docker API calls for now - replace with actual Docker API calls
+  // Docker API configuration
+  const dockerConfig = getCurrentDockerConfig()
+  const DOCKER_API_BASE = dockerConfig.apiUrl
+
+  // Helper function to make Docker API calls
+  const makeDockerAPICall = async (endpoint: string, options: RequestInit = {}) => {
+    try {
+      const response = await fetch(`${DOCKER_API_BASE}${endpoint}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`Docker API error: ${response.status} ${response.statusText}`)
+      }
+
+      return await response.json()
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          throw new Error('Unable to connect to Docker daemon. Make sure Docker is running and API is accessible.')
+        }
+      }
+      throw error
+    }
+  }
+
+  // Real Docker API calls
   const refreshContainers = async () => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock containers data
-      const mockContainers: DockerContainer[] = [
-        {
-          Id: '1234567890abcdef',
-          Names: ['/my-app'],
-          Image: 'nginx:latest',
-          ImageID: 'sha256:abc123',
-          Command: 'nginx -g "daemon off;"',
-          Created: Date.now() / 1000,
-          Ports: [{ PrivatePort: 80, PublicPort: 8080, Type: 'tcp' }],
-          Labels: {},
-          State: 'running',
-          Status: 'Up 2 hours',
-          HostConfig: { NetworkMode: 'default' },
-          NetworkSettings: { Networks: {} },
-          Mounts: [],
-        },
-      ]
-      dispatch({ type: 'SET_CONTAINERS', payload: mockContainers })
+      // Fetch all containers (including stopped ones)
+      const containers = await makeDockerAPICall('/containers/json?all=true')
+      dispatch({ type: 'SET_CONTAINERS', payload: containers })
       dispatch({ type: 'SET_CONNECTED', payload: true })
+      dispatch({ type: 'SET_ERROR', payload: null })
     } catch (error) {
+      console.error('Error fetching containers:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
+      dispatch({ type: 'SET_CONNECTED', payload: false })
     }
   }
 
   const refreshImages = async () => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock images data
-      const mockImages: DockerImage[] = [
-        {
-          Id: 'sha256:abc123def456',
-          ParentId: '',
-          RepoTags: ['nginx:latest'],
-          RepoDigests: null,
-          Created: Date.now() / 1000,
-          Size: 142000000,
-          VirtualSize: 142000000,
-          SharedSize: 0,
-          Labels: null,
-          Containers: 1,
-        },
-      ]
-      dispatch({ type: 'SET_IMAGES', payload: mockImages })
+      // Fetch all images
+      const images = await makeDockerAPICall('/images/json')
+      dispatch({ type: 'SET_IMAGES', payload: images })
+      dispatch({ type: 'SET_ERROR', payload: null })
     } catch (error) {
+      console.error('Error fetching images:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -217,20 +224,13 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const refreshVolumes = async () => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock volumes data
-      const mockVolumes: DockerVolume[] = [
-        {
-          CreatedAt: new Date().toISOString(),
-          Driver: 'local',
-          Labels: null,
-          Mountpoint: '/var/lib/docker/volumes/my-volume/_data',
-          Name: 'my-volume',
-          Options: null,
-          Scope: 'local',
-        },
-      ]
-      dispatch({ type: 'SET_VOLUMES', payload: mockVolumes })
+      // Fetch all volumes
+      const volumesResponse = await makeDockerAPICall('/volumes')
+      const volumes = volumesResponse.Volumes || []
+      dispatch({ type: 'SET_VOLUMES', payload: volumes })
+      dispatch({ type: 'SET_ERROR', payload: null })
     } catch (error) {
+      console.error('Error fetching volumes:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -238,32 +238,12 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const refreshNetworks = async () => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock networks data
-      const mockNetworks: DockerNetwork[] = [
-        {
-          Name: 'bridge',
-          Id: 'abc123def456',
-          Created: new Date().toISOString(),
-          Scope: 'local',
-          Driver: 'bridge',
-          EnableIPv6: false,
-          IPAM: {
-            Driver: 'default',
-            Options: null,
-            Config: [{ Subnet: '172.17.0.0/16', Gateway: '172.17.0.1' }],
-          },
-          Internal: false,
-          Attachable: false,
-          Ingress: false,
-          ConfigFrom: { Network: '' },
-          ConfigOnly: false,
-          Containers: {},
-          Options: {},
-          Labels: {},
-        },
-      ]
-      dispatch({ type: 'SET_NETWORKS', payload: mockNetworks })
+      // Fetch all networks
+      const networks = await makeDockerAPICall('/networks')
+      dispatch({ type: 'SET_NETWORKS', payload: networks })
+      dispatch({ type: 'SET_ERROR', payload: null })
     } catch (error) {
+      console.error('Error fetching networks:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -271,10 +251,11 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const startContainer = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock container start
-      console.log(`Starting container ${id}`)
+      await makeDockerAPICall(`/containers/${id}/start`, { method: 'POST' })
+      // Refresh containers to get updated status
       await refreshContainers()
     } catch (error) {
+      console.error('Error starting container:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -282,10 +263,11 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const stopContainer = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock container stop
-      console.log(`Stopping container ${id}`)
+      await makeDockerAPICall(`/containers/${id}/stop`, { method: 'POST' })
+      // Refresh containers to get updated status
       await refreshContainers()
     } catch (error) {
+      console.error('Error stopping container:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -293,10 +275,11 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const removeContainer = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock container removal
-      console.log(`Removing container ${id}`)
+      await makeDockerAPICall(`/containers/${id}`, { method: 'DELETE' })
+      // Refresh containers to get updated list
       await refreshContainers()
     } catch (error) {
+      console.error('Error removing container:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
@@ -304,21 +287,26 @@ export function DockerProvider({ children }: DockerProviderProps) {
   const removeImage = async (id: string) => {
     dispatch({ type: 'SET_LOADING', payload: true })
     try {
-      // Mock image removal
-      console.log(`Removing image ${id}`)
+      await makeDockerAPICall(`/images/${id}`, { method: 'DELETE' })
+      // Refresh images to get updated list
       await refreshImages()
     } catch (error) {
+      console.error('Error removing image:', error)
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Unknown error' })
     }
   }
 
   useEffect(() => {
     // Initialize data on mount
-    refreshContainers()
-    refreshImages()
-    refreshVolumes()
-    refreshNetworks()
-  }, [])
+    const initializeData = async () => {
+      await refreshContainers()
+      await refreshImages()
+      await refreshVolumes()
+      await refreshNetworks()
+    }
+    
+    initializeData()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const contextValue: DockerContextType = {
     ...state,
