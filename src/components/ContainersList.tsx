@@ -1,23 +1,35 @@
-import { useDocker } from '../context/DockerContext'
-import './ContainersList.css'
+import { useDocker } from "../context/DockerContext"
+import "./ContainersList.css"
 
-export function ContainersList() {
-  const { containers, loading, error, startContainer, stopContainer, removeContainer, refreshContainers } = useDocker()
+interface ContainersListProps {
+  onContainerSelect?: (containerId: string) => void
+}
+
+export function ContainersList({ onContainerSelect }: ContainersListProps) {
+  const {
+    containers,
+    loading,
+    error,
+    startContainer,
+    stopContainer,
+    removeContainer,
+    refreshContainers,
+  } = useDocker()
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
-      case 'start':
+      case "start":
         await startContainer(containerId)
         break
-      case 'stop':
+      case "stop":
         await stopContainer(containerId)
         break
-      case 'remove':
-        if (confirm('Are you sure you want to remove this container?')) {
+      case "remove":
+        if (confirm("Are you sure you want to remove this container?")) {
           await removeContainer(containerId)
         }
         break
-      case 'refresh':
+      case "refresh":
         await refreshContainers()
         break
     }
@@ -25,14 +37,14 @@ export function ContainersList() {
 
   const getStatusColor = (state: string) => {
     switch (state.toLowerCase()) {
-      case 'running':
-        return '#28a745'
-      case 'exited':
-        return '#dc3545'
-      case 'paused':
-        return '#ffc107'
+      case "running":
+        return "#28a745"
+      case "exited":
+        return "#dc3545"
+      case "paused":
+        return "#ffc107"
       default:
-        return '#6c757d'
+        return "#6c757d"
     }
   }
 
@@ -50,7 +62,10 @@ export function ContainersList() {
       <div className="containers-error">
         <h3>Error loading containers</h3>
         <p>{error}</p>
-        <button onClick={() => handleAction('refresh', '')} className="retry-btn">
+        <button
+          onClick={() => handleAction("refresh", "")}
+          className="retry-btn"
+        >
           Retry
         </button>
       </div>
@@ -63,8 +78,8 @@ export function ContainersList() {
         <div className="header-content">
           <h2>Containers ({containers.length})</h2>
           <div className="header-actions">
-            <button 
-              onClick={() => handleAction('refresh', '')} 
+            <button
+              onClick={() => handleAction("refresh", "")}
               className="refresh-btn"
               disabled={loading}
             >
@@ -90,37 +105,41 @@ export function ContainersList() {
             <div className="col-created">Created</div>
             <div className="col-actions">Actions</div>
           </div>
-          
+
           {containers.map((container) => (
             <div key={container.Id} className="table-row">
               <div className="col-name">
                 <div className="container-name">
-                  {container.Names[0]?.replace('/', '') || 'unnamed'}
+                  {container.Names[0]?.replace("/", "") || "unnamed"}
                 </div>
-                <div className="container-id">{container.Id.substring(0, 12)}</div>
+                <div className="container-id">
+                  {container.Id.substring(0, 12)}
+                </div>
               </div>
-              
+
               <div className="col-image">
                 <span className="image-name">{container.Image}</span>
               </div>
-              
+
               <div className="col-status">
                 <div className="status-badge">
-                  <div 
-                    className="status-dot" 
+                  <div
+                    className="status-dot"
                     style={{ backgroundColor: getStatusColor(container.State) }}
                   ></div>
                   <span>{container.State}</span>
                 </div>
                 <div className="status-detail">{container.Status}</div>
               </div>
-              
+
               <div className="col-ports">
                 {container.Ports.length > 0 ? (
                   <div className="ports-list">
                     {container.Ports.map((port, index) => (
                       <div key={index} className="port-mapping">
-                        {port.PublicPort ? `${port.PublicPort}:${port.PrivatePort}` : port.PrivatePort}
+                        {port.PublicPort
+                          ? `${port.PublicPort}:${port.PrivatePort}`
+                          : port.PrivatePort}
                         <span className="port-type">/{port.Type}</span>
                       </div>
                     ))}
@@ -129,16 +148,24 @@ export function ContainersList() {
                   <span className="no-ports">-</span>
                 )}
               </div>
-              
+
               <div className="col-created">
                 {new Date(container.Created * 1000).toLocaleDateString()}
               </div>
-              
+
               <div className="col-actions">
                 <div className="action-buttons">
-                  {container.State === 'running' ? (
+                  <button
+                    onClick={() => onContainerSelect?.(container.Id)}
+                    className="action-btn details-btn"
+                    title="View details"
+                  >
+                    📋
+                  </button>
+
+                  {container.State === "running" ? (
                     <button
-                      onClick={() => handleAction('stop', container.Id)}
+                      onClick={() => handleAction("stop", container.Id)}
                       className="action-btn stop-btn"
                       title="Stop container"
                     >
@@ -146,16 +173,16 @@ export function ContainersList() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleAction('start', container.Id)}
+                      onClick={() => handleAction("start", container.Id)}
                       className="action-btn start-btn"
                       title="Start container"
                     >
                       ▶️
                     </button>
                   )}
-                  
+
                   <button
-                    onClick={() => handleAction('remove', container.Id)}
+                    onClick={() => handleAction("remove", container.Id)}
                     className="action-btn remove-btn"
                     title="Remove container"
                   >

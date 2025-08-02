@@ -1,0 +1,82 @@
+/* Volumes Tab Styles */
+.volumes-tab {
+  padding: 0;
+}
+
+.mounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
+}
+
+.mount-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.mount-card:hover {
+  border-color: #007acc;
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.1);
+  transform: translateY(-1px);
+}
+
+.mount-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.mount-type {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.mount-mode {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mount-mode.read-write {
+  background: rgba(40, 167, 69, 0.2);
+  color: #155724;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.mount-mode.read-only {
+  background: rgba(255, 193, 7, 0.2);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.mount-details {
+  padding: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mounts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mount-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mount-mode {
+    align-self: flex-end;
+  }
+}

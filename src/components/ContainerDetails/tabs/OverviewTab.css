@@ -1,0 +1,148 @@
+/* Overview Tab Styles */
+.overview-tab {
+  padding: 0;
+}
+
+/* Port Mappings */
+.ports-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.port-mapping {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.9rem;
+}
+
+.container-port {
+  background: #007acc;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  min-width: 80px;
+  text-align: center;
+}
+
+.port-arrow {
+  color: #6c757d;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.host-ports {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.host-port {
+  background: #28a745;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.host-port.unpublished {
+  background: #6c757d;
+  font-style: italic;
+}
+
+/* Badge Extensions */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* Code styling improvements */
+.info-value.code {
+  word-break: break-all;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-value.code:hover {
+  white-space: normal;
+  overflow: visible;
+  max-width: none;
+}
+
+/* Status styling */
+.info-value.status {
+  justify-content: flex-end;
+}
+
+/* Resource limits styling */
+.info-card h4 {
+  position: relative;
+}
+
+.info-card:nth-child(6) h4::before {
+  content: "⚡";
+  margin-right: 0.5rem;
+}
+
+/* Command section styling */
+.tab-section .info-card .info-row .info-value.code {
+  background: #212529;
+  color: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  max-width: none;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .port-mapping {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .port-arrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+
+  .host-ports {
+    align-items: center;
+  }
+
+  .info-value.code {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-value.code {
+    max-width: 150px;
+    font-size: 0.75rem;
+  }
+
+  .port-mapping {
+    font-size: 0.8rem;
+  }
+
+  .container-port,
+  .host-port {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.75rem;
+  }
+}

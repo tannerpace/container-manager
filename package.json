@@ -7,7 +7,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite",
+    "fresh": "npm run clean && npm install",
+    "docker:check": "curl -f -s http://localhost:2375/version || echo 'Docker API not accessible'",
+    "docker:containers": "docker ps -a",
+    "docker:images": "docker images",
+    "docker:info": "docker system df",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@types/node": "^24.1.0",

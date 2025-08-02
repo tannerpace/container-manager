@@ -16,10 +16,11 @@
   border: 1px solid #333;
   border-radius: 8px;
   width: 90%;
-  max-width: 600px;
+  max-width: 60vw;
   max-height: 80vh;
   overflow-y: auto;
   color: white;
+  box-sizing: border-box;
 }
 
 .setup-guide-header {
@@ -90,7 +91,7 @@
   background-color: #333;
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
-  font-family: 'Monaco', 'Consolas', monospace;
+  font-family: "Monaco", "Consolas", monospace;
   font-size: 0.9rem;
   color: #4fc3f7;
 }
@@ -101,7 +102,7 @@
   border-radius: 4px;
   overflow-x: auto;
   margin: 0.5rem 0;
-  font-family: 'Monaco', 'Consolas', monospace;
+  font-family: "Monaco", "Consolas", monospace;
   font-size: 0.9rem;
   color: #4fc3f7;
 }
@@ -124,11 +125,98 @@
   color: #dc3545;
 }
 
+.setup-section.verification {
+  border-left: 4px solid #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.setup-section.verification h3 {
+  color: #28a745;
+}
+
+.setup-section.troubleshooting {
+  border-left: 4px solid #6f42c1;
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.setup-section.troubleshooting h3 {
+  color: #6f42c1;
+}
+
+.setup-section.recommended {
+  border-left: 4px solid #17a2b8;
+  background-color: rgba(23, 162, 184, 0.1);
+}
+
+.setup-section.recommended h3 {
+  color: #17a2b8;
+}
+
+.setup-section.recommended h3::after {
+  content: " (No sudo required)";
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: #28a745;
+}
+
+.alternatives {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.alternative {
+  background-color: #2d2d2d;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #0078d4;
+}
+
+.alternative h4 {
+  margin: 0 0 0.5rem 0;
+  color: #0078d4;
+  font-size: 1rem;
+}
+
+.alternative pre {
+  background-color: #1e1e1e;
+  margin: 0.5rem 0 0 0;
+}
+
+.alternative ol {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.2rem;
+}
+
+.alternative li {
+  margin-bottom: 0.3rem;
+}
+
 .setup-guide-footer {
   padding: 1.5rem;
   border-top: 1px solid #333;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-info {
+  flex: 1;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.footer-info a {
+  color: #0078d4;
+  text-decoration: none;
+}
+
+.footer-info a:hover {
+  text-decoration: underline;
 }
 
 .retry-btn {
