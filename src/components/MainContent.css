@@ -1,7 +1,7 @@
 .main-content {
   flex: 1;
   background: transparent;
-  overflow: auto;
+  overflow: visible;
   position: relative;
   padding: 0;
   border-radius: 0;

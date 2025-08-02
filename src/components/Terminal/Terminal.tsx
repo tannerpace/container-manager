@@ -139,7 +139,7 @@ export function Terminal({
         // Handle terminal input
         let currentLine = ""
 
-        xtermRef.current.onData((data) => {
+        xtermRef.current.onData((data: string) => {
           const terminal = xtermRef.current
           if (!terminal) return
 
