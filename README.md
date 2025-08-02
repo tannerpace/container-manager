@@ -5,7 +5,7 @@ A modern Docker Desktop clone built with React, TypeScript, and Vite. This appli
 ## Features
 
 - 🐳 **Container Management**: View, start, stop, and remove Docker containers
-- 💿 **Image Management**: Browse and manage Docker images  
+- 💿 **Image Management**: Browse and manage Docker images
 - 💾 **Volume Management**: View and manage Docker volumes
 - 🌐 **Network Management**: Monitor Docker networks
 - 🔄 **Real-time Updates**: Live status updates for containers and resources
@@ -24,32 +24,36 @@ A modern Docker Desktop clone built with React, TypeScript, and Vite. This appli
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - Docker Desktop or Docker Engine running
 - npm or yarn package manager
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/your-username/container-manager.git
 cd container-manager
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. **Enable Docker API access** (Required):
-   
+
    **For Docker Desktop:**
+
    - Open Docker Desktop
    - Go to Settings → General
    - Enable "Expose daemon on tcp://localhost:2375 without TLS"
    - Click "Apply & Restart"
-   
+
    **For Docker on Linux:**
+
    - Edit `/etc/docker/daemon.json`:
      ```json
      {
@@ -59,6 +63,7 @@ npm install
    - Restart Docker: `sudo systemctl restart docker`
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -72,7 +77,7 @@ npm run dev
 The Docker API doesn't set CORS headers. If you can't connect after enabling the API:
 
 - **Development**: Use Chrome with `--disable-web-security --user-data-dir=/tmp/chrome_dev`
-- **Alternative**: Install a CORS browser extension  
+- **Alternative**: Install a CORS browser extension
 - **Production**: Use a proxy server
 
 See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed setup instructions.
@@ -105,23 +110,27 @@ src/
 ## Features Overview
 
 ### Container Management
+
 - View all containers with their status, ports, and resource usage
 - Start, stop, and remove containers with one click
 - Real-time status updates
 - Port mapping visualization
 
-### Image Management  
+### Image Management
+
 - Browse local Docker images
 - View image sizes, tags, and creation dates
 - Remove unused images
 - Repository and tag information
 
 ### Volume Management
+
 - List all Docker volumes
 - View mount points and driver information
 - Volume usage tracking
 
 ### Network Management
+
 - Monitor Docker networks
 - View network drivers and configurations
 - Container network associations
@@ -129,6 +138,7 @@ src/
 ## Development
 
 ### Mock Data
+
 Currently, the application uses mock data for demonstration purposes. To connect to a real Docker daemon, you'll need to:
 
 1. Implement Docker Engine API calls in `src/context/DockerContext.tsx`
@@ -165,16 +175,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Inspired by Docker Desktop
 - Built with modern React patterns and TypeScript
 - Uses Vite for optimal development experience
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
+  languageOptions: {
+  parserOptions: {
+  project: ['./tsconfig.node.json', './tsconfig.app.json'],
+  tsconfigRootDir: import.meta.dirname,
   },
-])
-```
+  // other options...
+  }
+
+````
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
@@ -203,4 +212,4 @@ export default tseslint.config([
     },
   },
 ])
-```
+````
