@@ -261,7 +261,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
                     className="action-btn details-btn"
                     data-tooltip="View details"
                   >
-                    �️
+                    🔁
                   </button>
 
                   {container.State?.toLowerCase() === "running" ? (
