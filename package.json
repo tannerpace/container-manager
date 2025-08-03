@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:electron": "tsc -p tsconfig.electron.json && echo '{\"type\": \"commonjs\"}' > dist/electron/package.json",
+    "build:electron": "tsc -p tsconfig.electron.json && echo '{\"type\": \"commonjs\"}' > dist/electron/package.json && cp public/freewhaley-*.png dist/electron/",
     "electron": "npm run build:electron && electron .",
     "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && npm run build:electron && electron .\"",
     "package": "npm run build && npm run build:electron && electron-builder",

@@ -7,6 +7,7 @@
 
 import { exec, spawn } from 'child_process'
 import { app, BrowserWindow, ipcMain } from 'electron'
+import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import { promisify } from 'util'
@@ -22,9 +23,29 @@ let dockerBridge: DockerSocketBridge | null = null
  * Create the main applicatsion window
  */
 function createWindow(): void {
-  const iconPath = process.env.NODE_ENV === 'development'
-    ? path.join(__dirname, '../../public/freewhaley-256.png')
-    : path.join(__dirname, '../../public/freewhaley-256.png')
+  // Get the correct icon path based on environment
+  let iconPath: string
+
+  if (process.env.NODE_ENV === 'development') {
+    iconPath = path.join(__dirname, '../../public/freewhaley-512.png')
+  } else {
+    // In production, the icon should be in the resources directory
+    iconPath = path.join(process.resourcesPath, 'freewhaley-512.png')
+  }
+
+  // Fallback to app directory if resources path doesn't work
+  if (process.env.NODE_ENV !== 'development' && !fs.existsSync(iconPath)) {
+    iconPath = path.join(__dirname, '../freewhaley-512.png')
+  }
+
+  // Final fallback to 256px version
+  if (!fs.existsSync(iconPath)) {
+    iconPath = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-256.png')
+      : path.join(process.resourcesPath, 'freewhaley-256.png')
+  }
+
+  console.log('Using icon path:', iconPath)
 
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -80,7 +101,33 @@ async function setupDocker(): Promise<void> {
  */
 app.whenReady().then(async () => {
   await createWindow()
-  await setupDocker()
+  await setupDocker()  // Set dock icon on macOS
+  if (process.platform === 'darwin' && app.dock) {
+    const dockIconPath = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-512.png')
+      : path.join(process.resourcesPath, 'freewhaley-512.png')
+
+    // Fallback paths
+    const fallbackIconPath = path.join(__dirname, '../freewhaley-512.png')
+    const fallbackIconPath256 = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-256.png')
+      : path.join(process.resourcesPath, 'freewhaley-256.png')
+
+    let finalIconPath = dockIconPath
+    if (!fs.existsSync(finalIconPath)) {
+      finalIconPath = fallbackIconPath
+    }
+    if (!fs.existsSync(finalIconPath)) {
+      finalIconPath = fallbackIconPath256
+    }
+
+    if (fs.existsSync(finalIconPath)) {
+      app.dock.setIcon(finalIconPath)
+      console.log('Dock icon set to:', finalIconPath)
+    } else {
+      console.warn('No suitable dock icon found')
+    }
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
