@@ -1,6 +1,6 @@
 {
   "appId": "com.containerManager.app",
-  "productName": "Free Whaley Face",
+  "productName": "Whaley Face",
   "directories": {
     "buildResources": "build",
     "output": "release"
