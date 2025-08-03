@@ -247,6 +247,14 @@ export const ActionModal: React.FC<ActionModalProps> = ({
             <span className="action-text">Copy</span>
           </button>
 
+          <button
+            className="action-item duplicate"
+            onClick={() => handleAction("duplicate")}
+          >
+            <span className="action-icon">🔄</span>
+            <span className="action-text">Duplicate Container</span>
+          </button>
+
           {/* Dangerous actions */}
           <div className="action-divider" />
 

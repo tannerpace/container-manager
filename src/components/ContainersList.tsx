@@ -2,6 +2,10 @@ import { useRef, useState } from "react"
 import { useDocker } from "../hooks/useDocker"
 import type { DockerContainer } from "../types/dockerTypes"
 import { ActionModal } from "./ActionModal"
+import {
+  ContainerCreateModal,
+  type ContainerConfig,
+} from "./ContainerCreateModal"
 import "./ContainersList.css"
 import { HamburgerButton } from "./HamburgerButton"
 import { TerminalModal } from "./Terminal/TerminalModal"
@@ -29,6 +33,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     removeContainer,
     refreshContainers,
     copyContainer,
+    createContainerWithConfig,
   } = useDocker()
 
   // Filter containers based on search term
@@ -52,6 +57,11 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
   const [actionModalContainer, setActionModalContainer] =
     useState<DockerContainer | null>(null)
   const actionButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Container creation modal state
+  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [duplicateContainer, setDuplicateContainer] =
+    useState<DockerContainer | null>(null)
 
   const handleAction = async (action: string, containerId: string) => {
     switch (action) {
@@ -89,6 +99,14 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       case "copy":
         await copyContainer(containerId)
         break
+      case "duplicate": {
+        const container = containers.find((c) => c.Id === containerId)
+        if (container) {
+          setDuplicateContainer(container)
+          setCreateModalVisible(true)
+        }
+        break
+      }
       case "terminal": {
         const container = containers.find((c) => c.Id === containerId)
         if (container) {
@@ -121,6 +139,22 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       setRemoveModalVisible(false)
       setContainerToRemove(null)
     }
+  }
+
+  const handleCreateContainer = async (config: ContainerConfig) => {
+    try {
+      await createContainerWithConfig(config)
+      setCreateModalVisible(false)
+      setDuplicateContainer(null)
+    } catch (error) {
+      console.error("Failed to create container:", error)
+      // Error handling is done in the Docker context
+    }
+  }
+
+  const handleCloseCreateModal = () => {
+    setCreateModalVisible(false)
+    setDuplicateContainer(null)
   }
 
   const handleActionButtonClick = (
@@ -430,6 +464,15 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
         anchorEl={actionButtonRef.current}
         onAction={handleAction}
         onClose={handleCloseActionModal}
+      />
+
+      {/* Container Create/Duplicate Modal */}
+      <ContainerCreateModal
+        isOpen={createModalVisible}
+        onClose={handleCloseCreateModal}
+        onCreateContainer={handleCreateContainer}
+        sourceContainer={duplicateContainer || undefined}
+        mode="duplicate"
       />
     </div>
   )

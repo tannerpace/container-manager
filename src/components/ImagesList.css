@@ -439,6 +439,20 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* Create button styling */
+.create-btn {
+  background: linear-gradient(145deg, #007aff, #0056cc);
+  color: white;
+  border: none;
+}
+
+.create-btn:hover {
+  background: linear-gradient(145deg, #0056cc, #0041a3);
+  border-color: rgba(0, 122, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .images-list {
@@ -572,5 +586,13 @@
 
   .run-btn:hover {
     background: linear-gradient(145deg, #30d158, #28a745);
+  }
+
+  .create-btn {
+    background: linear-gradient(145deg, #0a84ff, #007aff);
+  }
+
+  .create-btn:hover {
+    background: linear-gradient(145deg, #007aff, #0056cc);
   }
 }

@@ -117,6 +117,23 @@ export interface DockerContextType extends DockerState {
   removeContainer: (id: string) => Promise<void>
   removeImage: (id: string) => Promise<void>
   createContainer: (imageId: string, containerName?: string) => Promise<void>
+  createContainerWithConfig: (config: {
+    image: string
+    name?: string
+    memory?: number
+    memorySwap?: number
+    cpus?: number
+    cpuShares?: number
+    volumes?: { host: string; container: string; mode: "ro" | "rw" }[]
+    ports?: { host: number; container: number; protocol: "tcp" | "udp" }[]
+    networkMode?: string
+    environment?: { key: string; value: string }[]
+    workingDir?: string
+    command?: string
+    entrypoint?: string
+    restart?: "no" | "always" | "unless-stopped" | "on-failure"
+    autoRemove?: boolean
+  }) => Promise<{ Id: string; Warnings?: string[] }>
   runContainer: (imageId: string, containerName?: string) => Promise<void>
   copyContainer: (containerId: string, newContainerName?: string) => Promise<void>
   openTerminal: (containerId: string) => Promise<void>
