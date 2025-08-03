@@ -223,7 +223,12 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
           ))}
         </div>
 
-        <div className="tab-content" style={{ overflowY: "auto" }}>
+        <div
+          className={`tab-content ${
+            activeTab === "terminal" ? "terminal-active" : ""
+          }`}
+          style={activeTab === "terminal" ? {} : { overflowY: "auto" }}
+        >
           {activeTab === "overview" && (
             <OverviewTab container={containerDetails} />
           )}

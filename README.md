@@ -1,3 +1,9 @@
+# To start use vs code task
+
+clean clean build
+build build production
+start start electron app
+
 # Container Manager
 
 A modern Docker Desktop clone built with React, TypeScript, and Vite. This application provides a clean and intuitive interface for managing Docker containers, images, volumes, and networks.

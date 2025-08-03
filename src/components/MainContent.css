@@ -1,7 +1,6 @@
 .main-content {
   flex: 1;
   background: transparent;
-  overflow: scroll;
   position: relative;
   padding: 0;
   border-radius: 0;

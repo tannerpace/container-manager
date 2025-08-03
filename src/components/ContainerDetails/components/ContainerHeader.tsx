@@ -67,7 +67,8 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
         </div>
 
         <div className="header-actions">
-          {container.State.Running ? (
+          {/* Running container actions */}
+          {container.State.Running && (
             <>
               <button
                 onClick={() => onAction("pause")}
@@ -91,7 +92,10 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
                 ⏹️ Stop
               </button>
             </>
-          ) : container.State.Paused ? (
+          )}
+
+          {/* Paused container actions */}
+          {container.State.Paused && (
             <>
               <button
                 onClick={() => onAction("unpause")}
@@ -108,7 +112,10 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
                 ⏹️ Stop
               </button>
             </>
-          ) : (
+          )}
+
+          {/* Stopped container actions */}
+          {!container.State.Running && !container.State.Paused && (
             <>
               <button
                 onClick={() => onAction("start")}

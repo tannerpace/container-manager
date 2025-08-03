@@ -162,6 +162,20 @@
   min-height: 0; /* Important for proper flexbox scrolling */
 }
 
+/* Special handling for terminal tab - remove padding and let it fill space */
+.tab-content.terminal-active {
+  padding: 0;
+  overflow: hidden; /* Terminal handles its own scrolling */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-content.terminal-active .terminal-tab {
+  flex: 1;
+  min-height: 500px; /* Ensure minimum usable terminal height */
+}
+
 /* Common Tab Styles */
 .tab-section {
   margin-bottom: 2rem;
@@ -491,4 +505,33 @@
   .close-btn:focus {
     outline-color: #0a84ff;
   }
+}
+
+/* Additional layout improvements for terminal in container details */
+.container-details .details-tabs {
+  height: 100%;
+  min-height: 0;
+}
+
+/* Ensure terminal gets full available height when active */
+.tab-content.terminal-active {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-content.terminal-active .terminal-tab {
+  flex: 1;
+  min-height: 500px; /* Ensure minimum usable terminal height */
+}
+
+/* Make sure the terminal header doesn't take up too much space */
+.terminal-tab .terminal-header {
+  flex-shrink: 0;
+  min-height: 50px;
+}
+
+.terminal-tab .terminal-footer {
+  flex-shrink: 0;
+  height: 30px;
 }

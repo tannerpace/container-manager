@@ -10,6 +10,7 @@ interface TerminalProps {
   containerName?: string
   onClose: () => void
   showHeader?: boolean
+  embedded?: boolean // New prop for embedded mode
 }
 
 export function Terminal({
@@ -17,6 +18,7 @@ export function Terminal({
   containerName,
   onClose,
   showHeader = true,
+  embedded = false,
 }: TerminalProps) {
   const terminalRef = useRef<HTMLDivElement>(null)
   const xtermRef = useRef<XTerm | null>(null)
@@ -282,12 +284,27 @@ export function Terminal({
     }
     window.addEventListener("resize", handleResize)
 
+    // Handle container resize for embedded mode
+    let resizeObserver: ResizeObserver | null = null
+    if (embedded && terminalRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        // Small delay to ensure DOM has settled
+        setTimeout(() => {
+          fitAddon.fit()
+        }, 100)
+      })
+      resizeObserver.observe(terminalRef.current)
+    }
+
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize)
+      if (resizeObserver) {
+        resizeObserver.disconnect()
+      }
       xterm.dispose()
     }
-  }, [containerId, connectToContainer])
+  }, [containerId, connectToContainer, embedded])
 
   const handleReconnect = () => {
     connectToContainer()
@@ -300,7 +317,7 @@ export function Terminal({
   }
 
   return (
-    <div className="terminal-container">
+    <div className={`terminal-container ${embedded ? "embedded" : ""}`}>
       {showHeader && (
         <div className="terminal-header">
           <div className="terminal-title">

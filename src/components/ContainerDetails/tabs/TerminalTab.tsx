@@ -138,6 +138,7 @@ export const TerminalTab: React.FC<TerminalTabProps> = ({
             containerName={containerName}
             onClose={() => closeTerminal(activeTerminal.id)}
             showHeader={false} // We're handling the header ourselves
+            embedded={true} // Enable embedded mode
           />
         )}
       </div>

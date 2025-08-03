@@ -270,6 +270,37 @@
   height: 100% !important;
 }
 
+/* Embedded mode for terminals inside container details */
+.terminal-container.embedded {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: #1a1a1a;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.terminal-container.embedded .terminal-header {
+  min-height: 48px;
+  padding: 8px 16px;
+}
+
+.terminal-container.embedded .terminal-content {
+  flex: 1;
+  height: calc(100% - 48px); /* Account for header height */
+  min-height: 400px; /* Minimum usable height */
+}
+
+.terminal-container.embedded .xterm-container {
+  height: 100%;
+}
+
+/* Ensure the embedded terminal fills the tab content properly */
+.tab-content.terminal-active .terminal-container.embedded {
+  height: 100%;
+  min-height: 500px; /* Ensure minimum usable space */
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .terminal-header {
