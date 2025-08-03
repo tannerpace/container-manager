@@ -198,7 +198,7 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
   }
 
   return (
-    <div className="container-details">
+    <>
       <ContainerHeader
         container={containerDetails}
         onAction={handleContainerAction}
@@ -223,7 +223,7 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
           ))}
         </div>
 
-        <div className="tab-content">
+        <div className="tab-content" style={{ overflowY: "auto" }}>
           {activeTab === "overview" && (
             <OverviewTab container={containerDetails} />
           )}
@@ -238,10 +238,13 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
           )}
           {activeTab === "logs" && <LogsTab containerId={containerId} />}
           {activeTab === "terminal" && (
-            <TerminalTab containerId={containerId} />
+            <TerminalTab
+              containerId={containerId}
+              containerName={containerDetails?.Name?.replace(/^\//, "")}
+            />
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -327,3 +327,68 @@
     opacity: 1;
   }
 }
+
+/* Dark mode support for Network Tab */
+@media (prefers-color-scheme: dark) {
+  .network-card {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .network-card:hover {
+    border-color: var(--accent-color, #0a84ff);
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.15);
+  }
+
+  .network-header {
+    background: linear-gradient(135deg, #5ac8fa, #007aff);
+    color: #ffffff;
+  }
+
+  .network-status.connected {
+    background: rgba(50, 215, 75, 0.2);
+    color: #32d74b;
+  }
+
+  .network-status.disconnected {
+    background: rgba(142, 142, 147, 0.2);
+    color: #8e8e93;
+  }
+
+  .network-body {
+    background: var(--bg-secondary, #2c2c2e);
+  }
+
+  .network-info .info-label {
+    color: var(--text-muted, #8e8e93);
+  }
+
+  .network-info .info-value {
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .network-info .info-value.code {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-primary, #f2f2f7);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .ip-address {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--accent-color, #0a84ff);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .gateway {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-secondary, #d1d1d6);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .subnet {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-secondary, #d1d1d6);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+}

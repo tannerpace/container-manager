@@ -156,3 +156,95 @@
     padding: 0.5rem;
   }
 }
+
+/* Dark mode support for Logs Tab */
+@media (prefers-color-scheme: dark) {
+  .logs-toolbar {
+    background: var(--bg-secondary, #2c2c2e);
+    border-bottom-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .toolbar-btn {
+    background: var(--bg-tertiary, #3a3a3c);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .toolbar-btn:hover:not(:disabled) {
+    background: var(--bg-primary, #1c1c1e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.2));
+  }
+
+  .refresh-btn:hover:not(:disabled) {
+    background: rgba(10, 132, 255, 0.2);
+    border-color: var(--accent-color, #0a84ff);
+  }
+
+  .clear-btn:hover:not(:disabled) {
+    background: rgba(255, 69, 58, 0.2);
+    border-color: #ff453a;
+  }
+
+  .download-btn:hover:not(:disabled) {
+    background: rgba(50, 215, 75, 0.2);
+    border-color: #32d74b;
+  }
+
+  .logs-container {
+    background: #1c1c1e;
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .logs-output {
+    background: #1c1c1e;
+    color: #f2f2f7;
+  }
+
+  .logs-loading {
+    background: var(--bg-secondary, #2c2c2e);
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .logs-error {
+    background: var(--bg-secondary, #2c2c2e);
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .logs-error h4 {
+    color: #ff453a;
+  }
+
+  .logs-empty {
+    background: var(--bg-secondary, #2c2c2e);
+    color: var(--text-muted, #8e8e93);
+  }
+
+  .logs-empty h4 {
+    color: var(--text-secondary, #d1d1d6);
+  }
+
+  /* Log entry styling for better readability */
+  .log-entry {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .log-timestamp {
+    color: var(--text-muted, #8e8e93);
+  }
+
+  .log-level.info {
+    color: #5ac8fa;
+  }
+
+  .log-level.warn {
+    color: #ffd60a;
+  }
+
+  .log-level.error {
+    color: #ff453a;
+  }
+
+  .log-level.debug {
+    color: #bf5af2;
+  }
+}

@@ -23,21 +23,21 @@ function AppContent() {
   return (
     <div className="app">
       {!isTerminalModalOpen && <Header />}
+
+      {selectedContainerId && (
+        <ContainerDetails
+          containerId={selectedContainerId}
+          onClose={() => setSelectedContainerId(null)}
+        />
+      )}
       <div className="app-body">
-        {selectedContainerId ? (
-          <ContainerDetails
-            containerId={selectedContainerId}
-            onClose={() => setSelectedContainerId(null)}
+        <>
+          <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+          <MainContent
+            activeTab={activeTab}
+            onContainerSelect={setSelectedContainerId}
           />
-        ) : (
-          <>
-            <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
-            <MainContent
-              activeTab={activeTab}
-              onContainerSelect={setSelectedContainerId}
-            />
-          </>
-        )}
+        </>
       </div>
     </div>
   )

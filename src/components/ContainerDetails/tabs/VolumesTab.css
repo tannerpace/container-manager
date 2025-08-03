@@ -81,3 +81,50 @@
     align-self: flex-end;
   }
 }
+
+/* Dark mode support for Volumes Tab */
+@media (prefers-color-scheme: dark) {
+  .mount-card {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .mount-card:hover {
+    border-color: var(--accent-color, #0a84ff);
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.15);
+  }
+
+  .mount-header {
+    background: linear-gradient(135deg, #32d74b, #30d158);
+    color: #ffffff;
+  }
+
+  .mount-mode.read-write {
+    background: rgba(50, 215, 75, 0.2);
+    color: #32d74b;
+  }
+
+  .mount-mode.read-only {
+    background: rgba(255, 214, 10, 0.2);
+    color: #ffd60a;
+  }
+
+  .mount-body {
+    background: var(--bg-secondary, #2c2c2e);
+  }
+
+  .mount-info .info-label {
+    color: var(--text-muted, #8e8e93);
+  }
+
+  .mount-info .info-value {
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .mount-info .info-value.code {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-primary, #f2f2f7);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+}

@@ -96,36 +96,68 @@
   background: #6c757d;
 }
 
-/* Dark mode support for port mappings */
-[data-theme="dark"] .port-mapping {
-  background: var(--bg-secondary, #2d2d2d);
-  border-color: var(--border-color, #404040);
-}
+/* Dark mode support for Overview Tab */
+@media (prefers-color-scheme: dark) {
+  .port-mapping {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
 
-[data-theme="dark"] .port-mapping:hover {
-  background: var(--bg-tertiary, #3e3e3e);
-  border-color: var(--accent-color, #4da6d9);
-  box-shadow: 0 2px 8px rgba(77, 166, 217, 0.1);
-}
+  .port-mapping:hover {
+    background: var(--bg-tertiary, #3a3a3c);
+    border-color: var(--accent-color, #0a84ff);
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.15);
+  }
 
-[data-theme="dark"] .container-port {
-  background: var(--accent-color, #4da6d9);
-}
+  .container-port {
+    background: var(--accent-color, #0a84ff);
+    color: #ffffff;
+  }
 
-[data-theme="dark"] .host-port {
-  background: #32d74b; /* Apple's green for dark mode */
-}
+  .host-port {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-primary, #f2f2f7);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
 
-[data-theme="dark"] .host-port:hover {
-  background: #30cb4a;
-}
+  .port-arrow {
+    color: var(--text-secondary, #d1d1d6);
+  }
 
-[data-theme="dark"] .host-port.unpublished {
-  background: #8e8e93; /* Apple's gray for dark mode */
-}
+  .protocol-badge {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-secondary, #d1d1d6);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
 
-[data-theme="dark"] .host-port.unpublished:hover {
-  background: #8e8e93;
+  /* Command section dark mode */
+  .tab-section .info-card .info-row .info-value.code {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-primary, #f2f2f7);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  /* Health check dark mode */
+  .health-check-item {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .health-status.healthy {
+    background: rgba(50, 215, 75, 0.2);
+    color: #32d74b;
+  }
+
+  .health-status.unhealthy {
+    background: rgba(255, 69, 58, 0.2);
+    color: #ff453a;
+  }
+
+  .health-status.starting {
+    background: rgba(255, 214, 10, 0.2);
+    color: #ffd60a;
+  }
 }
 
 /* Badge Extensions */

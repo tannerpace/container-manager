@@ -40,6 +40,33 @@
   opacity: 0.8;
 }
 
+.shell-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.shell-btn {
+  background: #007acc;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shell-btn:hover {
+  background: #1a8cd8;
+  transform: translateY(-1px);
+}
+
 .connect-btn {
   background: #007acc;
   color: white;
@@ -203,6 +230,102 @@
 
 .terminal-status {
   font-weight: 500;
+}
+
+/* Enhanced dark mode support for Terminal Tab */
+@media (prefers-color-scheme: dark) {
+  .terminal-tab {
+    background: #1c1c1e; /* Use consistent dark theme color */
+  }
+
+  .terminal-placeholder {
+    background: #1c1c1e;
+  }
+
+  .placeholder-content {
+    color: var(--text-secondary, #d1d1d6);
+  }
+
+  .placeholder-content h4 {
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .connect-btn {
+    background: var(--accent-color, #0a84ff);
+    color: #ffffff;
+  }
+
+  .connect-btn:hover {
+    background: var(--accent-hover, #409cff);
+  }
+
+  .terminal-header {
+    background: var(--bg-secondary, #2c2c2e);
+    border-bottom-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .terminal-controls {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .terminal-control-btn {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-secondary, #d1d1d6);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+
+  .terminal-control-btn:hover:not(:disabled) {
+    background: var(--bg-primary, #1c1c1e);
+    color: var(--text-primary, #f2f2f7);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.2));
+  }
+
+  .terminal-control-btn.danger:hover:not(:disabled) {
+    background: rgba(255, 69, 58, 0.2);
+    border-color: #ff453a;
+    color: #ff453a;
+  }
+
+  .terminal-status.connected {
+    color: #32d74b;
+  }
+
+  .terminal-status.disconnected {
+    color: #ff453a;
+  }
+
+  .terminal-status.connecting {
+    color: #ffd60a;
+  }
+}
+
+/* Light mode adjustments for Terminal Tab */
+@media (prefers-color-scheme: light) {
+  .terminal-tab {
+    background: #1c1c1e; /* Keep terminal dark even in light mode */
+  }
+
+  .terminal-placeholder {
+    background: #1c1c1e;
+  }
+
+  .placeholder-content {
+    color: #d1d1d6;
+  }
+
+  .placeholder-content h4 {
+    color: #f2f2f7;
+  }
+
+  .connect-btn {
+    background: #007aff;
+  }
+
+  .connect-btn:hover {
+    background: #0056cc;
+  }
 }
 
 /* Responsive Design */
