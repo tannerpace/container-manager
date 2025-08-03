@@ -340,3 +340,15 @@
     );
   }
 }
+
+/* Stats Error State */
+.stats-error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.stats-error p {
+  margin: 0;
+  font-size: 0.9rem;
+}

@@ -192,6 +192,22 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
           </button>
         </div>
 
+        <div className="modal-description">
+          {mode === "duplicate" ? (
+            <p>
+              Create a copy of the existing container with the same
+              configuration. You can modify the settings below before creating
+              the duplicate.
+            </p>
+          ) : (
+            <p>
+              Configure your new container settings. Use the tabs below to
+              customize resources, networking, storage, and environment
+              variables.
+            </p>
+          )}
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="modal-tabs">
             <button
@@ -234,6 +250,13 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
           <div className="modal-content">
             {activeTab === "basic" && (
               <div className="tab-content">
+                <div className="tab-description">
+                  <p>
+                    Configure the basic container settings including name,
+                    image, and startup behavior.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="container-name">Container Name</label>
                   <input
@@ -243,6 +266,7 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
                     onChange={(e) => updateConfig({ name: e.target.value })}
                     placeholder="Optional container name"
                   />
+                  <small>Leave empty to auto-generate a name</small>
                 </div>
 
                 <div className="form-group">
@@ -255,6 +279,11 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
                     required
                     readOnly={mode === "duplicate"}
                   />
+                  {mode === "duplicate" && (
+                    <small>
+                      Image is inherited from the original container
+                    </small>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -277,6 +306,9 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
                     <option value="unless-stopped">Unless Stopped</option>
                     <option value="on-failure">On Failure</option>
                   </select>
+                  <small>
+                    Controls how the container behaves when it stops
+                  </small>
                 </div>
 
                 <div className="form-group">
@@ -296,6 +328,13 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
 
             {activeTab === "resources" && (
               <div className="tab-content">
+                <div className="tab-description">
+                  <p>
+                    Set resource limits to control how much memory and CPU the
+                    container can use.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="memory-limit">Memory Limit (MB)</label>
                   <input
@@ -376,6 +415,13 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
 
             {activeTab === "network" && (
               <div className="tab-content">
+                <div className="tab-description">
+                  <p>
+                    Configure port mappings to expose container services to the
+                    host system.
+                  </p>
+                </div>
+
                 <div className="form-section">
                   <div className="section-header">
                     <h3>Port Mappings</h3>
@@ -443,6 +489,13 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
 
             {activeTab === "volumes" && (
               <div className="tab-content">
+                <div className="tab-description">
+                  <p>
+                    Mount host directories or volumes into the container for
+                    persistent storage.
+                  </p>
+                </div>
+
                 <div className="form-section">
                   <div className="section-header">
                     <h3>Volume Mounts</h3>
@@ -498,6 +551,13 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
 
             {activeTab === "environment" && (
               <div className="tab-content">
+                <div className="tab-description">
+                  <p>
+                    Set environment variables that will be available inside the
+                    container.
+                  </p>
+                </div>
+
                 <div className="form-section">
                   <div className="section-header">
                     <h3>Environment Variables</h3>
@@ -544,25 +604,41 @@ export const ContainerCreateModal: React.FC<ContainerCreateModalProps> = ({
           </div>
 
           <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={onClose}
-              disabled={isCreating}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isCreating || !config.image}
-            >
-              {isCreating
-                ? "Creating..."
-                : mode === "duplicate"
-                ? "Duplicate Container"
-                : "Create Container"}
-            </button>
+            <div className="footer-info">
+              {mode === "duplicate" ? (
+                <small>
+                  This will create a new container with the same configuration
+                  as the original. The new container will be stopped and ready
+                  to start.
+                </small>
+              ) : (
+                <small>
+                  The container will be created in a stopped state. You can
+                  start it after creation from the containers list.
+                </small>
+              )}
+            </div>
+            <div className="footer-buttons">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+                disabled={isCreating}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={isCreating || !config.image}
+              >
+                {isCreating
+                  ? "Creating..."
+                  : mode === "duplicate"
+                  ? "Duplicate Container"
+                  : "Create Container"}
+              </button>
+            </div>
           </div>
         </form>
       </div>

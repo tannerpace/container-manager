@@ -11,10 +11,22 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({ stats }) => {
   // Debug logging
   console.log("StatsWidget received stats:", stats)
 
+  // Safety check - return early if stats is null/undefined
+  if (!stats) {
+    return (
+      <div className="stats-widget">
+        <h3 className="stats-title">Live Performance</h3>
+        <div className="stats-error">
+          <p>Unable to load performance data</p>
+        </div>
+      </div>
+    )
+  }
+
   const cpuPercent = dockerAPI.calculateCPUPercent(stats)
   const memoryPercent = dockerAPI.calculateMemoryPercent(stats)
-  const memoryUsage = dockerAPI.formatBytes(stats.memory_stats.usage)
-  const memoryLimit = dockerAPI.formatBytes(stats.memory_stats.limit)
+  const memoryUsage = dockerAPI.formatBytes(stats.memory_stats?.usage || 0)
+  const memoryLimit = dockerAPI.formatBytes(stats.memory_stats?.limit || 0)
 
   // Debug the calculations
   console.log("CPU calculation:", {
@@ -35,14 +47,18 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({ stats }) => {
   })
 
   // Calculate network I/O
-  const networkRx = Object.values(stats.networks).reduce(
-    (total, net) => total + net.rx_bytes,
-    0
-  )
-  const networkTx = Object.values(stats.networks).reduce(
-    (total, net) => total + net.tx_bytes,
-    0
-  )
+  const networkRx = stats.networks
+    ? Object.values(stats.networks).reduce(
+        (total, net) => total + net.rx_bytes,
+        0
+      )
+    : 0
+  const networkTx = stats.networks
+    ? Object.values(stats.networks).reduce(
+        (total, net) => total + net.tx_bytes,
+        0
+      )
+    : 0
 
   // Calculate block I/O
   const blockRead =
@@ -142,7 +158,7 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({ stats }) => {
             <span className="stat-icon">⚙️</span>
             <span className="stat-label">Processes</span>
           </div>
-          <div className="stat-value">{stats.pids_stats.current}</div>
+          <div className="stat-value">{stats.pids_stats?.current || 0}</div>
         </div>
 
         {/* PIDs */}
@@ -152,7 +168,9 @@ export const StatsWidget: React.FC<StatsWidgetProps> = ({ stats }) => {
             <span className="stat-label">Main PID</span>
           </div>
           <div className="stat-value">
-            {stats.pids_stats.current > 0 ? stats.pids_stats.current : "N/A"}
+            {stats.pids_stats?.current && stats.pids_stats.current > 0
+              ? stats.pids_stats.current
+              : "N/A"}
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.25rem);
   right: 0;
   background: #2d2d2d;
   border: 0.0625rem solid #444;
