@@ -1,4 +1,5 @@
 import { useState } from "react"
+// import whaleSvg from "../assets/whaley.svg"
 import { useDocker } from "../hooks/useDocker"
 import "./Header.css"
 import { SystemInfoModal } from "./SystemInfoModal"
@@ -22,7 +23,7 @@ export function Header() {
               /> */}
               🐳
             </div>
-            <h1>Free Whaley Face</h1>
+            <h1>Whale Tracker</h1>
           </div>
         </div>
 
