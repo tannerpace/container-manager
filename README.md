@@ -45,22 +45,15 @@ npm install
 
 3. **Enable Docker API access** (Required):
 
-   **For Docker Desktop:**
+Option 1: Colima (macOS, tested)
 
-   - Open Docker Desktop
-   - Go to Settings → General
-   - Enable "Expose daemon on tcp://localhost:2375 without TLS"
-   - Click "Apply & Restart"
+Colima is an open-source container runtime that can be used as a lightweight alternative to Docker Desktop:
 
-   **For Docker on Linux:**
+colima start 
 
-   - Edit `/etc/docker/daemon.json`:
-     ```json
-     {
-       "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"]
-     }
-     ```
-   - Restart Docker: `sudo systemctl restart docker`
+> ⚠️ Note: This setup has only been tested on macOS with Colima 
+
+Linux an PC setups should work, but are untested.
 
 4. Start the development server:
 
@@ -72,17 +65,6 @@ npm run dev
 
 **Note:** If you see a connection error, the app will show a setup guide with detailed instructions.
 
-### CORS Issues
-
-The Docker API doesn't set CORS headers. If you can't connect after enabling the API:
-
-- **Development**: Use Chrome with `--disable-web-security --user-data-dir=/tmp/chrome_dev`
-- **Alternative**: Install a CORS browser extension
-- **Production**: Use a proxy server
-
-See [DOCKER_SETUP.md](DOCKER_SETUP.md) for detailed setup instructions.
-
-### Building for Production
 
 ```bash
 npm run build
@@ -137,13 +119,6 @@ src/
 
 ## Development
 
-### Mock Data
-
-Currently, the application uses mock data for demonstration purposes. To connect to a real Docker daemon, you'll need to:
-
-1. Implement Docker Engine API calls in `src/context/DockerContext.tsx`
-2. Handle CORS issues when calling Docker API from browser
-3. Consider using a backend proxy or Electron for direct Docker API access
 
 ### Contributing
 
@@ -156,36 +131,20 @@ Currently, the application uses mock data for demonstration purposes. To connect
 
 ## Roadmap
 
-- [ ] Real Docker Engine API integration
-- [ ] Container logs viewer
-- [ ] Container terminal access
-- [ ] Image building interface
+- [x] Real Docker Engine API integration
+- [x] Container logs viewer
+- [x] Container terminal access
+- [x] Image building interface
 - [ ] Docker Compose support
 - [ ] Multi-host Docker management
-- [ ] Resource usage monitoring
-- [ ] Container health checks
+- [x] Resource usage monitoring
+- [x] Container health checks
 - [ ] Registry integration
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-- Inspired by Docker Desktop
-- Built with modern React patterns and TypeScript
-- Uses Vite for optimal development experience
-  languageOptions: {
-  parserOptions: {
-  project: ['./tsconfig.node.json', './tsconfig.app.json'],
-  tsconfigRootDir: import.meta.dirname,
-  },
-  // other options...
-  }
-
-````
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
 // eslint.config.js
