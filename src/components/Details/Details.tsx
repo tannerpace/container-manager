@@ -3,7 +3,7 @@ import { dockerAPI } from "../../api/dockerClient"
 import type { ContainerStats, DockerContainerDetails } from "../../types/docker"
 import { ContainerHeader } from "./components/ContainerHeader"
 import { StatsWidget } from "./components/StatsWidget"
-import "./ContainerDetails.css"
+import "./Details.css"
 import { EnvironmentTab } from "./tabs/EnvironmentTab"
 import { LogsTab } from "./tabs/LogsTab"
 import { NetworkTab } from "./tabs/NetworkTab"
@@ -19,15 +19,12 @@ type TabType =
   | "logs"
   | "terminal"
 
-interface ContainerDetailsProps {
+interface DetailsProps {
   containerId: string
   onClose: () => void
 }
 
-export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
-  containerId,
-  onClose,
-}) => {
+export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
   const [containerDetails, setContainerDetails] =
     useState<DockerContainerDetails | null>(null)
   const [containerStats, setContainerStats] = useState<ContainerStats | null>(
@@ -166,7 +163,7 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
 
   if (loading) {
     return (
-      <div className="container-details loading">
+      <div className="details loading">
         <div className="loading-spinner"></div>
         <p>Loading container details...</p>
       </div>
@@ -175,7 +172,7 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
 
   if (error) {
     return (
-      <div className="container-details error">
+      <div className="details error">
         <h3>Error Loading Container</h3>
         <p>{error}</p>
         <button onClick={onClose} className="close-btn">
@@ -187,7 +184,7 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({
 
   if (!containerDetails) {
     return (
-      <div className="container-details error">
+      <div className="details error">
         <h3>Container Not Found</h3>
         <p>The container could not be found or accessed.</p>
         <button onClick={onClose} className="close-btn">

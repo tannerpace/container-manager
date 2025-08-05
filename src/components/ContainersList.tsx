@@ -6,6 +6,7 @@ import {
   ContainerCreateModal,
   type ContainerConfig,
 } from "./ContainerCreateModal"
+import { ContainerInspectModal } from "./ContainerInspectModal"
 import "./ContainersList.css"
 import { HamburgerButton } from "./HamburgerButton"
 import { TerminalModal } from "./Terminal/TerminalModal"
@@ -51,6 +52,13 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
     null
   )
   const [terminalContainerName, setTerminalContainerName] = useState<string>("")
+
+  // Inspect modal state
+  const [inspectModalVisible, setInspectModalVisible] = useState(false)
+  const [inspectContainerId, setInspectContainerId] = useState<string | null>(
+    null
+  )
+  const [inspectContainerName, setInspectContainerName] = useState<string>("")
 
   // Action modal state
   const [actionModalVisible, setActionModalVisible] = useState(false)
@@ -115,6 +123,17 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             container.Names[0]?.replace("/", "") || containerId.slice(0, 12)
           )
           setTerminalModalVisible(true)
+        }
+        break
+      }
+      case "inspect": {
+        const container = containers.find((c) => c.Id === containerId)
+        if (container) {
+          setInspectContainerId(containerId)
+          setInspectContainerName(
+            container.Names[0]?.replace("/", "") || containerId.slice(0, 12)
+          )
+          setInspectModalVisible(true)
         }
         break
       }
@@ -453,6 +472,20 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             setTerminalModalVisible(false)
             setTerminalContainerId(null)
             setTerminalContainerName("")
+          }}
+        />
+      )}
+
+      {/* Container Inspect Modal */}
+      {inspectModalVisible && inspectContainerId && (
+        <ContainerInspectModal
+          containerId={inspectContainerId}
+          containerName={inspectContainerName}
+          isVisible={inspectModalVisible}
+          onClose={() => {
+            setInspectModalVisible(false)
+            setInspectContainerId(null)
+            setInspectContainerName("")
           }}
         />
       )}

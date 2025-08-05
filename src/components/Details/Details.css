@@ -5,14 +5,14 @@
  */
 
 /* Container Details Main Layout */
-.container-details {
+.details {
   display: flex;
   flex-direction: column;
   background: var(--bg-primary, #ffffff);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin: 1rem;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 /* Dark mode support */
@@ -53,15 +53,15 @@
   background-color: #ff453a;
 }
 
-.container-details.loading,
-.container-details.error {
+.details.loading,
+.details.error {
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 2rem;
 }
 
-.container-details.loading .loading-spinner {
+.details.loading .loading-spinner {
   box-sizing: border-box;
   width: 40px;
   height: 40px;
@@ -81,12 +81,12 @@
   }
 }
 
-.container-details.error h3 {
+.details.error h3 {
   color: #dc3545; /* Keep red for error - this has sufficient contrast */
   margin-bottom: 0.5rem;
 }
 
-.container-details.error p {
+.details.error p {
   color: var(--text-muted, #6c757d);
   margin-bottom: 1rem;
 }
@@ -347,21 +347,21 @@
 
 /* Dark mode and accessibility improvements */
 @media (prefers-color-scheme: dark) {
-  .container-details {
+  .details {
     background: var(--bg-primary, #1c1c1e);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
-  .container-details.loading .loading-spinner {
+  .details.loading .loading-spinner {
     border-color: var(--bg-tertiary, rgba(255, 255, 255, 0.2));
     border-top-color: var(--accent-color, #4da6d9);
   }
 
-  .container-details.error h3 {
+  .details.error h3 {
     color: #ff453a; /* Apple's red for dark mode */
   }
 
-  .container-details.error p {
+  .details.error p {
     color: var(--text-muted, #b0b0b0); /* Better contrast than 8e8e93 */
   }
 
@@ -508,7 +508,7 @@
 }
 
 /* Additional layout improvements for terminal in container details */
-.container-details .details-tabs {
+.details .details-tabs {
   height: 100%;
   min-height: 0;
 }

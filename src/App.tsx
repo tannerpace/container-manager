@@ -1,6 +1,6 @@
 import { useState } from "react"
 import "./App.css"
-import { ContainerDetails } from "./components/ContainerDetails/ContainerDetails"
+import { Details } from "./components/Details/Details"
 import { ErrorBoundary } from "./components/ErrorBoundary"
 import { Header } from "./components/Header"
 import { MainContent } from "./components/MainContent"
@@ -25,7 +25,7 @@ function AppContent() {
       {!isTerminalModalOpen && <Header />}
 
       {selectedContainerId && (
-        <ContainerDetails
+        <Details
           containerId={selectedContainerId}
           onClose={() => setSelectedContainerId(null)}
         />
