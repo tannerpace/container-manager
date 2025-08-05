@@ -33,7 +33,7 @@ A modern Docker Desktop clone built with React, TypeScript, and Vite. This appli
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/container-manager.git
+git clone https://github.com/tannerpace/container-manager.git
 cd container-manager
 ```
 
