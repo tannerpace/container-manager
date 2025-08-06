@@ -8,6 +8,17 @@ start start electron app
 
 A modern Docker Desktop clone built with React, TypeScript, and Vite. This application provides a clean and intuitive interface for managing Docker containers, images, volumes, and networks.
 
+## ⚠️ Security Notice
+
+**IMPORTANT**: This application connects to Docker API on `localhost:2375` without TLS encryption for development convenience. This configuration:
+
+- Exposes Docker daemon without authentication
+- Should **NEVER** be used in production environments
+- Could allow unauthorized access to your Docker daemon
+- Is intended for local development only
+
+**For production use**, implement proper Docker API authentication and TLS encryption.
+
 ## Features
 
 - 🐳 **Container Management**: View, start, stop, and remove Docker containers
@@ -174,7 +185,7 @@ Currently, the application uses mock data for demonstration purposes. To connect
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
@@ -218,4 +229,5 @@ export default tseslint.config([
     },
   },
 ])
+```
 ````

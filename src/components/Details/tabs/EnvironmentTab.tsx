@@ -46,10 +46,9 @@ export const EnvironmentTab: React.FC<EnvironmentTabProps> = ({
   const copyToClipboard = async (text: string, label?: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      // Log what was actually copied, not what the button represents
-      console.log("Copied to clipboard:", text)
-      if (label) {
-        console.log(`Copied ${label}:`, text)
+      // Only log labels in development, not the actual values
+      if (process.env.NODE_ENV === "development" && label) {
+        console.log(`Copied ${label}`)
       }
     } catch (err) {
       console.error("Failed to copy to clipboard:", err)
