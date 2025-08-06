@@ -66,9 +66,9 @@ Option 1: Colima (macOS, tested)
 
 Colima is an open-source container runtime that can be used as a lightweight alternative to Docker Desktop:
 
-colima start 
+colima start
 
-> ⚠️ Note: This setup has only been tested on macOS with Colima 
+> ⚠️ Note: This setup has only been tested on macOS with Colima
 
 Linux an PC setups should work, but are untested.
 
@@ -81,7 +81,6 @@ npm run dev
 5. Open [http://localhost:5173](http://localhost:5173) in your browser
 
 **Note:** If you see a connection error, the app will show a setup guide with detailed instructions.
-
 
 ```bash
 npm run build
@@ -136,7 +135,6 @@ src/
 
 ## Development
 
-
 ### Contributing
 
 1. Fork the repository
@@ -162,31 +160,33 @@ src/
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-
 ```js
 // eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import js from "@eslint/js"
+import reactHooks from "eslint-plugin-react-hooks"
+import reactRefresh from "eslint-plugin-react-refresh"
+import { globalIgnores } from "eslint/config"
+import globals from "globals"
+import tseslint from "typescript-eslint"
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(["dist"]),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs["recommended-latest"],
+      reactRefresh.configs.vite,
     ],
     languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
+      ecmaVersion: 2020,
+      globals: globals.browser,
     },
   },
 ])
 ```
-````
+
+```
+
+```
