@@ -1,15 +1,104 @@
+import { useState } from "react"
+import { dockerTerminalActions } from "../utils/terminalUtils"
 import "./DockerSetupGuide.css"
+import { WhaleIcon } from "./WhaleIcon"
 
 interface DockerSetupGuideProps {
   onClose: () => void
 }
 
 export function DockerSetupGuide({ onClose }: DockerSetupGuideProps) {
+  const [isStartingColima, setIsStartingColima] = useState(false)
+  const [colimaOutput, setColimaOutput] = useState<string>("")
+
+  // Detect if we're on macOS (for showing Colima button)
+  const isMacOS =
+    typeof navigator !== "undefined" && navigator.platform.includes("Mac")
+
+  // Simple helper to get optimal config based on common Mac specs
+  const getOptimalConfig = () => {
+    const cores = navigator.hardwareConcurrency || 4
+    return {
+      cpu: Math.min(cores >= 8 ? 4 : 2, 4),
+      memory: cores >= 8 ? 8 : 4,
+    }
+  }
+
+  const startColima = async () => {
+    setIsStartingColima(true)
+    setColimaOutput("🚀 Starting Colima with optimized settings...")
+
+    try {
+      // Show optimized command based on system
+      const config = getOptimalConfig()
+      setColimaOutput(`🔧 Optimized Colima configuration detected:
+
+📋 Copy and run this command in your terminal:
+
+colima start --api --cpu ${config.cpu} --memory ${config.memory}
+
+✨ This will:
+• ✅ Start Colima VM with Docker runtime
+• 🌐 Enable API access on localhost:2375  
+• 🖥️ Allocate ${config.cpu} CPUs and ${config.memory}GB memory
+• 🔄 Connect automatically once ready
+
+⏱️ Starting Colima usually takes 30-60 seconds.
+
+🔍 After running the command, click "Check Status" to verify!`)
+    } catch (error) {
+      setColimaOutput(
+        `❌ Error: ${
+          error instanceof Error ? error.message : "Failed to get configuration"
+        }
+
+🛠️ Try running manually:
+colima start --api --cpu 2 --memory 4`
+      )
+    } finally {
+      setIsStartingColima(false)
+    }
+  }
+
+  const checkColimaStatus = async () => {
+    setColimaOutput("🔍 Checking Colima and Docker API status...")
+
+    try {
+      // Simulate checking status and provide manual commands
+      setColimaOutput(`📊 Status Check Commands:
+
+🔹 Check Colima status:
+colima status
+
+🔹 Check Docker API availability:
+curl http://localhost:2375/version
+
+🔹 If API is not accessible, restart with API enabled:
+colima stop
+colima start --api --cpu 2 --memory 4
+
+🔹 Test Docker connection:
+docker ps
+
+✅ When the API responds, close this dialog and refresh Container Manager!`)
+    } catch (error) {
+      setColimaOutput(`❌ Error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }
+
+🛠️ Manual status check:
+1. Run: colima status
+2. Run: curl http://localhost:2375/version
+3. If not working, restart Colima with: colima start --api`)
+    }
+  }
   return (
     <div className="setup-guide-overlay">
       <div className="setup-guide-modal">
         <div className="setup-guide-header">
-          <h2>🐳 Docker API Setup Required</h2>
+          <h2>
+            <WhaleIcon size={28} alt="Docker whale" /> Docker API Setup Required
+          </h2>
           <button className="close-btn" onClick={onClose}>
             ✕
           </button>
@@ -21,12 +110,44 @@ export function DockerSetupGuide({ onClose }: DockerSetupGuideProps) {
             Choose your setup method (no sudo required):
           </p>
 
+          {isMacOS && (
+            <div className="quick-actions">
+              <h3>🚀 Quick Start for macOS</h3>
+              <div className="colima-controls">
+                <button
+                  className="colima-start-btn"
+                  onClick={startColima}
+                  disabled={isStartingColima}
+                >
+                  {isStartingColima ? "Starting..." : "🍎 Quick Start Colima"}
+                </button>
+                <button
+                  className="colima-status-btn"
+                  onClick={checkColimaStatus}
+                >
+                  📊 Check Status
+                </button>
+                <button
+                  className="colima-terminal-btn"
+                  onClick={() => dockerTerminalActions.colima()}
+                >
+                  🖥️ Open in Terminal
+                </button>
+              </div>
+              {colimaOutput && (
+                <div className="colima-output">
+                  <pre>{colimaOutput}</pre>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="setup-section recommended">
             <h3>🍎 macOS with Colima (Recommended)</h3>
             <div className="alternatives">
               <div className="alternative">
                 <h4>Option 1: Colima with TCP API (Easiest)</h4>
-                <pre>{`# Stop current Colima instance
+                <pre>{`# Stop current Colima instance (if running)
 colima stop
 
 # Start with TCP API enabled

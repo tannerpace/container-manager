@@ -5,10 +5,16 @@
  * Sets up native Docker access and IPC handlers
  */
 
+import { exec, spawn } from 'child_process'
 import { app, BrowserWindow, ipcMain } from 'electron'
+import * as fs from 'fs'
+import * as os from 'os'
 import * as path from 'path'
+import { promisify } from 'util'
 import { DockerSocketBridge } from './dockerBridge'
 import { setupDockerIPC } from './dockerClient'
+
+const execAsync = promisify(exec)
 
 let mainWindow: Electron.BrowserWindow | null = null
 let dockerBridge: DockerSocketBridge | null = null
@@ -17,9 +23,34 @@ let dockerBridge: DockerSocketBridge | null = null
  * Create the main applicatsion window
  */
 function createWindow(): void {
+  // Get the correct icon path based on environment
+  let iconPath: string
+
+  if (process.env.NODE_ENV === 'development') {
+    iconPath = path.join(__dirname, '../../public/freewhaley-512.png')
+  } else {
+    // In production, the icon should be in the resources directory
+    iconPath = path.join(process.resourcesPath, 'freewhaley-512.png')
+  }
+
+  // Fallback to app directory if resources path doesn't work
+  if (process.env.NODE_ENV !== 'development' && !fs.existsSync(iconPath)) {
+    iconPath = path.join(__dirname, '../freewhaley-512.png')
+  }
+
+  // Final fallback to 256px version
+  if (!fs.existsSync(iconPath)) {
+    iconPath = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-256.png')
+      : path.join(process.resourcesPath, 'freewhaley-256.png')
+  }
+
+  console.log('Using icon path:', iconPath)
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    icon: iconPath,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -70,7 +101,33 @@ async function setupDocker(): Promise<void> {
  */
 app.whenReady().then(async () => {
   await createWindow()
-  await setupDocker()
+  await setupDocker()  // Set dock icon on macOS
+  if (process.platform === 'darwin' && app.dock) {
+    const dockIconPath = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-512.png')
+      : path.join(process.resourcesPath, 'freewhaley-512.png')
+
+    // Fallback paths
+    const fallbackIconPath = path.join(__dirname, '../freewhaley-512.png')
+    const fallbackIconPath256 = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '../../public/freewhaley-256.png')
+      : path.join(process.resourcesPath, 'freewhaley-256.png')
+
+    let finalIconPath = dockIconPath
+    if (!fs.existsSync(finalIconPath)) {
+      finalIconPath = fallbackIconPath
+    }
+    if (!fs.existsSync(finalIconPath)) {
+      finalIconPath = fallbackIconPath256
+    }
+
+    if (fs.existsSync(finalIconPath)) {
+      app.dock.setIcon(finalIconPath)
+      console.log('Dock icon set to:', finalIconPath)
+    } else {
+      console.warn('No suitable dock icon found')
+    }
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -106,4 +163,69 @@ ipcMain.handle('app:getVersion', () => {
 
 ipcMain.handle('app:getPlatform', () => {
   return process.platform
+})
+
+/**
+ * System utility IPC handlers
+ */
+ipcMain.handle('system:execute-applescript', async (_event, script: string) => {
+  const { stdout } = await execAsync(`osascript -e "${script.replace(/"/g, '\\"')}"`)
+  return stdout.trim()
+})
+
+ipcMain.handle('system:exec', async (_event, command: string) => {
+  try {
+    const result = await execAsync(command)
+    return {
+      stdout: result.stdout,
+      stderr: result.stderr
+    }
+  } catch (error: unknown) {
+    const err = error as Error
+    return {
+      stdout: '',
+      stderr: err.message
+    }
+  }
+})
+
+ipcMain.handle('system:exec-long-running', async (_event, command: string) => {
+  return new Promise((resolve) => {
+    const child = spawn('sh', ['-c', command])
+    let stdout = ''
+    let stderr = ''
+
+    child.stdout.on('data', (data) => {
+      stdout += data.toString()
+    })
+
+    child.stderr.on('data', (data) => {
+      stderr += data.toString()
+    })
+
+    child.on('close', (code) => {
+      resolve({
+        stdout,
+        stderr: stderr || (code !== 0 ? `Process exited with code ${code}` : '')
+      })
+    })
+
+    child.on('error', (error) => {
+      resolve({
+        stdout,
+        stderr: error.message
+      })
+    })
+  })
+})
+
+ipcMain.handle('system:get-system-info', async () => {
+  return {
+    nodeVersion: process.version,
+    osInfo: `${os.type()} ${os.release()}`,
+    architecture: os.arch(),
+    hostname: os.hostname(),
+    totalMemory: os.totalmem(),
+    availableMemory: os.freemem()
+  }
 })

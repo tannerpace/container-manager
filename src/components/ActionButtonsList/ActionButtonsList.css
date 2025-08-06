@@ -1,0 +1,10 @@
+/* Action Buttons List Styles */
+.action-buttons {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap;
+}

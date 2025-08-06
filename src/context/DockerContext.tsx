@@ -298,6 +298,316 @@ export function DockerProvider({ children }: DockerProviderProps) {
     }
   }
 
+  const createContainer = async (imageId: string, containerName?: string) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      const createConfig = {
+        Image: imageId,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        ...(containerName && { name: containerName }),
+      }
+
+      await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      // Refresh containers to get updated list
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error creating container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
+  const createContainerWithConfig = async (config: {
+    image: string
+    name?: string
+    memory?: number
+    memorySwap?: number
+    cpus?: number
+    cpuShares?: number
+    volumes?: { host: string; container: string; mode: "ro" | "rw" }[]
+    ports?: { host: number; container: number; protocol: "tcp" | "udp" }[]
+    networkMode?: string
+    environment?: { key: string; value: string }[]
+    workingDir?: string
+    command?: string
+    entrypoint?: string
+    restart?: "no" | "always" | "unless-stopped" | "on-failure"
+    autoRemove?: boolean
+  }) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      // Build the Docker container creation configuration
+      interface DockerCreateConfig {
+        Image: string
+        AttachStdin: boolean
+        AttachStdout: boolean
+        AttachStderr: boolean
+        Tty: boolean
+        OpenStdin: boolean
+        StdinOnce: boolean
+        name?: string
+        ExposedPorts?: Record<string, object>
+        Env?: string[]
+        WorkingDir?: string
+        Cmd?: string[]
+        Entrypoint?: string[]
+        HostConfig?: DockerHostConfig
+      }
+
+      interface DockerHostConfig {
+        Memory?: number
+        MemorySwap?: number
+        NanoCpus?: number
+        CpuShares?: number
+        Binds?: string[]
+        PortBindings?: Record<string, Array<{ HostPort: string }>>
+        NetworkMode?: string
+        RestartPolicy?: {
+          Name: string
+          MaximumRetryCount: number
+        }
+        AutoRemove?: boolean
+      }
+
+      const createConfig: DockerCreateConfig = {
+        Image: config.image,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+      }
+
+      // Add name if provided
+      if (config.name) {
+        createConfig.name = config.name
+      }
+
+      // Add resource limits
+      const hostConfig: DockerHostConfig = {}
+      if (config.memory) {
+        hostConfig.Memory = config.memory * 1024 * 1024 // Convert MB to bytes
+      }
+      if (config.memorySwap) {
+        hostConfig.MemorySwap = config.memorySwap * 1024 * 1024 // Convert MB to bytes
+      }
+      if (config.cpus) {
+        hostConfig.NanoCpus = config.cpus * 1000000000 // Convert to nanocpus
+      }
+      if (config.cpuShares) {
+        hostConfig.CpuShares = config.cpuShares
+      }
+
+      // Add volumes
+      if (config.volumes && config.volumes.length > 0) {
+        hostConfig.Binds = config.volumes.map(
+          (vol) => `${vol.host}:${vol.container}:${vol.mode}`
+        )
+      }
+
+      // Add port mappings
+      if (config.ports && config.ports.length > 0) {
+        hostConfig.PortBindings = {}
+        createConfig.ExposedPorts = {}
+
+        config.ports.forEach((port) => {
+          const containerPort = `${port.container}/${port.protocol}`
+          createConfig.ExposedPorts![containerPort] = {}
+          hostConfig.PortBindings![containerPort] = [
+            { HostPort: port.host.toString() },
+          ]
+        })
+      }
+
+      // Add network mode
+      if (config.networkMode) {
+        hostConfig.NetworkMode = config.networkMode
+      }
+
+      // Add restart policy
+      if (config.restart && config.restart !== "no") {
+        hostConfig.RestartPolicy = {
+          Name: config.restart,
+          MaximumRetryCount: config.restart === "on-failure" ? 3 : 0,
+        }
+      }
+
+      // Add auto remove
+      if (config.autoRemove) {
+        hostConfig.AutoRemove = true
+      }
+
+      // Add host config to main config
+      if (Object.keys(hostConfig).length > 0) {
+        createConfig.HostConfig = hostConfig
+      }
+
+      // Add environment variables
+      if (config.environment && config.environment.length > 0) {
+        createConfig.Env = config.environment.map(
+          (env) => `${env.key}=${env.value}`
+        )
+      }
+
+      // Add working directory
+      if (config.workingDir) {
+        createConfig.WorkingDir = config.workingDir
+      }
+
+      // Add command
+      if (config.command) {
+        createConfig.Cmd = config.command.split(" ")
+      }
+
+      // Add entrypoint
+      if (config.entrypoint) {
+        createConfig.Entrypoint = config.entrypoint.split(" ")
+      }
+
+      // Create the container
+      const response = await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      // Refresh containers to get updated list
+      await refreshContainers()
+
+      return response
+    } catch (error) {
+      console.error("Error creating container with config:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+      throw error
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
+  const runContainer = async (imageId: string, containerName?: string) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      const createConfig = {
+        Image: imageId,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        ...(containerName && { name: containerName }),
+      }
+
+      const response = await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      const containerId = response.Id
+
+      // Start the container
+      await makeDockerAPICall(`/containers/${containerId}/start`, {
+        method: "POST",
+      })
+
+      // Refresh containers to get updated list
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error running container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
+  const openTerminal = async (containerId: string) => {
+    try {
+      // For now, we'll open a new browser tab/window to a terminal interface
+      // In a real implementation, this would open a WebSocket-based terminal
+      const terminalUrl = `/terminal/${containerId}`
+      window.open(
+        terminalUrl,
+        "_blank",
+        "width=800,height=600,scrollbars=yes,resizable=yes"
+      )
+
+      // Alternative: For now, show alert with instructions
+      alert(
+        `Terminal access for container ${containerId}\n\nIn a full implementation, this would open an interactive terminal.\n\nFor now, you can use:\n\`docker exec -it ${containerId} /bin/sh\``
+      )
+    } catch (error) {
+      console.error("Error opening terminal:", error)
+      alert("Failed to open terminal connection")
+    }
+  }
+
+  const copyContainer = async (
+    containerId: string,
+    newContainerName?: string
+  ) => {
+    dispatch({ type: "SET_LOADING", payload: true })
+    try {
+      // Get the original container details
+      const containerDetails = await makeDockerAPICall(
+        `/containers/${containerId}/json`
+      )
+
+      // Generate a new container name if not provided
+      const originalName = containerDetails.Name.replace("/", "")
+      const finalName = newContainerName || `${originalName}_copy_${Date.now()}`
+
+      // Create the new container from the same image with similar config
+      const createConfig = {
+        Image: containerDetails.Config.Image,
+        AttachStdin: false,
+        AttachStdout: true,
+        AttachStderr: true,
+        Tty: true,
+        OpenStdin: false,
+        StdinOnce: false,
+        // Copy some basic configuration
+        Env: containerDetails.Config.Env,
+        Cmd: containerDetails.Config.Cmd,
+        WorkingDir: containerDetails.Config.WorkingDir,
+        ExposedPorts: containerDetails.Config.ExposedPorts,
+        name: finalName,
+      }
+
+      await makeDockerAPICall("/containers/create", {
+        method: "POST",
+        body: JSON.stringify(createConfig),
+      })
+
+      // Refresh containers to show the new container
+      await refreshContainers()
+    } catch (error) {
+      console.error("Error copying container:", error)
+      dispatch({
+        type: "SET_ERROR",
+        payload: error instanceof Error ? error.message : "Unknown error",
+      })
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }
+
   // Search/filter utility functions
   const setSearchTerm = (term: string) => {
     dispatch({ type: "SET_SEARCH_TERM", payload: term })
@@ -330,6 +640,11 @@ export function DockerProvider({ children }: DockerProviderProps) {
     exportContainer,
     removeContainer,
     removeImage,
+    createContainer,
+    createContainerWithConfig,
+    runContainer,
+    copyContainer,
+    openTerminal,
     setSearchTerm,
     filterContainers,
     filterImages,

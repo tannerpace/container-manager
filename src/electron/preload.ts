@@ -43,5 +43,19 @@ const dockerAPI = {
   ping: () => ipcRenderer.invoke('docker:ping'),
 }
 
-// Expose API to renderer process
+/**
+ * System utilities API exposed to renderer process
+ */
+const electronAPI = {
+  executeAppleScript: (script: string) => ipcRenderer.invoke('system:execute-applescript', script),
+  exec: (command: string) => ipcRenderer.invoke('system:exec', command),
+  execLongRunning: (command: string) => ipcRenderer.invoke('system:exec-long-running', command),
+  getSystemInfo: () => ipcRenderer.invoke('system:get-system-info'),
+}
+
+// Expose APIs to renderer process
 contextBridge.exposeInMainWorld('dockerAPI', dockerAPI)
+contextBridge.exposeInMainWorld('electron', electronAPI)
+
+// Export types for TypeScript
+export type ElectronAPI = typeof electronAPI

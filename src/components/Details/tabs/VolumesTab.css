@@ -1,0 +1,130 @@
+/* Volumes Tab Styles */
+.volumes-tab {
+  width: 100%;
+  padding: 0;
+}
+
+.mounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
+}
+
+.mount-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.mount-card:hover {
+  border-color: #007acc;
+  box-shadow: 0 2px 8px rgba(0, 122, 204, 0.1);
+  transform: translateY(-1px);
+}
+
+.mount-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.mount-type {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.mount-mode {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mount-mode.read-write {
+  background: rgba(40, 167, 69, 0.2);
+  color: #155724;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.mount-mode.read-only {
+  background: rgba(255, 193, 7, 0.2);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.mount-details {
+  padding: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mounts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mount-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mount-mode {
+    align-self: flex-end;
+  }
+}
+
+/* Dark mode support for Volumes Tab */
+@media (prefers-color-scheme: dark) {
+  .mount-card {
+    background: var(--bg-secondary, #2c2c2e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .mount-card:hover {
+    border-color: var(--accent-color, #0a84ff);
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.15);
+  }
+
+  .mount-header {
+    background: linear-gradient(135deg, #32d74b, #30d158);
+    color: #ffffff;
+  }
+
+  .mount-mode.read-write {
+    background: rgba(50, 215, 75, 0.2);
+    color: #32d74b;
+  }
+
+  .mount-mode.read-only {
+    background: rgba(255, 214, 10, 0.2);
+    color: #ffd60a;
+  }
+
+  .mount-body {
+    background: var(--bg-secondary, #2c2c2e);
+  }
+
+  .mount-info .info-label {
+    color: var(--text-muted, #8e8e93);
+  }
+
+  .mount-info .info-value {
+    color: var(--text-primary, #f2f2f7);
+  }
+
+  .mount-info .info-value.code {
+    background: var(--bg-tertiary, #3a3a3c);
+    color: var(--text-primary, #f2f2f7);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  }
+}

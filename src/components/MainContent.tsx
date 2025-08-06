@@ -6,10 +6,11 @@ import { ImagesList } from "./ImagesList"
 import "./MainContent.css"
 import { NetworksList } from "./NetworksList"
 import { VolumesList } from "./VolumesList"
+import { WhaleIcon } from "./WhaleIcon"
 
 interface MainContentProps {
   activeTab: "containers" | "images" | "volumes" | "networks"
-  onContainerSelect?: (containerId: string) => void
+  onContainerSelect: (containerId: string) => void
 }
 
 export function MainContent({
@@ -43,7 +44,10 @@ export function MainContent({
       {shouldShowSetupGuide && !showSetupGuide && (
         <div className="docker-connection-error">
           <div className="error-content">
-            <h3>🐳 Docker Connection Required</h3>
+            <h3>
+              <WhaleIcon size={24} alt="Docker whale" /> Docker Connection
+              Required
+            </h3>
             <p>
               Unable to connect to Docker daemon. Make sure Docker is running
               and API access is enabled.

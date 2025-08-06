@@ -1,4 +1,10 @@
+import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
+import type { DockerImage } from "../types/dockerTypes"
+import {
+  ContainerCreateModal,
+  type ContainerConfig,
+} from "./ContainerCreateModal"
 import "./ImagesList.css"
 
 export function ImagesList() {
@@ -10,7 +16,13 @@ export function ImagesList() {
     filterImages,
     removeImage,
     refreshImages,
+    runContainer,
+    createContainerWithConfig,
   } = useDocker()
+
+  // Container creation modal state
+  const [createModalVisible, setCreateModalVisible] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<DockerImage | null>(null)
 
   // Filter images based on search term
   const filteredImages = filterImages(images, searchTerm)
@@ -22,10 +34,42 @@ export function ImagesList() {
           await removeImage(imageId)
         }
         break
+      case "run":
+        try {
+          await runContainer(imageId)
+        } catch (error) {
+          console.error("Error running container:", error)
+          alert("Failed to create and run container from this image")
+        }
+        break
+      case "create": {
+        const image = images.find((img) => img.Id === imageId)
+        if (image) {
+          setSelectedImage(image)
+          setCreateModalVisible(true)
+        }
+        break
+      }
       case "refresh":
         await refreshImages()
         break
     }
+  }
+
+  const handleCreateContainer = async (config: ContainerConfig) => {
+    try {
+      await createContainerWithConfig(config)
+      setCreateModalVisible(false)
+      setSelectedImage(null)
+    } catch (error) {
+      console.error("Failed to create container:", error)
+      // Error handling is done in the Docker context
+    }
+  }
+
+  const handleCloseCreateModal = () => {
+    setCreateModalVisible(false)
+    setSelectedImage(null)
   }
 
   const formatBytes = (bytes: number) => {
@@ -134,6 +178,20 @@ export function ImagesList() {
               <div className="col-actions">
                 <div className="action-buttons">
                   <button
+                    onClick={() => handleAction("run", image.Id)}
+                    className="action-btn run-btn"
+                    data-tooltip="Run container"
+                  >
+                    ▶️
+                  </button>
+                  <button
+                    onClick={() => handleAction("create", image.Id)}
+                    className="action-btn create-btn"
+                    data-tooltip="Create container with custom settings"
+                  >
+                    ⚙️
+                  </button>
+                  <button
                     onClick={() => handleAction("remove", image.Id)}
                     className="action-btn remove-btn"
                     data-tooltip="Remove image"
@@ -145,6 +203,16 @@ export function ImagesList() {
             </div>
           ))}
         </div>
+      )}
+
+      {createModalVisible && selectedImage && (
+        <ContainerCreateModal
+          isOpen={createModalVisible}
+          onClose={handleCloseCreateModal}
+          onCreateContainer={handleCreateContainer}
+          sourceImage={selectedImage}
+          mode="create"
+        />
       )}
     </div>
   )
