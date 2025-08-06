@@ -1,0 +1,76 @@
+{
+  "appId": "com.containerManager.app",
+  "productName": "Whaley Face",
+  "directories": {
+    "buildResources": "build",
+    "output": "release"
+  },
+  "files": ["dist/**/*", "node_modules/**/*", "package.json"],
+  "extraResources": [
+    {
+      "from": "dist/electron",
+      "to": "app/dist/electron"
+    },
+    {
+      "from": "public/freewhaley-256.png",
+      "to": "freewhaley-256.png"
+    },
+    {
+      "from": "public/freewhaley-128.png",
+      "to": "freewhaley-128.png"
+    },
+    {
+      "from": "public/freewhaley-64.png",
+      "to": "freewhaley-64.png"
+    },
+    {
+      "from": "public/freewhaley-48.png",
+      "to": "freewhaley-48.png"
+    },
+    {
+      "from": "public/freewhaley-32.png",
+      "to": "freewhaley-32.png"
+    },
+    {
+      "from": "public/freewhaley-16.png",
+      "to": "freewhaley-16.png"
+    },
+    {
+      "from": "public/freewhaley-512.png",
+      "to": "freewhaley-512.png"
+    },
+    {
+      "from": "public/freewhaley-1024.png",
+      "to": "freewhaley-1024.png"
+    }
+  ],
+  "mac": {
+    "icon": "build/freewhaley.icns",
+    "category": "public.app-category.developer-tools",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "win": {
+    "icon": "public/freewhaley-256.png",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ]
+  },
+  "linux": {
+    "icon": "public/freewhaley-256.png",
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,219 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  box-sizing: border-box;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.1),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
+  min-height: 0;
+  max-height: calc(100vh - 3rem - 1.5rem); /* Adjust for header and padding */
+}
+
+.sidebar {
+  width: 17.5rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+}
+
+.main-content {
+  overflow: visible;
+  min-width: 0;
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
+/* Reset default styles with Apple-inspired typography */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: #1d1d1f;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Apple-style loading spinner */
+.loading-spinner {
+  box-sizing: border-box;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  border: 0.1875rem solid rgba(0, 122, 255, 0.1);
+  border-top: 0.1875rem solid #007aff;
+  border-radius: 50%;
+  animation: smoothSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes smoothSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apple-inspired empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  color: #48484a;
+  text-align: center;
+  font-family: var(--font-family-system);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+  filter: grayscale(20%);
+}
+
+.empty-state h3 {
+  color: #1d1d1f;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.0125rem;
+}
+
+/* Modern table styling */
+.table-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: #48484a;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  font-family: var(--font-family-system);
+}
+
+.table-row {
+  color: #1d1d1f;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-family: var(--font-family-system);
+}
+
+.table-row:hover {
+  background: rgba(0, 122, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 122, 255, 0.1);
+}
+
+/* Apple-style action buttons */
+.action-btn {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 0.0625rem solid rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-family: var(--font-family-system);
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.5);
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.6);
+}
+
+.remove-btn {
+  background: linear-gradient(145deg, #ff3b30, #dc3545);
+  color: white;
+  border-color: rgba(255, 59, 48, 0.3);
+}
+
+.remove-btn:hover {
+  background: linear-gradient(145deg, #dc3545, #c82333);
+  box-shadow: 0 0.125rem 0.5rem rgba(255, 59, 48, 0.35),
+    inset 0 0.0625rem 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Terminal modal fullscreen adjustments */
+.terminal-modal-fullscreen .app {
+  height: 100vh;
+}
+
+.terminal-modal-fullscreen .app-body {
+  height: 100vh;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  #root {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+  }
+
+  .app {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    color: #f2f2f7;
+  }
+
+  .app-body {
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3),
+      inset 0 0.0625rem 0 rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+    color: #f2f2f7;
+  }
+
+  .loading-spinner {
+    border: 0.1875rem solid rgba(10, 132, 255, 0.2);
+    border-top: 0.1875rem solid #0a84ff;
+  }
+}

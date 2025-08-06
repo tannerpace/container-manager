@@ -1,0 +1,191 @@
+/* Action Modal Backdrop */
+.action-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 9999;
+}
+
+/* Action Modal */
+.action-modal {
+  background: #2d2d2d;
+  border: 0.0625rem solid #444;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.4);
+  min-width: 12.5rem;
+  max-width: 18.75rem;
+  overflow: hidden;
+  animation: actionModalAppear 0.15s ease-out;
+}
+
+@keyframes actionModalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Modal Header */
+.action-modal-header {
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 0.0625rem solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.action-modal-header strong {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.status-badge.running {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+  border: 0.0625rem solid #28a745;
+}
+
+.status-badge.exited,
+.status-badge.stopped {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  border: 0.0625rem solid #dc3545;
+}
+
+.status-badge.paused {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 0.0625rem solid #ffc107;
+}
+
+/* Modal Actions */
+.action-modal-actions {
+  padding: 0.5rem 0;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.action-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.action-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 1.25rem;
+  text-align: center;
+}
+
+.action-text {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Action Divider */
+.action-divider {
+  margin: 0.5rem 0;
+  height: 0.0625rem;
+  background: #444;
+}
+
+/* Specific action styles */
+.action-item.start:hover:not(:disabled) {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.action-item.stop:hover:not(:disabled),
+.action-item.remove:hover:not(:disabled) {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.action-item.restart:hover:not(:disabled) {
+  background: rgba(0, 123, 255, 0.1);
+  color: #007bff;
+}
+
+.action-item.pause:hover:not(:disabled),
+.action-item.unpause:hover:not(:disabled) {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.action-item.terminal:hover:not(:disabled),
+.action-item.mac-terminal:hover:not(:disabled) {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+
+.action-item.logs:hover:not(:disabled),
+.action-item.terminal-logs:hover:not(:disabled),
+.action-item.terminal-stats:hover:not(:disabled),
+.action-item.inspect:hover:not(:disabled) {
+  background: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+}
+
+.action-item.rename:hover:not(:disabled),
+.action-item.export:hover:not(:disabled),
+.action-item.copy:hover:not(:disabled) {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48rem) {
+  .action-modal {
+    min-width: 11.25rem;
+    max-width: 16.25rem;
+  }
+
+  .action-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .action-modal-header {
+    padding: 0.875rem 1rem 0.625rem;
+  }
+}
