@@ -411,7 +411,7 @@ export class DockerAPIClient {
     };
   }
 
-  // System operations
+
   async getSystemInfo(): Promise<DockerSystemInfo> {
     return this.makeRequest<DockerSystemInfo>('/info');
   }

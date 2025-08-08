@@ -200,13 +200,13 @@ export function DockerProvider({ children }: DockerProviderProps) {
    */
   const refreshSystemInfo = useCallback(async () => {
     try {
-      const systemInfo = await makeDockerAPICall("/info")
+      const systemInfo = await dockerAPI.getSystemInfo()
       dispatch({ type: "SET_SYSTEM_INFO", payload: systemInfo })
     } catch (error) {
       console.error("Error fetching system info:", error)
       dispatch({ type: "SET_SYSTEM_INFO", payload: null })
     }
-  }, [makeDockerAPICall])
+  }, [])
 
   /**
    * Starts a Docker container by ID
