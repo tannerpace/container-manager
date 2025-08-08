@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from "react"
+import { dockerAPI } from "../api/dockerClient"
 import { getCurrentDockerConfig } from "../config/docker"
 import type { DockerContextType } from "../types/dockerTypes"
 import {
@@ -151,6 +152,59 @@ export function DockerProvider({ children }: DockerProviderProps) {
       })
     } finally {
       dispatch({ type: "SET_LOADING", payload: false })
+    }
+  }, [makeDockerAPICall])
+
+  const refreshSystemUsage = useCallback(async () => {
+    console.log("🔄 DockerContext: Starting system usage refresh...")
+    try {
+      const systemUsageResponse = await dockerAPI.getRealSystemUsage()
+      console.log(
+        "✅ DockerContext: Received system usage data:",
+        systemUsageResponse
+      )
+
+      const systemUsage = {
+        ...systemUsageResponse,
+        lastUpdated: new Date(),
+      }
+
+      console.log(
+        "📊 DockerContext: Dispatching system usage to state:",
+        systemUsage
+      )
+      dispatch({ type: "SET_SYSTEM_USAGE", payload: systemUsage })
+    } catch (error) {
+      console.error("❌ DockerContext: Error getting real system usage:", error)
+
+      // Fallback to zero values if real monitoring fails
+      const now = new Date()
+      const fallbackUsage = {
+        cpuPercent: 0,
+        memoryUsed: 0,
+        memoryTotal: 0,
+        memoryPercent: 0,
+        lastUpdated: now,
+      }
+
+      console.log(
+        "🔄 DockerContext: Using fallback system usage:",
+        fallbackUsage
+      )
+      dispatch({ type: "SET_SYSTEM_USAGE", payload: fallbackUsage })
+    }
+  }, [])
+
+  /**
+   * Fetches Docker system information and updates the state
+   */
+  const refreshSystemInfo = useCallback(async () => {
+    try {
+      const systemInfo = await makeDockerAPICall("/info")
+      dispatch({ type: "SET_SYSTEM_INFO", payload: systemInfo })
+    } catch (error) {
+      console.error("Error fetching system info:", error)
+      dispatch({ type: "SET_SYSTEM_INFO", payload: null })
     }
   }, [makeDockerAPICall])
 
@@ -662,12 +716,51 @@ export function DockerProvider({ children }: DockerProviderProps) {
     initializeData()
   }, [refreshContainers, refreshImages, refreshVolumes, refreshNetworks])
 
+  // Set up periodic system monitoring
+  useEffect(() => {
+    let systemStatsInterval: NodeJS.Timeout
+
+    const startSystemMonitoring = async () => {
+      console.log("🚀 DockerContext: Starting system monitoring...")
+      // Initial fetch of system info
+      await refreshSystemInfo()
+      await refreshSystemUsage()
+
+      console.log(
+        "⏰ DockerContext: Setting up 5-second system usage interval..."
+      )
+      // Set up periodic updates every 5 seconds
+      systemStatsInterval = setInterval(async () => {
+        console.log("🔄 DockerContext: Periodic system usage refresh...")
+        await refreshSystemUsage()
+      }, 5000)
+    }
+
+    if (state.connected) {
+      console.log(
+        "✅ DockerContext: Docker is connected, starting system monitoring..."
+      )
+      startSystemMonitoring()
+    } else {
+      console.log(
+        "❌ DockerContext: Docker not connected, skipping system monitoring..."
+      )
+    }
+
+    return () => {
+      if (systemStatsInterval) {
+        clearInterval(systemStatsInterval)
+      }
+    }
+  }, [state.connected, refreshSystemInfo, refreshSystemUsage])
+
   const contextValue: DockerContextType = {
     ...state,
     refreshContainers,
     refreshImages,
     refreshVolumes,
     refreshNetworks,
+    refreshSystemUsage,
     startContainer,
     stopContainer,
     restartContainer,

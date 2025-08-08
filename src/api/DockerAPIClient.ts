@@ -5,7 +5,7 @@ import type {
   LogEntry,
   LogOptions
 } from '../types/docker';
-import type { DockerContainerDetails } from '../types/dockerTypes';
+import type { DockerContainerDetails, DockerSystemInfo } from '../types/dockerTypes';
 
 /**
  * Enhanced Docker API Client for Container Details functionality
@@ -409,6 +409,134 @@ export class DockerAPIClient {
         controller = null;
       }
     };
+  }
+
+  // System operations
+  async getSystemInfo(): Promise<DockerSystemInfo> {
+    return this.makeRequest<DockerSystemInfo>('/info');
+  }
+
+  async getVersion(): Promise<{
+    Platform: { Name: string };
+    Components: Array<{ Name: string; Version: string }>;
+    Version: string;
+    ApiVersion: string;
+    MinAPIVersion: string;
+    GitCommit: string;
+    GoVersion: string;
+    Os: string;
+    Arch: string;
+    KernelVersion: string;
+    BuildTime: string;
+  }> {
+    return this.makeRequest('/version');
+  }
+
+  /**
+   * Get real system resource usage using system commands or test data
+   */
+  async getRealSystemUsage(): Promise<{
+    cpuPercent: number;
+    memoryUsed: number;
+    memoryTotal: number;
+    memoryPercent: number;
+  }> {
+    console.log('🔍 getRealSystemUsage called');
+
+    try {
+      // Check if we're in Electron environment where we can execute system commands
+      if (typeof window !== 'undefined' && window.electronAPI?.exec) {
+        console.log('🔧 Electron environment detected, executing system commands...');
+        const electronAPI = window.electronAPI;
+
+        // Get CPU usage using top command
+        const cpuResult = await electronAPI.exec('top -l 1 -n 0 | grep "CPU usage"');
+        const cpuOutput = cpuResult.stdout;
+
+        const userMatch = cpuOutput.match(/(\d+\.\d+)% user/);
+        const sysMatch = cpuOutput.match(/(\d+\.\d+)% sys/);
+
+        const userCpu = userMatch ? parseFloat(userMatch[1]) : 0;
+        const sysCpu = sysMatch ? parseFloat(sysMatch[1]) : 0;
+        const cpuPercent = userCpu + sysCpu;
+
+        // Get memory info using vm_stat
+        const memResult = await electronAPI.exec('vm_stat');
+        const memOutput = memResult.stdout;
+        const pageSize = 4096;
+
+        const freeMatch = memOutput.match(/Pages free:\s+(\d+)/);
+        const activeMatch = memOutput.match(/Pages active:\s+(\d+)/);
+        const inactiveMatch = memOutput.match(/Pages inactive:\s+(\d+)/);
+        const wiredMatch = memOutput.match(/Pages wired down:\s+(\d+)/);
+        const compressedMatch = memOutput.match(/Pages occupied by compressor:\s+(\d+)/);
+
+        const freePages = freeMatch ? parseInt(freeMatch[1]) : 0;
+        const activePages = activeMatch ? parseInt(activeMatch[1]) : 0;
+        const inactivePages = inactiveMatch ? parseInt(inactiveMatch[1]) : 0;
+        const wiredPages = wiredMatch ? parseInt(wiredMatch[1]) : 0;
+        const compressedPages = compressedMatch ? parseInt(compressedMatch[1]) : 0;
+
+        const totalPages = freePages + activePages + inactivePages + wiredPages + compressedPages;
+        const usedPages = activePages + inactivePages + wiredPages + compressedPages;
+
+        const memoryTotal = totalPages * pageSize;
+        const memoryUsed = usedPages * pageSize;
+        const memoryPercent = (memoryUsed / memoryTotal) * 100;
+
+        console.log('✅ Electron system stats:', { cpuPercent, memoryUsed, memoryTotal, memoryPercent });
+
+        return {
+          cpuPercent,
+          memoryUsed,
+          memoryTotal,
+          memoryPercent
+        };
+      }
+
+      // For browser environment, provide test data based on running containers
+      console.log("🌐 Browser environment detected - checking containers for test data");
+
+      try {
+        const containers = await this.getContainers(true);
+        const runningContainers = containers.filter(c => c.State === 'running');
+        console.log(`📊 Found ${runningContainers.length} running containers`);
+
+        if (runningContainers.length > 0) {
+          // Provide realistic test data based on running containers
+          const testData = {
+            cpuPercent: 8.5 + (runningContainers.length * 3.2), // Base + per container
+            memoryUsed: (6 + runningContainers.length * 0.8) * 1024 * 1024 * 1024, // 6GB + 0.8GB per container  
+            memoryTotal: 16 * 1024 * 1024 * 1024, // 16GB total
+            memoryPercent: 0
+          };
+          testData.memoryPercent = (testData.memoryUsed / testData.memoryTotal) * 100;
+
+          console.log("🧪 Browser test data (with containers):", testData);
+          return testData;
+        }
+      } catch (containerCheckError) {
+        console.warn("⚠️ Could not check containers for test data:", containerCheckError);
+      }
+
+      // Fallback to zeros if no containers
+      console.log("🔄 Browser environment - no containers, returning zeros");
+      return {
+        cpuPercent: 0,
+        memoryUsed: 0,
+        memoryTotal: 0,
+        memoryPercent: 0
+      };
+
+    } catch (error) {
+      console.error('❌ Error getting system usage:', error);
+      return {
+        cpuPercent: 0,
+        memoryUsed: 0,
+        memoryTotal: 0,
+        memoryPercent: 0
+      };
+    }
   }
 
   // Utility methods

@@ -90,6 +90,8 @@ export interface DockerState {
   error: string | null
   connected: boolean
   searchTerm: string
+  systemInfo: DockerSystemInfo | null
+  systemUsage: SystemResourceUsage | null
 }
 
 export type DockerAction =
@@ -101,6 +103,8 @@ export type DockerAction =
   | { type: "SET_VOLUMES"; payload: DockerVolume[] }
   | { type: "SET_NETWORKS"; payload: DockerNetwork[] }
   | { type: "SET_SEARCH_TERM"; payload: string }
+  | { type: "SET_SYSTEM_INFO"; payload: DockerSystemInfo | null }
+  | { type: "SET_SYSTEM_USAGE"; payload: SystemResourceUsage | null }
 
 export interface DockerContextType extends DockerState {
   refreshContainers: () => Promise<void>
@@ -138,6 +142,7 @@ export interface DockerContextType extends DockerState {
   copyContainer: (containerId: string, newContainerName?: string) => Promise<void>
   openTerminal: (containerId: string) => Promise<void>
   setSearchTerm: (term: string) => void
+  refreshSystemUsage: () => Promise<void>
   filterContainers: (
     containers: DockerContainer[],
     searchTerm: string
@@ -375,4 +380,115 @@ export interface DockerContainerDetails {
       DriverOpts: Record<string, string>
     }>
   }
+}
+
+// Docker system information
+export interface DockerSystemInfo {
+  ID: string
+  Containers: number
+  ContainersRunning: number
+  ContainersPaused: number
+  ContainersStopped: number
+  Images: number
+  Driver: string
+  DriverStatus: Array<[string, string]>
+  SystemStatus: null | Array<[string, string]>
+  Plugins: {
+    Volume: string[]
+    Network: string[]
+    Authorization: string[]
+    Log: string[]
+  }
+  MemoryLimit: boolean
+  SwapLimit: boolean
+  KernelMemory: boolean
+  KernelMemoryTCP: boolean
+  CpuCfsPeriod: boolean
+  CpuCfsQuota: boolean
+  CPUShares: boolean
+  CPUSet: boolean
+  PidsLimit: boolean
+  IPv4Forwarding: boolean
+  BridgeNfIptables: boolean
+  BridgeNfIp6tables: boolean
+  Debug: boolean
+  NFd: number
+  OomKillDisable: boolean
+  NGoroutines: number
+  SystemTime: string
+  LoggingDriver: string
+  CgroupDriver: string
+  CgroupVersion: string
+  NEventsListener: number
+  KernelVersion: string
+  OperatingSystem: string
+  OSVersion: string
+  OSType: string
+  Architecture: string
+  IndexServerAddress: string
+  RegistryConfig: {
+    AllowNondistributableArtifactsCIDRs: string[]
+    AllowNondistributableArtifactsHostnames: string[]
+    InsecureRegistryCIDRs: string[]
+    IndexConfigs: Record<string, unknown>
+    Mirrors: string[]
+  }
+  NCPU: number
+  MemTotal: number
+  GenericResources: null | unknown[]
+  DockerRootDir: string
+  HttpProxy: string
+  HttpsProxy: string
+  NoProxy: string
+  Name: string
+  Labels: string[]
+  ExperimentalBuild: boolean
+  ServerVersion: string
+  Runtimes: Record<string, {
+    path: string
+    runtimeArgs?: string[]
+  }>
+  DefaultRuntime: string
+  Swarm: {
+    NodeID: string
+    NodeAddr: string
+    LocalNodeState: string
+    ControlAvailable: boolean
+    Error: string
+    RemoteManagers: Array<{
+      NodeID: string
+      Addr: string
+    }>
+  }
+  LiveRestoreEnabled: boolean
+  Isolation: string
+  InitBinary: string
+  ContainerdCommit: {
+    ID: string
+    Expected: string
+  }
+  RuncCommit: {
+    ID: string
+    Expected: string
+  }
+  InitCommit: {
+    ID: string
+    Expected: string
+  }
+  SecurityOptions: string[]
+  ProductLicense: string
+  DefaultAddressPools: Array<{
+    Base: string
+    Size: number
+  }>
+  Warnings: string[]
+}
+
+// System resource usage
+export interface SystemResourceUsage {
+  cpuPercent: number
+  memoryUsed: number
+  memoryTotal: number
+  memoryPercent: number
+  lastUpdated: Date
 }

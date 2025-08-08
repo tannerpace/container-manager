@@ -9,6 +9,8 @@ export const initialState: DockerState = {
   error: null,
   connected: false,
   searchTerm: "",
+  systemInfo: null,
+  systemUsage: null,
 }
 
 export function dockerReducer(state: DockerState, action: DockerAction): DockerState {
@@ -29,6 +31,11 @@ export function dockerReducer(state: DockerState, action: DockerAction): DockerS
       return { ...state, networks: action.payload, loading: false }
     case "SET_SEARCH_TERM":
       return { ...state, searchTerm: action.payload }
+    case "SET_SYSTEM_INFO":
+      return { ...state, systemInfo: action.payload }
+    case "SET_SYSTEM_USAGE":
+      console.log('🔄 DockerReducer: SET_SYSTEM_USAGE action received:', action.payload);
+      return { ...state, systemUsage: action.payload }
     default:
       return state
   }

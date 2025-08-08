@@ -110,8 +110,8 @@ export function SystemInfoModal({ isOpen, onClose }: SystemInfoModalProps) {
           info.osInfo = electronInfo.osInfo
           info.architecture = electronInfo.architecture
           info.hostname = electronInfo.hostname
-          info.totalMemory = electronInfo.totalMemory
-          info.availableMemory = electronInfo.availableMemory
+          info.totalMemory = electronInfo.totalMemory.toString()
+          info.availableMemory = electronInfo.availableMemory.toString()
         } catch (error) {
           console.log("Could not fetch Electron system info:", error)
         }

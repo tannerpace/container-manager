@@ -6,7 +6,7 @@
  */
 
 
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron';
 
 /**
  * Docker API exposed to renderer process
@@ -50,6 +50,10 @@ const electronAPI = {
   executeAppleScript: (script: string) => ipcRenderer.invoke('system:execute-applescript', script),
   exec: (command: string) => ipcRenderer.invoke('system:exec', command),
   execLongRunning: (command: string) => ipcRenderer.invoke('system:exec-long-running', command),
+  executeCommand: async (command: string) => {
+    const result = await ipcRenderer.invoke('system:exec', command);
+    return result.stdout; // Return just stdout for backwards compatibility
+  },
   getSystemInfo: () => ipcRenderer.invoke('system:get-system-info'),
 }
 
