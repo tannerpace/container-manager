@@ -190,3 +190,5 @@ export default tseslint.config([
 ```
 
 ```
+
+[buymeacoffee][buymeacoffee.com/tannerpacec](https://buymeacoffee.com/tannerpacec)
