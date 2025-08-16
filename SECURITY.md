@@ -3,38 +3,53 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.x.x   | :white_check_mark: |
+| 0.x.x   | ✅ Yes             |
 
-## Security Considerations
+---
 
-### Docker API Access
+## Security Overview
 
-This application connects to Docker API without authentication for development convenience. This configuration:
+Container Manager is intended for **local development only**. It connects to the Docker Engine API without authentication for ease of use. **Do not use this configuration in production.**
 
-- ⚠️ Exposes Docker daemon without authentication
-- ⚠️ Should **NEVER** be used in production environments
-- ⚠️ Could allow unauthorized access to your Docker daemon
-- ✅ Is intended for local development only
+### ⚠️ Docker API Access
+
+- The Docker daemon is exposed **without authentication** (typically on `localhost:2375`).
+- **Never** expose this port to external or untrusted networks.
+- Anyone with access to this port can control your Docker daemon and containers.
+- This setup is for **trusted, local development environments only**.
 
 ### Data Handling
 
-- Environment variables marked as potentially sensitive are masked by default
-- Clipboard operations involving sensitive data are logged only in development mode
-- No persistent storage of sensitive container data
+- Sensitive environment variables are masked in the UI by default.
+- Clipboard operations involving sensitive data are only logged in development mode.
+- No persistent storage of sensitive container data is used by this application.
 
-## Reporting a Vulnerability
+---
 
-If you discover a security vulnerability, please:
+## Reporting Security Issues
 
-1. **DO NOT** open a public GitHub issue
-2. Email the maintainer directly
-3. Include detailed information about the vulnerability
-4. Allow time for the issue to be addressed before public disclosure
+If you discover a security vulnerability:
+
+1. **Do not** open a public GitHub issue.
+2. Email the maintainer directly (see repository owner).
+3. Include as much detail as possible.
+4. Please allow time for a fix before public disclosure.
+
+---
 
 ## Best Practices for Users
 
-1. Only use this application in trusted development environments
-2. Never expose Docker API (port 2375) to external networks
-3. Regularly update Docker and this application
-4. Review container environment variables before sharing screenshots
-5. Use proper Docker authentication in production environments
+- Use only in trusted, local development environments.
+- **Never** expose Docker API (`localhost:2375`) to the internet or external networks.
+- Regularly update Docker and this application.
+- Review environment variables before sharing screenshots or logs.
+- Use Docker authentication and TLS in production environments.
+- Remove or disable this application when not in use.
+
+---
+
+## Additional Recommendations
+
+- Consider using a firewall to restrict access to the Docker API port.
+- Monitor your Docker daemon for unexpected activity.
+- Always follow Docker’s own [security best practices](https://docs.docker.com/engine/security/).
