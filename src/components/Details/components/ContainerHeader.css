@@ -1,7 +1,6 @@
 /* Container Header Styles - Auto-reload test! */
 .container-header {
   color: white;
-  padding: 1.5rem;
   border-bottom: 1px solid #e0e0e0;
   flex-shrink: 0;
 }
@@ -10,7 +9,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
 }
 
 .container-info {
@@ -20,7 +18,6 @@
 .container-name-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
   margin-bottom: 0.5rem;
 }
 

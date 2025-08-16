@@ -26,7 +26,6 @@ More details: https://code.visualstudio.com/docs/copilot/copilot-customization#_
 
 - Use **functional components** and **React hooks** only
 - Favor **modular, composable components**
-- Always check for **existing utilities, hooks, or components** before creating new ones
 - Use **custom hooks** (`useDockerXYZ`) for reusable async Docker logic
 - Keep code **DRY**: abstract repeated logic into helpers or utilities
 - Create **clear separation of concerns** (UI vs data vs state vs effects)
@@ -47,6 +46,27 @@ More details: https://code.visualstudio.com/docs/copilot/copilot-customization#_
 - Ensure **consistency across files** (naming, spacing, imports)
 
 ---
+
+### Indentation
+
+Use tabs, not spaces.
+
+### Naming Conventions
+
+- Use PascalCase for `type` names
+- Use PascalCase for `enum` values
+- Use camelCase for `function` and `method` names
+- Use camelCase for `property` names and `local variables`
+- Use whole words in names when possible
+
+### Types
+
+- Do not export `types` or `functions` unless you need to share it across multiple components
+- Do not introduce new `types` or `values` to the global namespace
+
+### Comments
+
+- Use JSDoc style comments for `functions`, `interfaces`, `enums`, and `classes`
 
 ## Development Practices
 

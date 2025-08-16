@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import "./App.css"
 import { Details } from "./components/Details/Details"
 import { ErrorBoundary } from "./components/ErrorBoundary"
@@ -20,6 +20,11 @@ function AppContent() {
 
   console.log("App - isTerminalModalOpen:", isTerminalModalOpen)
 
+  const handleContainerSelect = useCallback((containerId: string) => {
+    setSelectedContainerId(containerId)
+    setActiveTab("containers") // Switch to containers tab when a container is selected
+  }, [])
+
   return (
     <div className="app">
       {!isTerminalModalOpen && <Header />}
@@ -35,7 +40,7 @@ function AppContent() {
           <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
           <MainContent
             activeTab={activeTab}
-            onContainerSelect={setSelectedContainerId}
+            onContainerSelect={handleContainerSelect}
           />
         </>
       </div>
