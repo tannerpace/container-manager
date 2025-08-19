@@ -1,7 +1,8 @@
-import React from 'react';
+
+import { VolumesList } from '../components/VolumesList';
 
 const VolumesPage: React.FC = () => {
-	return <div>💾 Volumes Page</div>;
+	return <VolumesList />;
 };
 
 export default VolumesPage;

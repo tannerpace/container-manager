@@ -1,7 +1,8 @@
-import React from 'react';
+
+import { ImagesList } from '../components/ImagesList';
 
 const ImagesPage: React.FC = () => {
-	return <div>💿 Images Page</div>;
+	return <ImagesList />;
 };
 
 export default ImagesPage;

@@ -1,7 +1,8 @@
-import React from 'react';
+
+import { NetworksList } from '../components/NetworksList';
 
 const NetworksPage: React.FC = () => {
-	return <div>🌐 Networks Page</div>;
+	return <NetworksList />;
 };
 
 export default NetworksPage;
