@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { dockerAPI } from "../../api/dockerClient"
-import type { ContainerStats, DockerContainerDetails } from "../../types/docker"
+import type { DockerContainerDetails } from "../../types/docker"
 import { ContainerHeader } from "./components/ContainerHeader"
-import { StatsWidget } from "./components/StatsWidget"
 import "./Details.css"
 import { EnvironmentTab } from "./tabs/EnvironmentTab"
 import { LogsTab } from "./tabs/LogsTab"
@@ -27,9 +26,7 @@ interface DetailsProps {
 export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
   const [containerDetails, setContainerDetails] =
     useState<DockerContainerDetails | null>(null)
-  const [containerStats, setContainerStats] = useState<ContainerStats | null>(
-    null
-  )
+
   const [activeTab, setActiveTab] = useState<TabType>("overview")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -51,7 +48,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
           try {
             const singleStats = await dockerAPI.getStats(containerId)
             console.log("Single stats test successful:", singleStats)
-            setContainerStats(singleStats)
           } catch (statsError) {
             console.error("Single stats test failed:", statsError)
           }
@@ -60,7 +56,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
             containerId,
             (stats) => {
               console.log("Received new stats:", stats)
-              setContainerStats(stats)
             },
             (error) => {
               console.error("Stats stream error:", error)
@@ -95,7 +90,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
     if (containerDetails && !containerDetails.State.Running && statsCleanup) {
       statsCleanup()
       setStatsCleanup(null)
-      setContainerStats(null)
     }
   }, [containerDetails?.State.Running]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -131,19 +125,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
       // Refresh container details after action
       const updatedDetails = await dockerAPI.getContainer(containerId)
       setContainerDetails(updatedDetails)
-
-      // Restart stats streaming if container is now running
-      if (updatedDetails.State.Running && !statsCleanup) {
-        const cleanup = await dockerAPI.streamStats(
-          containerId,
-          (stats) => {
-            console.log("Received new stats after action:", stats)
-            setContainerStats(stats)
-          },
-          (error) => console.error("Stats stream error:", error)
-        )
-        setStatsCleanup(() => cleanup)
-      }
     } catch (err) {
       console.error(`Error ${action} container:`, err)
       setError(
@@ -195,17 +176,12 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
   }
 
   return (
-    <>
+    <div className="details">
       <ContainerHeader
         container={containerDetails}
         onAction={handleContainerAction}
         onClose={onClose}
       />
-
-      {containerDetails.State.Running && containerStats && (
-        <StatsWidget stats={containerStats} />
-      )}
-
       <div className="details-tabs">
         <div className="tab-nav">
           {tabs.map((tab) => (
@@ -219,12 +195,12 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
             </button>
           ))}
         </div>
-
         <div
-          className={`tab-content ${
-            activeTab === "terminal" ? "terminal-active" : ""
-          }`}
-          style={activeTab === "terminal" ? {} : { overflowY: "auto" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "600px",
+          }}
         >
           {activeTab === "overview" && (
             <OverviewTab container={containerDetails} />
@@ -247,6 +223,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   )
 }

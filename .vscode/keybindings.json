@@ -1,0 +1,50 @@
+[
+  {
+    "key": "cmd+shift+d",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🚀 Start Dev Server",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🔄 Restart Dev Server",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+b",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🏗️ Build Production",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+l",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🔍 Lint Code",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+o",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🌐 Open in Browser",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+t",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🐳 Check Docker Connection",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+e",
+    "command": "workbench.action.tasks.runTask",
+    "args": "⚡ Electron Dev Auto-Reload",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "cmd+shift+a",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🔄 Manual Reload Electron",
+    "when": "!terminalFocus"
+  }
+]

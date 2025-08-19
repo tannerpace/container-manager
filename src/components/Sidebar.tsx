@@ -1,12 +1,8 @@
+import { NavLink } from "react-router-dom"
 import { useDocker } from "../hooks/useDocker"
 import "./Sidebar.css"
 
-interface SidebarProps {
-  activeTab: "containers" | "images" | "volumes" | "networks"
-  onTabChange: (tab: "containers" | "images" | "volumes" | "networks") => void
-}
-
-export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export function Sidebar() {
   const { systemUsage, refreshSystemUsage } = useDocker()
 
   // Add logging to track system usage updates
@@ -25,28 +21,32 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
   const menuItems = [
     {
-      id: "containers" as const,
+      id: "containers",
       label: "Containers",
       icon: "📦",
       tooltip: "Manage Docker containers",
+      path: "/containers",
     },
     {
-      id: "images" as const,
+      id: "images",
       label: "Images",
       icon: "💿",
       tooltip: "Manage Docker images",
+      path: "/images",
     },
     {
-      id: "volumes" as const,
+      id: "volumes",
       label: "Volumes",
       icon: "💾",
       tooltip: "Manage Docker volumes",
+      path: "/volumes",
     },
     {
-      id: "networks" as const,
+      id: "networks",
       label: "Networks",
       icon: "🌐",
       tooltip: "Manage Docker networks",
+      path: "/networks",
     },
   ]
 
@@ -54,15 +54,15 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     <aside className="sidebar">
       <nav className="sidebar-nav">
         {menuItems.map((item) => (
-          <button
+          <NavLink
             key={item.id}
-            className={`nav-item ${activeTab === item.id ? "active" : ""}`}
-            onClick={() => onTabChange(item.id)}
+            to={item.path}
+            className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
             data-tooltip={item.tooltip}
           >
             <span className="nav-icon">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
-          </button>
+          </NavLink>
         ))}
       </nav>
 
