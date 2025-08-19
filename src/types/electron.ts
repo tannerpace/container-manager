@@ -3,7 +3,7 @@
  * Consolidated type declarations for the Electron main process bridge
  */
 
-import { ElectronAPI } from '../electron/preload';
+
 
 export interface ElectronBridge {
 	executeAppleScript: (script: string) => Promise<string>
@@ -23,6 +23,6 @@ export interface ElectronBridge {
 // Global type declaration for the Electron bridge
 declare global {
 	interface Window {
-		electron?: ElectronBridge | ElectronAPI
+		electron?: ElectronBridge
 	}
 }
