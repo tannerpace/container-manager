@@ -17,14 +17,6 @@
     "editor.defaultFormatter": "vscode.typescript-language-features",
     "editor.formatOnSave": true
   },
-  "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer",
-    "editor.formatOnSave": true
-  },
-  "[github-issues]": {
-    "editor.wordWrap": "on"
-  },
-
   // --- Files ---
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
@@ -150,10 +142,6 @@
   "npm.exclude": "**/extensions/**",
   "eslint.useFlatConfig": true,
   "emmet.excludeLanguages": [],
-  // --- Workbench ---
-  "remote.extensionKind": {
-    "msjsdiag.debugger-for-chrome": "workspace"
-  },
   "terminal.integrated.suggest.enabled": true,
   "application.experimental.rendererProfiling": true,
   "chat.checkpoints.showFileChanges": true
