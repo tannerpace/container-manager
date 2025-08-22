@@ -3,18 +3,10 @@ import { useDocker } from "../hooks/useDocker"
 import "./Sidebar.css"
 
 export function Sidebar() {
-  const { systemUsage, refreshSystemUsage } = useDocker()
+  const { systemUsage } = useDocker()
 
   // Add logging to track system usage updates
   console.log("📊 Sidebar: Current system usage:", systemUsage)
-
-  // Add manual refresh handler for testing
-  const handleSystemRefresh = () => {
-    console.log("🔄 Sidebar: Manual system refresh triggered")
-    if (refreshSystemUsage) {
-      refreshSystemUsage()
-    }
-  }
 
   // Add logging to track system usage updates
   console.log("📊 Sidebar: Current system usage:", systemUsage)
@@ -109,24 +101,6 @@ export function Sidebar() {
             </span>
           </div>
         </div>
-
-        {/* Debug button for testing system refresh */}
-        <button
-          onClick={handleSystemRefresh}
-          style={{
-            marginTop: "10px",
-            padding: "5px 10px",
-            fontSize: "12px",
-            background: "#444",
-            border: "1px solid #666",
-            borderRadius: "4px",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-          title="Refresh system stats manually"
-        >
-          🔄 Refresh Stats
-        </button>
       </div>
     </aside>
   )

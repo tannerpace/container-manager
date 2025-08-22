@@ -3,10 +3,10 @@ import { dockerAPI } from "../api/dockerClient"
 import { getCurrentDockerConfig } from "../config/docker"
 import type { DockerContextType } from "../types/dockerTypes"
 import {
-  filterContainers,
-  filterImages,
-  filterNetworks,
-  filterVolumes,
+	filterContainers,
+	filterImages,
+	filterNetworks,
+	filterVolumes,
 } from "../utils/dockerFilters"
 import { dockerReducer, initialState } from "../utils/dockerReducer"
 import { DockerContext } from "./DockerContextDefinition"
@@ -760,7 +760,6 @@ export function DockerProvider({ children }: DockerProviderProps) {
     refreshImages,
     refreshVolumes,
     refreshNetworks,
-    refreshSystemUsage,
     startContainer,
     stopContainer,
     restartContainer,
