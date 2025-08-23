@@ -77,6 +77,7 @@ export function useImageComponent() {
 	 * Select an image for actions (e.g., when clicking a row)
 	 */
 	const handleSelectImage = (image: DockerImage) => {
+		setCreateModalVisible(true)
 		setSelectedImage(image)
 	}
 
