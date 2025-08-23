@@ -1,4 +1,5 @@
 import { useState } from "react"
+import type { ContainerConfig } from '../components/ContainerCreateModal'
 import type { DockerImage } from "../types/dockerTypes"
 import { useDocker } from "./useDocker"
 
@@ -6,6 +7,7 @@ import { useDocker } from "./useDocker"
  * Custom hook for managing Docker image actions and modal state.
  */
 export function useImageComponent() {
+
 	const {
 		images,
 		loading,
@@ -22,11 +24,10 @@ export function useImageComponent() {
 	const [createModalVisible, setCreateModalVisible] = useState(false)
 	const [selectedImage, setSelectedImage] = useState<DockerImage | null>(null)
 
-	/**
-	 * Handles actions on images (remove, run, create, refresh).
-	 * @param action Action type
-	 * @param imageId Docker image ID
-	 */
+	// Filter images based on search term
+	const filteredImages = filterImages(images, searchTerm)
+	// Boolean for conditional rendering
+	const isAllFiltered = filteredImages.length === 0 && images.length > 0
 	const handleAction = async (action: string, imageId: string) => {
 		switch (action) {
 			case "remove":
@@ -56,27 +57,7 @@ export function useImageComponent() {
 		}
 	}
 
-	/**
-	 * Handles container creation from modal.
-	 * @param config Container configuration
-	 */
-	const handleCreateContainer = async (config: {
-		image: string
-		name?: string
-		memory?: number
-		memorySwap?: number
-		cpus?: number
-		cpuShares?: number
-		volumes?: { host: string; container: string; mode: "ro" | "rw" }[]
-		ports?: { host: number; container: number; protocol: "tcp" | "udp" }[]
-		networkMode?: string
-		environment?: { key: string; value: string }[]
-		workingDir?: string
-		command?: string
-		entrypoint?: string
-		restart?: "no" | "always" | "unless-stopped" | "on-failure"
-		autoRemove?: boolean
-	}) => {
+	const handleCreateContainer = async (config: ContainerConfig) => {
 		try {
 			await createContainerWithConfig(config)
 			setCreateModalVisible(false)
@@ -87,19 +68,11 @@ export function useImageComponent() {
 		}
 	}
 
-	/**
-	 * Closes the container creation modal.
-	 */
 	const handleCloseCreateModal = () => {
 		setCreateModalVisible(false)
 		setSelectedImage(null)
 	}
 
-	/**
-	 * Formats bytes as human-readable string.
-	 * @param bytes Number of bytes
-	 * @returns Formatted string
-	 */
 	const formatBytes = (bytes: number) => {
 		if (bytes === 0) return "0 Bytes"
 		const k = 1024
@@ -114,15 +87,19 @@ export function useImageComponent() {
 		error,
 		searchTerm,
 		filterImages,
-		createModalVisible,
-		selectedImage,
-		handleAction,
-		handleCreateContainer,
-		handleCloseCreateModal,
-		formatBytes,
 		removeImage,
 		refreshImages,
 		runContainer,
 		createContainerWithConfig,
+		createModalVisible,
+		setCreateModalVisible,
+		selectedImage,
+		setSelectedImage,
+		filteredImages,
+		isAllFiltered,
+		handleAction,
+		handleCreateContainer,
+		handleCloseCreateModal,
+		formatBytes,
 	}
 }
