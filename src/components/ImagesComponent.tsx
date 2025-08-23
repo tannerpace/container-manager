@@ -3,7 +3,7 @@ import type { DockerImage } from "../types/dockerTypes"
 import {
 	ContainerCreateModal
 } from "./ContainerCreateModal"
-import "./ImagesList.css"
+import "./ImagesComponent.css"
 
 export function ImagesComponent() {
 const {
@@ -174,6 +174,7 @@ function ImagesTable({ images, handleAction, formatBytes }: {
               >
                 🗑️
               </button>
+							hi
             </div>
           </div>
         </div>
