@@ -73,6 +73,13 @@ export function useImageComponent() {
 		setSelectedImage(null)
 	}
 
+	/**
+	 * Select an image for actions (e.g., when clicking a row)
+	 */
+	const handleSelectImage = (image: DockerImage) => {
+		setSelectedImage(image)
+	}
+
 	const formatBytes = (bytes: number) => {
 		if (bytes === 0) return "0 Bytes"
 		const k = 1024
@@ -101,5 +108,6 @@ export function useImageComponent() {
 		handleCreateContainer,
 		handleCloseCreateModal,
 		formatBytes,
+		handleSelectImage,
 	}
 }

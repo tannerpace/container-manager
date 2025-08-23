@@ -3,22 +3,24 @@ import type { DockerImage } from "../types/dockerTypes"
 import {
 	ContainerCreateModal
 } from "./ContainerCreateModal"
+import { ImageRow } from "./ImageRow"
 import "./ImagesComponent.css"
 
 export function ImagesComponent() {
-const {
-		images,
-		loading,
-		error,
-		createModalVisible,
-		selectedImage,
-		filteredImages,
-		isAllFiltered,
-		handleAction,
-		handleCreateContainer,
-		handleCloseCreateModal,
-		formatBytes,
-	} = useImageComponent()
+  const {
+    images,
+    loading,
+    error,
+    createModalVisible,
+    selectedImage,
+    filteredImages,
+    isAllFiltered,
+    handleAction,
+    handleCreateContainer,
+    handleCloseCreateModal,
+    formatBytes,
+    handleSelectImage,
+  } = useImageComponent()
 
   if (loading && images.length === 0) {
     return (
@@ -88,6 +90,8 @@ const {
           images={filteredImages}
           handleAction={handleAction}
           formatBytes={formatBytes}
+          handleSelectImage={handleSelectImage}
+          selectedImage={selectedImage}
         />
       )}
 
@@ -107,10 +111,12 @@ const {
 /**
  * Table component for displaying Docker images
  */
-function ImagesTable({ images, handleAction, formatBytes }: {
-  images: DockerImage[]
-  handleAction: (action: string, imageId: string) => void
-  formatBytes: (bytes: number) => string
+function ImagesTable({ images, handleAction, formatBytes, handleSelectImage, selectedImage }: {
+	images: DockerImage[]
+	handleAction: (action: string, imageId: string) => void
+	formatBytes: (bytes: number) => string
+	handleSelectImage: (image: DockerImage) => void
+	selectedImage: DockerImage | null
 }) {
   return (
     <div className="images-table">
@@ -124,60 +130,14 @@ function ImagesTable({ images, handleAction, formatBytes }: {
       </div>
 
       {images.map((image) => (
-        <div key={image.Id} className="table-row">
-          <div className="col-repository">
-            <div className="image-repo">
-              {image.RepoTags?.[0]?.split(":")[0] || "none"}
-            </div>
-          </div>
-
-          <div className="col-tag">
-            <span className="image-tag">
-              {image.RepoTags?.[0]?.split(":")[1] || "none"}
-            </span>
-          </div>
-
-          <div className="col-id">
-            <span className="image-id">
-              {image.Id.replace("sha256:", "").substring(0, 12)}
-            </span>
-          </div>
-
-          <div className="col-created">
-            {new Date(image.Created * 1000).toLocaleDateString()}
-          </div>
-
-          <div className="col-size">
-            <span className="image-size">{formatBytes(image.Size)}</span>
-          </div>
-
-          <div className="col-actions">
-            <div className="action-buttons">
-              <button
-                onClick={() => handleAction("run", image.Id)}
-                className="action-btn run-btn"
-                data-tooltip="Run container"
-              >
-                ▶️
-              </button>
-              <button
-                onClick={() => handleAction("create", image.Id)}
-                className="action-btn create-btn"
-                data-tooltip="Create container with custom settings"
-              >
-                ⚙️
-              </button>
-              <button
-                onClick={() => handleAction("remove", image.Id)}
-                className="action-btn remove-btn"
-                data-tooltip="Remove image"
-              >
-                🗑️
-              </button>
-							hi
-            </div>
-          </div>
-        </div>
+        <ImageRow
+          key={image.Id}
+          image={image}
+          isSelected={!!selectedImage && selectedImage.Id === image.Id}
+          handleSelectImage={handleSelectImage}
+          handleAction={handleAction}
+          formatBytes={formatBytes}
+        />
       ))}
     </div>
   )
