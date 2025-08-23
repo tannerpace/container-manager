@@ -3,21 +3,72 @@ Container Manager
 A modern Docker Desktop–style UI built with React, TypeScript, and Vite.
 This project is designed for local development and experimentation — a lightweight way to explore and manage Docker containers, images, volumes, and networks.
 
-> ⚡ Note on Security:
-By default, this project connects to the Docker Engine API without authentication for simplicity. This is totally fine for running locally on your own machine, If you’d like to run it over a network, you should enable proper TLS/SSH security for Docker (see Docker’s guide).
 
 
 
-✅ In short: Safe for local dev. Add TLS/SSH if deploying remotely.
-
-
----
+- 🐳 **Container Management**: View, start, stop, and remove Docker containers
+- 💿 **Image Management**: Browse and manage Docker images
+- 💾 **Volume Management**: View and manage Docker volumes
+- 🌐 **Network Management**: Monitor Docker networks
+- 🔄 **Real-time Updates**: Live status updates for containers and resources
+- 🎨 **Modern UI**: Dark theme with responsive design
+- ⚡ **Fast Performance**: Built with Vite for lightning-fast development
+- 🧑‍💻 **Beginner Friendly**: Clean code, helpful comments, and a welcoming community
 
 Features
 
 🐳 Container Management: View, start, stop, and remove Docker containers
 
-💿 Image Management: Browse and manage Docker images
+
+## Environment Setup & Verification
+
+Before you start, make sure your environment matches these requirements:
+
+### 1. Check your shell
+
+```bash
+echo $SHELL
+# Should output: /bin/zsh (or your preferred shell)
+```
+
+### 2. Check Node.js and npm versions
+
+```bash
+node --version
+# Should output: v20.x.x or higher
+
+npm --version
+# Should output: 10.x.x or higher
+```
+
+### 3. Check your OS and architecture
+
+```bash
+uname -a
+# Example output: Darwin ... arm64 (for Apple Silicon Macs)
+```
+
+### 4. Check Docker installation
+
+```bash
+which docker
+docker --version
+# Should output: Docker version 27.x.x or higher
+```
+
+### 5. (macOS recommended) Check Colima installation
+
+```bash
+which colima
+colima version
+# Should output: colima version 0.8.x or higher
+```
+
+If you see errors or missing tools, please install them before proceeding.
+
+---
+
+## Getting Started
 
 💾 Volume Management: View and manage Docker volumes
 
@@ -250,14 +301,28 @@ src/
 
 ## Development
 
-### Contributing
 
+### Contributing & Community
+
+We welcome contributors of all experience levels! Whether you're new to open source or a seasoned developer, your ideas and code are valued here.
+
+**How to get started:**
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
 3. Make your changes and add tests
 4. Commit your changes: `git commit -am 'Add feature'`
 5. Push to the branch: `git push origin feature-name`
 6. Submit a pull request
+
+**Need help?**
+- Check the [issues](https://github.com/tannerpace/container-manager/issues) for good first tasks
+- Ask questions or suggest features in Discussions or Issues
+- Read the code comments and documentation for guidance
+
+**Why contribute?**
+- Learn Docker and modern web development
+- Build your portfolio and help others learn
+- Join a friendly, growing open source community
 
 ## Roadmap
 
@@ -271,9 +336,10 @@ src/
 - [x] Container health checks
 - [ ] Registry integration
 
+
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 – see the [LICENSE](LICENSE) file for details. Free for all uses, including enterprise.
 
 ```js
 // eslint.config.js
@@ -304,6 +370,4 @@ export default tseslint.config([
 
 ```
 
-```
 
-[buymeacoffee][buymeacoffee.com/tannerpacec](https://buymeacoffee.com/tannerpacec)
