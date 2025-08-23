@@ -5,7 +5,7 @@ import {
 	ContainerCreateModal,
 	type ContainerConfig,
 } from "./ContainerCreateModal"
-import "./ImagesComponent.css"
+import "./ImagesList.css"
 
 export function ImagesComponent() {
   const {

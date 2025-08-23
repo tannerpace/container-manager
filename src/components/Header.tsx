@@ -12,15 +12,8 @@ export function Header() {
     <>
       <header className="header">
         <div className="header-left">
-          {" "}
           <div className="logo">
             <div className="logo-icon">
-              {/* <img
-                src={whaleSvg}
-                alt="Free Whaley Face Logo"
-                width="32"
-                height="32"
-              /> */}
               🐳
             </div>
             <h1>Whale Tracker</h1>
@@ -60,10 +53,6 @@ export function Header() {
           >
             📊
           </button>
-
-          {/* <button className="settings-btn" title="Settings">
-            ⚙️
-          </button> */}
         </div>
       </header>
 

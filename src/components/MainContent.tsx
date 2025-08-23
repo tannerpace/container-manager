@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useDocker } from "../hooks/useDocker"
 import { ContainersList } from "./ContainersList"
 import { DockerSetupGuide } from "./DockerSetupGuide"
-import { ImagesList } from "./ImagesList"
+import { ImagesComponent } from "./ImagesComponent"
 import "./MainContent.css"
 import { NetworksList } from "./NetworksList"
 import { VolumesList } from "./VolumesList"
@@ -25,7 +25,7 @@ export function MainContent({
       case "containers":
         return <ContainersList onContainerSelect={onContainerSelect} />
       case "images":
-        return <ImagesList />
+        return <ImagesComponent />
       case "volumes":
         return <VolumesList />
       case "networks":
