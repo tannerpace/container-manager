@@ -1,9 +1,3 @@
-# To start use vs code task
-
-clean clean build
-build build production
-start start electron app
-
 
 # Container Manager
 
