@@ -4,16 +4,28 @@ clean clean build
 build build production
 start start electron app
 
+
 # Container Manager
 
-A modern Docker Desktop clone built with React, TypeScript, and Vite. This application provides a clean and intuitive interface for managing Docker containers, images, volumes, and networks.
+**A lightweight, open source Docker Desktop alternative focused on learning Docker and making container technology accessible to everyone.**
 
-- Exposes Docker daemon without authentication
-- Should **NEVER** be used in production environments
-- Could allow unauthorized access to your Docker daemon
-- Is intended for local development only
+Container Manager is designed for:
+- **Learning Docker**: Explore, experiment, and understand Docker concepts in a safe, visual way.
+- **Open Source for All**: 100% free for personal, educational, and enterprise use—no paywalls, no restrictions.
+- **New Developers Welcome**: Friendly for beginners, with a modern codebase and clear contribution guidelines.
+- **Lightweight & Fast**: Minimal dependencies, quick startup, and low resource usage.
 
-**For production use**, implement proper Docker API authentication and TLS encryption.
+This project provides a clean and intuitive interface for managing Docker containers, images, volumes, and networks. It's a great way to learn Docker, contribute to open source, and help others do the same!
+
+
+> ⚠️ **Security Note:**
+> - Exposes Docker daemon without authentication
+> - Should **NEVER** be used in production environments
+> - Could allow unauthorized access to your Docker daemon
+> - Is intended for local development and learning only
+
+For production use, implement proper Docker API authentication and TLS encryption.
+
 
 ## Features
 
@@ -24,6 +36,7 @@ A modern Docker Desktop clone built with React, TypeScript, and Vite. This appli
 - 🔄 **Real-time Updates**: Live status updates for containers and resources
 - 🎨 **Modern UI**: Dark theme with responsive design
 - ⚡ **Fast Performance**: Built with Vite for lightning-fast development
+- 🧑‍💻 **Beginner Friendly**: Clean code, helpful comments, and a welcoming community
 
 ## Technology Stack
 
@@ -32,6 +45,54 @@ A modern Docker Desktop clone built with React, TypeScript, and Vite. This appli
 - **State Management**: React Context API with useReducer
 - **Styling**: CSS Modules with modern CSS features
 - **Docker Integration**: Docker Engine API (REST endpoints)
+
+## Environment Setup & Verification
+
+Before you start, make sure your environment matches these requirements:
+
+### 1. Check your shell
+
+```bash
+echo $SHELL
+# Should output: /bin/zsh (or your preferred shell)
+```
+
+### 2. Check Node.js and npm versions
+
+```bash
+node --version
+# Should output: v20.x.x or higher
+
+npm --version
+# Should output: 10.x.x or higher
+```
+
+### 3. Check your OS and architecture
+
+```bash
+uname -a
+# Example output: Darwin ... arm64 (for Apple Silicon Macs)
+```
+
+### 4. Check Docker installation
+
+```bash
+which docker
+docker --version
+# Should output: Docker version 27.x.x or higher
+```
+
+### 5. (macOS recommended) Check Colima installation
+
+```bash
+which colima
+colima version
+# Should output: colima version 0.8.x or higher
+```
+
+If you see errors or missing tools, please install them before proceeding.
+
+---
 
 ## Getting Started
 
@@ -131,14 +192,28 @@ src/
 
 ## Development
 
-### Contributing
 
+### Contributing & Community
+
+We welcome contributors of all experience levels! Whether you're new to open source or a seasoned developer, your ideas and code are valued here.
+
+**How to get started:**
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature-name`
 3. Make your changes and add tests
 4. Commit your changes: `git commit -am 'Add feature'`
 5. Push to the branch: `git push origin feature-name`
 6. Submit a pull request
+
+**Need help?**
+- Check the [issues](https://github.com/tannerpace/container-manager/issues) for good first tasks
+- Ask questions or suggest features in Discussions or Issues
+- Read the code comments and documentation for guidance
+
+**Why contribute?**
+- Learn Docker and modern web development
+- Build your portfolio and help others learn
+- Join a friendly, growing open source community
 
 ## Roadmap
 
@@ -152,9 +227,10 @@ src/
 - [x] Container health checks
 - [ ] Registry integration
 
+
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 – see the [LICENSE](LICENSE) file for details. Free for all uses, including enterprise.
 
 ```js
 // eslint.config.js
@@ -185,6 +261,4 @@ export default tseslint.config([
 
 ```
 
-```
 
-[buymeacoffee][buymeacoffee.com/tannerpacec](https://buymeacoffee.com/tannerpacec)
