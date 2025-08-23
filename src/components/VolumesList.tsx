@@ -1,7 +1,11 @@
 import { useDocker } from "../hooks/useDocker"
 import "./VolumesList.css"
 
-export function VolumesList() {
+interface VolumesListProps {
+  onVolumeSelect?: (volumeName: string) => void
+}
+
+export function VolumesList({ onVolumeSelect }: VolumesListProps = {}) {
   const { volumes, loading, error, searchTerm, filterVolumes, refreshVolumes } =
     useDocker()
 
@@ -81,7 +85,12 @@ export function VolumesList() {
           </div>
 
           {filteredVolumes.map((volume) => (
-            <div key={volume.Name} className="table-row">
+            <div
+              key={volume.Name}
+              className="table-row"
+              onClick={() => onVolumeSelect && onVolumeSelect(volume.Name)}
+              style={{ cursor: onVolumeSelect ? "pointer" : undefined }}
+            >
               <div className="col-name">
                 <div className="volume-name">{volume.Name}</div>
               </div>

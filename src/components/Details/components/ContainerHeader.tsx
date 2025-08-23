@@ -156,11 +156,6 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
         </div>
 
         <div className="info-item">
-          <span className="info-label">Restart Count:</span>
-          <span className="info-value">{container.RestartCount}</span>
-        </div>
-
-        <div className="info-item">
           <span className="info-label">Platform:</span>
           <span className="info-value">{container.Platform}</span>
         </div>

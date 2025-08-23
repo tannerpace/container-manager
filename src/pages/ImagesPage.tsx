@@ -1,8 +1,8 @@
 
-import { ImagesList } from '../components/ImagesList';
+import { ImagesComponent } from '../components/ImagesComponent';
 
 const ImagesPage: React.FC = () => {
-	return <ImagesList />;
+	return <ImagesComponent />;
 };
 
 export default ImagesPage;

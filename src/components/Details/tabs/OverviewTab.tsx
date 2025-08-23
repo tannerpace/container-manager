@@ -203,10 +203,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ container }) => {
               {getRestartPolicyText(container.HostConfig.RestartPolicy)}
             </span>
           </div>
-          <div className="info-row">
-            <span className="info-label">Restart Count:</span>
-            <span className="info-value">{container.RestartCount}</span>
-          </div>
+
           <div className="info-row">
             <span className="info-label">Auto Remove:</span>
             <span className="info-value">
