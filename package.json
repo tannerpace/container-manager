@@ -1,5 +1,7 @@
 {
   "name": "container-manager",
+  "description": "A lightweight, open source Docker Desktop alternative focused on learning Docker, with a free and enterprise-friendly license.",
+  "author": "Tanner Bleakley",
   "private": true,
   "version": "0.0.0",
   "type": "module",
