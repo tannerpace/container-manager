@@ -1,4 +1,3 @@
-
 # Container Manager
 
 **A lightweight, open source Docker Desktop alternative focused on learning Docker and making container technology accessible to everyone.**
@@ -214,6 +213,33 @@ src/
 
 ## Development
 
+To streamline development, the following tasks are available in the project. These tasks can be run directly from the VS Code task runner or the terminal.
+
+### Key Tasks
+
+- **🚀 Start Dev Server**:
+  Starts the Vite development server. This task is useful for frontend development and supports hot module replacement (HMR) for CSS and JavaScript changes.
+
+- **⚡ Electron Dev Auto-Reload**:
+  Starts the Electron app in development mode with auto-reload enabled. This is the recommended task for developers working on both the frontend and Electron integration. It ensures that changes to CSS, JavaScript, or other assets are reflected immediately in the app without needing a manual restart.
+
+  **Usage**:
+  - Make changes to your CSS or other files.
+  - The app will automatically reload to reflect the changes.
+
+- **🔍 Lint Code**:
+  Runs the linter to check for code quality issues.
+
+- **🔧 Fix Lint Issues**:
+  Automatically fixes linting issues where possible.
+
+- **🏗️ Build**:
+  Builds the project for production.
+
+- **📦 Install Dependencies**:
+  Installs all required dependencies for the project.
+
+For a full list of tasks, refer to the `.vscode/tasks.json` file or the VS Code task runner.
 
 ### Contributing & Community
 
@@ -279,8 +305,6 @@ export default tseslint.config([
     },
   },
 ])
-```
-
 ```
 
 
