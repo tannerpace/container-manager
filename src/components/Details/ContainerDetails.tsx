@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react"
 import { dockerAPI } from "../../api/dockerClient"
 import type { DockerContainerDetails } from "../../types/docker"
 import { ContainerHeader } from "./components/ContainerHeader"
-import "./Details.css"
+import "./ContainerDetails.css"
 import { EnvironmentTab } from "./tabs/EnvironmentTab"
 import { LogsTab } from "./tabs/LogsTab"
 import { NetworkTab } from "./tabs/NetworkTab"
 import { OverviewTab } from "./tabs/OverviewTab"
-import { TerminalTab } from "./tabs/TerminalTab"
 import { VolumesTab } from "./tabs/VolumesTab"
 
 type TabType =
@@ -18,12 +17,12 @@ type TabType =
   | "logs"
   | "terminal"
 
-interface DetailsProps {
+interface ContainerDetailsProps {
   containerId: string
   onClose: () => void
 }
 
-export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
+export const ContainerDetails: React.FC<ContainerDetailsProps> = ({ containerId, onClose }) => {
   const [containerDetails, setContainerDetails] =
     useState<DockerContainerDetails | null>(null)
 
@@ -116,7 +115,7 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
         case "remove":
           if (confirm("Are you sure you want to remove this container?")) {
             await dockerAPI.removeContainer(containerId, true)
-            onClose() // Close details view after removal
+            onClose()
             return
           }
           break
@@ -139,7 +138,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
     { id: "network", label: "Network", icon: "🌐" },
     { id: "volumes", label: "Volumes", icon: "💾" },
     { id: "logs", label: "Logs", icon: "📄" },
-    { id: "terminal", label: "Terminal", icon: "💻" },
   ] as const
 
   if (loading) {
@@ -215,12 +213,6 @@ export const Details: React.FC<DetailsProps> = ({ containerId, onClose }) => {
             <VolumesTab container={containerDetails} />
           )}
           {activeTab === "logs" && <LogsTab containerId={containerId} />}
-          {activeTab === "terminal" && (
-            <TerminalTab
-              containerId={containerId}
-              containerName={containerDetails?.Name?.replace(/^\//, "")}
-            />
-          )}
         </div>
       </div>
     </div>

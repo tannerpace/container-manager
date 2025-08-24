@@ -477,9 +477,9 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
       )}
 
       {/* Container Inspect Modal */}
-      {inspectModalVisible && inspectContainerId && (
+
         <ContainerInspectModal
-          containerId={inspectContainerId}
+          containerId={inspectContainerId || ""}
           containerName={inspectContainerName}
           isVisible={inspectModalVisible}
           onClose={() => {
@@ -488,7 +488,7 @@ export function ContainersList({ onContainerSelect }: ContainersListProps) {
             setInspectContainerName("")
           }}
         />
-      )}
+
 
       {/* Action Modal */}
       <ActionModal

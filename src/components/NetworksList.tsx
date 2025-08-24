@@ -1,22 +1,19 @@
-import { useDocker } from "../hooks/useDocker"
+
+import { useNetworkComponent } from "../hooks/useNetworkComponent"
+import { NetworksEmptyState } from "./Network/NetworksEmptyState"
+import { NetworksTable } from "./Network/NetworksTable"
 import "./NetworksList.css"
+
 
 export function NetworksList() {
   const {
     networks,
     loading,
     error,
-    searchTerm,
-    filterNetworks,
-    refreshNetworks,
-  } = useDocker()
+    filteredNetworks,
+    handleRefresh,
+  } = useNetworkComponent()
 
-  // Filter networks based on search term
-  const filteredNetworks = filterNetworks(networks, searchTerm)
-
-  const handleRefresh = async () => {
-    await refreshNetworks()
-  }
 
   if (loading && networks.length === 0) {
     return (
@@ -26,6 +23,7 @@ export function NetworksList() {
       </div>
     )
   }
+
 
   if (error) {
     return (
@@ -61,69 +59,10 @@ export function NetworksList() {
         </div>
       </div>
 
-      {filteredNetworks.length === 0 && networks.length > 0 ? (
-        <div className="networks-empty">
-          <div className="empty-icon">🔍</div>
-          <h3>No networks match your search</h3>
-          <p>
-            Try adjusting your search term or clear the search to see all
-            networks.
-          </p>
-        </div>
-      ) : filteredNetworks.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">🌐</div>
-          <h3>No networks found</h3>
-          <p>Create a network to connect containers</p>
-        </div>
+      {filteredNetworks.length === 0 ? (
+        <NetworksEmptyState searchActive={networks.length > 0} />
       ) : (
-        <div className="networks-table">
-          <div className="table-header">
-            <div className="col-name">Network Name</div>
-            <div className="col-id">Network ID</div>
-            <div className="col-driver">Driver</div>
-            <div className="col-scope">Scope</div>
-            <div className="col-created">Created</div>
-            <div className="col-actions">Actions</div>
-          </div>
-
-          {filteredNetworks.map((network) => (
-            <div key={network.Id} className="table-row">
-              <div className="col-name">
-                <div className="network-name">{network.Name}</div>
-              </div>
-
-              <div className="col-id">
-                <span className="network-id">
-                  {network.Id.substring(0, 12)}
-                </span>
-              </div>
-
-              <div className="col-driver">
-                <span className="network-driver">{network.Driver}</span>
-              </div>
-
-              <div className="col-scope">
-                <span className="network-scope">{network.Scope}</span>
-              </div>
-
-              <div className="col-created">
-                {new Date(network.Created).toLocaleDateString()}
-              </div>
-
-              <div className="col-actions">
-                <div className="action-buttons">
-                  <button
-                    className="action-btn remove-btn"
-                    data-tooltip="Remove network"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <NetworksTable networks={filteredNetworks} />
       )}
     </div>
   )

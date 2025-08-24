@@ -111,6 +111,19 @@ export function ImagesComponent() {
 /**
  * Table component for displaying Docker images
  */
+function ImagesTableHeader() {
+	return (
+		<div className="table-header">
+			<div className="col-repository">Repository</div>
+			<div className="col-tag">Tag</div>
+			<div className="col-id">Image ID</div>
+			<div className="col-created">Created</div>
+			<div className="col-size">Size</div>
+			<div className="col-actions">Actions</div>
+		</div>
+	)
+}
+
 function ImagesTable({ images, handleAction, formatBytes, handleSelectImage, selectedImage }: {
 	images: DockerImage[]
 	handleAction: (action: string, imageId: string) => void
@@ -120,15 +133,7 @@ function ImagesTable({ images, handleAction, formatBytes, handleSelectImage, sel
 }) {
   return (
     <div className="images-table">
-      <div className="table-header">
-        <div className="col-repository">Repository</div>
-        <div className="col-tag">Tag</div>
-        <div className="col-id">Image ID</div>
-        <div className="col-created">Created</div>
-        <div className="col-size">Size</div>
-        <div className="col-actions">Actions</div>
-      </div>
-
+      <ImagesTableHeader />
       {images.map((image) => (
         <ImageRow
           key={image.Id}
