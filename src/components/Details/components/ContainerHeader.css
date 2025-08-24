@@ -213,6 +213,7 @@
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   flex-wrap: wrap;
+	margin-bottom: 1rem;
 }
 .quick-info {
   display: flex;
@@ -226,7 +227,7 @@
   display: flex;
   align-items: center;
   font-size: 0.85rem;
-	/* margin-bottom: .75rem; */
+
 }
 .info-item {
   display: flex;
