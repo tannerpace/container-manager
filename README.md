@@ -98,24 +98,24 @@ If you see errors or missing tools, please install them before proceeding.
 
 ### Installation
 
-1. Clone the repository:
+1. **Enable Docker API access** (Required):
+
+Option 1: Colima (macOS, tested)
+
+Colima is an open-source container runtime that can be used as a lightweight alternative to Docker Desktop:
+
+2. Clone the repository:
 
 ```bash
 git clone https://github.com/tannerpace/container-manager.git
 cd container-manager
 ```
 
-2. Install dependencies:
+3. Install dependencies and build
 
 ```bash
-npm install
+npm install && npm run build
 ```
-
-3. **Enable Docker API access** (Required):
-
-Option 1: Colima (macOS, tested)
-
-Colima is an open-source container runtime that can be used as a lightweight alternative to Docker Desktop:
 
 colima start
 
@@ -134,14 +134,6 @@ npm run dev
 ```bash
 npm run electron
 ```
-
-**Note:** If you see a connection error, the app will show a setup guide with detailed instructions.
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist` directory.
 
 ## Project Structure
 
