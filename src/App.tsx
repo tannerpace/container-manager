@@ -55,7 +55,9 @@ function ImageDetailsWrapper() {
 function VolumeDetailsWrapper() {
   const params = useParams();
   const navigate = useNavigate();
+
   const volumeName = params.volumeName;
+	console.log(volumeName)
   if (!volumeName) return null;
   return <VolumeDetails volumeName={volumeName} onClose={() => navigate('/volumes')} />;
 }

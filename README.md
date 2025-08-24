@@ -88,15 +88,46 @@ If you see errors or missing tools, please install them before proceeding.
 
 ---
 
-## Getting Started
 
-### Prerequisites
+# Container Manager
 
-- Node.js 18+
-- Docker Desktop or Docker Engine running
-- npm or yarn package manager
+A modern, open-source Docker Desktop alternative built with React, TypeScript, and Vite.
 
-### Installation
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tannerpace/container-manager/ci.yml?branch=main)](https://github.com/tannerpace/container-manager/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Features
+
+- **Manage Docker containers, images, volumes, and networks**
+- **Modern, desktop-friendly UI**
+- **Real-time Docker status and updates**
+- **Electron and Tauri support (planned)**
+- **Cross-platform compatibility**
+
+---
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or newer recommended)
+- [Docker Engine](https://docs.docker.com/engine/install/) running locally
+
+---
+
+## Installation
 
 1. **Enable Docker API access** (Required):
 
@@ -132,6 +163,7 @@ npm run dev
 5. Start the electron app
 
 ```bash
+npm run electron
 npm run electron
 ```
 
