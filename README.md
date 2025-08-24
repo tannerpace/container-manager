@@ -129,7 +129,11 @@ Linux an PC setups should work, but are untested.
 npm run dev
 ```
 
-5. Open [http://localhost:5173](http://localhost:5173) in your browser
+5. Start the electron app
+
+```bash
+npm run electron
+```
 
 **Note:** If you see a connection error, the app will show a setup guide with detailed instructions.
 
