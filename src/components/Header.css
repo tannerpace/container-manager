@@ -59,6 +59,7 @@
 .search-container {
   width: 100%;
   position: relative;
+	min-width: fit-content;
 }
 
 .search-container form {
@@ -68,14 +69,13 @@
 .search-input {
   position: relative;
   width: 100%;
-  padding: 0.75rem 1.25rem;
+  padding: 0.50rem .25rem;
   border: 0.0625rem solid rgba(0, 0, 0, 0.1);
   border-radius: 0.625rem;
   background: rgba(120, 120, 128, 0.12);
-  backdrop-filter: blur(0.625rem) saturate(120%);
   -webkit-backdrop-filter: blur(0.625rem) saturate(120%);
   color: #1d1d1f;
-  font-size: 1rem;
+  font-size: .75rem;
   font-family: var(--font-family-system);
   transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-sizing: border-box;

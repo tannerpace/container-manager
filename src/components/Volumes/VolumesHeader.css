@@ -1,0 +1,23 @@
+.volumes-header {
+  padding: 24px 32px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px 12px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.volumes-header h2 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}

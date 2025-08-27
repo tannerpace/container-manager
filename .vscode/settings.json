@@ -4,6 +4,12 @@
   "editor.experimental.asyncTokenization": true,
   "editor.experimental.asyncTokenizationVerification": true,
   "editor.occurrencesHighlightDelay": 0,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always"
+  },
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
 
   // --- Language Specific ---
   "[plaintext]": {
@@ -144,5 +150,8 @@
   "emmet.excludeLanguages": [],
   "terminal.integrated.suggest.enabled": true,
   "application.experimental.rendererProfiling": true,
-  "chat.checkpoints.showFileChanges": true
+  "chat.checkpoints.showFileChanges": true,
+  "tasks.runOnSave": {
+    "commands": ["Build and Start Electron App"]
+  }
 }

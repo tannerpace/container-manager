@@ -1,5 +1,4 @@
-
-import { ImagesComponent } from '../components/ImagesComponent';
+import { ImagesComponent } from '../components/Images/ImagesComponent';
 
 const ImagesPage: React.FC = () => {
 	return <ImagesComponent />;

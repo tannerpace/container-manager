@@ -1,5 +1,4 @@
-
-import { NetworksList } from '../components/NetworksList';
+import { NetworksList } from '../components/Networks/NetworksList';
 
 const NetworksPage: React.FC = () => {
 	return <NetworksList />;

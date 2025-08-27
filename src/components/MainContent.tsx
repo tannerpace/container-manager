@@ -1,35 +1,18 @@
+import { BrowserRouter as Router } from "react-router-dom";
+import { useMainContentConnection } from "../hooks/useMainContentConnection";
+import { ContentRouter } from "../routers/ContentRouter";
+import { DockerConnectionError } from './Containers/DockerConnectionError';
+import { DockerSetupGuide } from './Containers/DockerSetupGuide';
 
-import { useMainContentConnection } from "../hooks/useMainContentConnection"
-import { ContainersList } from "./ContainersList"
-import { DockerConnectionError } from './DockerConnectionError'
-import { DockerSetupGuide } from "./DockerSetupGuide"
-import { ImagesComponent } from "./ImagesComponent"
-import "./MainContent.css"
-import { NetworksList } from "./NetworksList"
-import { VolumesList } from "./VolumesList"
+import "./MainContent.css";
 
 interface MainContentProps {
-  activeTab: "containers" | "images" | "volumes" | "networks"
-  onContainerSelect: (containerId: string) => void
+  activeTab: "containers" | "images" | "volumes" | "networks";
+
 }
 
-export function MainContent({ activeTab, onContainerSelect }: MainContentProps) {
+export function MainContent({ activeTab }: MainContentProps) {
   const { shouldShowSetupGuide, showSetupGuide, setShowSetupGuide } = useMainContentConnection();
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case "containers":
-        return <ContainersList onContainerSelect={onContainerSelect} />;
-      case "images":
-        return <ImagesComponent />;
-      case "volumes":
-        return <VolumesList />;
-      case "networks":
-        return <NetworksList />;
-      default:
-        return <ContainersList onContainerSelect={onContainerSelect} />;
-    }
-  };
 
   return (
     <main className="main-content">
@@ -37,7 +20,9 @@ export function MainContent({ activeTab, onContainerSelect }: MainContentProps) 
         <DockerConnectionError onShowGuide={() => setShowSetupGuide(true)} />
       )}
 
-      {renderContent()}
+      <Router>
+        <ContentRouter activeTab={activeTab} />
+      </Router>
 
       {showSetupGuide && (
         <DockerSetupGuide onClose={() => setShowSetupGuide(false)} />

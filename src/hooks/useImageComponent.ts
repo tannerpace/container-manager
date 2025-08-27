@@ -1,7 +1,8 @@
-import { useState } from "react"
-import type { ContainerConfig } from '../components/ContainerCreateModal'
-import type { DockerImage } from "../types/dockerTypes"
-import { useDocker } from "./useDocker"
+import { useState } from "react";
+
+import type { ContainerConfig } from '../components/Containers/ContainerCreateModal';
+import type { DockerImage } from '../types/dockerTypes';
+import { useDocker } from "./useDocker";
 
 /**
  * Custom hook for managing Docker image actions and modal state.

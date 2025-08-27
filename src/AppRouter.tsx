@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-    Route,
-    HashRouter as Router,
-    Routes
+	Route,
+	HashRouter as Router,
+	Routes
 } from 'react-router-dom';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import { ContainerDetails } from './components/Details/ContainerDetails';
-import { ImageDetails } from './components/Details/ImageDetails';
-import { NetworkDetails } from './components/Details/NetworkDetails';
-import { VolumeDetails } from './components/Details/VolumeDetails';
-import { Header } from './components/Header';
-import { Sidebar } from './components/Sidebar';
+import { ContainerDetails } from './components/ResourceDetails/ContainerDetails';
+import { ImageDetails } from './components/ResourceDetails/ImageDetails';
+import { NetworkDetails } from './components/ResourceDetails/NetworkDetails';
+import { VolumeDetails } from './components/ResourceDetails/VolumeDetails';
+import { Header } from './components/shared/Header';
+import { Sidebar } from './components/shared/Sidebar';
 import { useTerminal } from './hooks/useTerminal';
 import ContainersPage from './pages/ContainersPage';
 import ImagesPage from './pages/ImagesPage';
@@ -61,13 +61,12 @@ const AppRouter: React.FC = () => {
           <Sidebar />
           <main className="main-content">
             <Routes>
-              <Route path="/" element={<ContainersPage />} />
-              <Route path="/container_details/:containerId" element={<DetailsWrapper />} />
+							              <Route path="/" element={<ContainersPage />} />
+							              <Route path="/container_details/:containerId" element={<DetailsWrapper />} />
               <Route path="/image_details/:imageId" element={<ImageDetailsWrapper />} />
               <Route path="/volume_details/:volumeName" element={<VolumeDetailsWrapper />} />
               <Route path="/network_details/:networkId" element={<NetworkDetailsWrapper />} />
-              <Route path="/containers" element={<ContainersPage />} />
-              <Route path="/images" element={<ImagesPage />} />
+							<Route path="/containers" element={<ContainersPage />} />              <Route path="/images" element={<ImagesPage />} />
               <Route path="/volumes" element={<VolumesPage />} />
               <Route path="/networks" element={<NetworksPage />} />
               <Route path="*" element={<NotFoundPage />} />
