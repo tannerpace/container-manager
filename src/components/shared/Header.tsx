@@ -13,12 +13,7 @@ export function Header() {
     <>
       <header className="header">
         <div className="header-left">
-          <div className="logo">
-            <div className="logo-icon">
-              🐳
-            </div>
-            <h1>Whale Tracker</h1>
-          </div>
+         {/* todo add current page */}
         </div>
 
         <div className="header-center">

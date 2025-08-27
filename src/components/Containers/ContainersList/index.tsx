@@ -343,7 +343,7 @@ export function ContainersList() {
         <div className="header-content">
          <div className="containers-header">
         <div className="header-content">
-          <h2>Containers ({containers.length})</h2>
+          {/* <h2>Containers ({containers.length})</h2>
           <div className="header-actions">
             <button
               onClick={() => handleAction("refresh", "")}
@@ -351,14 +351,14 @@ export function ContainersList() {
               disabled={loading}
             >
               🔄 Refresh
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
         </div>
 
 
-      {!inspectModalVisible && renderContainersContent()}
+      {!inspectModalVisible &&renderContainersContent()}
 
       {renameModalVisible && (
         <div className="modal-overlay">
