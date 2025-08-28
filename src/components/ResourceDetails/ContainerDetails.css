@@ -11,7 +11,7 @@
 	background: var(--bg-primary, #ffffff);
 	border-radius: 8px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	margin: 1rem;
+	padding: 1rem;
 	overflow: hidden; /* Changed from scroll to hidden for proper flex behavior */
 	height: max-content;
 	min-height: 600px; /* Minimum usable height */

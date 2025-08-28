@@ -15,6 +15,7 @@
 	overflow: hidden; /* Changed from scroll to hidden for proper flex behavior */
 	height: max-content;
 	min-height: 600px; /* Minimum usable height */
+	padding: "1rem";
 }
 
 /* Dark mode support */
@@ -58,4 +59,5 @@
 .details.loading,
 .details.error {
 	justify-content: center;
+	align-items: center;
 }
