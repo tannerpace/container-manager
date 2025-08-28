@@ -1,6 +1,6 @@
 /* Container Create Modal Styles */
 .container-create-modal {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.75rem;
   width: 90vw;
   max-width: 50rem;
@@ -9,6 +9,7 @@
   flex-direction: column;
   box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  border: 0.0625rem solid var(--border-color);
 }
 
 .modal-header {
@@ -39,7 +40,7 @@
 }
 
 .close-btn:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
@@ -68,7 +69,7 @@
 }
 
 .modal-tabs .tab:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
@@ -120,9 +121,34 @@
   box-shadow: 0 0 0 0.1875rem rgba(0, 122, 255, 0.1);
 }
 
-.form-group small {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
+.form-group input::placeholder,
+.form-group select option,
+.port-mapping input::placeholder,
+.volume-mapping input::placeholder,
+.env-var input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Dark mode placeholder text - make it lighter */
+@media (prefers-color-scheme: dark) {
+  .form-group input::placeholder,
+  .form-group select option,
+  .port-mapping input::placeholder,
+  .volume-mapping input::placeholder,
+  .env-var input::placeholder {
+    color: #b0b0b5;
+  }
+
+  /* Make labels lighter in dark mode */
+  .form-group label {
+    color: "#FFFFF";
+  }
+
+  /* Make input text lighter in dark mode */
+  .form-group input,
+  .form-group select {
+    color: #e0e0e5;
+  }
 }
 
 /* Checkbox */
@@ -223,7 +249,7 @@
 }
 
 .remove-btn:hover {
-  background: #dc2626;
+  background: var(--color-error);
 }
 
 /* Modal Footer */
@@ -291,14 +317,14 @@
 /* Modal Description */
 .modal-description {
   padding: 1rem 1.5rem;
-  background: rgba(59, 130, 246, 0.05);
+  background: var(--bg-secondary);
   border-bottom: 0.0625rem solid var(--border-color);
 }
 
 .modal-description p {
   margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
   line-height: 1.4;
 }
 
@@ -306,15 +332,15 @@
 .tab-description {
   margin-bottom: 1.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(59, 130, 246, 0.05);
-  border-left: 0.25rem solid var(--accent-color);
+  background: var(--bg-secondary);
+  border-left: 0.25rem solid var(--color-primary);
   border-radius: 0.25rem;
 }
 
 .tab-description p {
   margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
   line-height: 1.4;
 }
 
