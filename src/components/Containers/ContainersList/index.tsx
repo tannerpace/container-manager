@@ -339,19 +339,7 @@ export function ContainersList() {
 
   return (
     <div className="containers-list">
-
-        <div className="header-content">
-        <div className="containers-header">
-        <div className="header-content">
-
-          <div className="header-actions">
-          </div>
-        </div>
-      </div>
-        </div>
-
-
-      {!inspectModalVisible &&renderContainersContent()}
+      {!inspectModalVisible && renderContainersContent()}
 
       {renameModalVisible && (
         <div className="modal-overlay">

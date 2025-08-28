@@ -1,7 +1,6 @@
 import { useNetworkComponent } from '../../hooks/useNetworkComponent';
 import { NetworksEmptyState } from '../Network/NetworksEmptyState';
 import { NetworksTable } from '../Network/NetworksTable';
-import { ReusableHeader } from '../shared/Header/ReusableHeader';
 
 import './NetworksList.css';
 
@@ -43,12 +42,6 @@ export function NetworksList() {
 
   return (
     <div className="networks-list">
-      <ReusableHeader
-        title="Networks"
-        count={filteredNetworks.length}
-        loading={loading}
-      />
-
       {filteredNetworks.length === 0 ? (
         <NetworksEmptyState searchActive={networks.length > 0} />
       ) : (

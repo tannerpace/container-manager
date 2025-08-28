@@ -8,8 +8,70 @@ import { SystemInfoModal } from "./SystemInfoModal"
 
 export function Header() {
   const location = useLocation()
-  const { connected, error, searchTerm, setSearchTerm, refreshContainers, refreshImages, refreshVolumes, refreshNetworks } = useDocker()
+  const {
+    connected,
+    error,
+    searchTerm,
+    setSearchTerm,
+    refreshContainers,
+    refreshImages,
+    refreshVolumes,
+    refreshNetworks,
+    containers,
+    images,
+    volumes,
+    networks,
+    filterContainers,
+    filterImages,
+    filterVolumes,
+    filterNetworks
+  } = useDocker()
   const [isSystemInfoOpen, setIsSystemInfoOpen] = useState(false)
+
+  const getPageInfo = () => {
+    const path = location.pathname
+
+    // Don't show page info on detail pages
+    if (path.includes('_details') || path.includes('_detail')) {
+      return {
+        title: '',
+        count: 0
+      }
+    }
+
+    if (path === '/' || path === '/containers') {
+      const filtered = filterContainers(containers, searchTerm)
+      return {
+        title: 'Containers',
+        count: filtered.length
+      }
+    } else if (path === '/images') {
+      const filtered = filterImages(images, searchTerm)
+      return {
+        title: 'Images',
+        count: filtered.length
+      }
+    } else if (path === '/volumes') {
+      const filtered = filterVolumes(volumes, searchTerm)
+      return {
+        title: 'Volumes',
+        count: filtered.length
+      }
+    } else if (path === '/networks') {
+      const filtered = filterNetworks(networks, searchTerm)
+      return {
+        title: 'Networks',
+        count: filtered.length
+      }
+    } else {
+      return {
+        title: '',
+        count: 0
+      }
+    }
+  }
+
+  const pageInfo = getPageInfo()
 
   const getRefreshConfig = () => {
     const path = location.pathname
@@ -68,7 +130,11 @@ export function Header() {
     <>
       <header className="header">
         <div className="header-left">
-         {/* todo add current page */}
+         {pageInfo.title && (
+           <div className="page-info">
+             <h2>{pageInfo.title} ({pageInfo.count})</h2>
+           </div>
+         )}
         </div>
 
         <div className="header-center">

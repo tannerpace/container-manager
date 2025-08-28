@@ -1,6 +1,5 @@
 import { useDocker } from '../../hooks/useDocker';
 import type { DockerVolume } from '../../types/dockerTypes';
-import VolumesHeader from './VolumesHeader';
 
 import './VolumesList.css';
 interface VolumesListProps {
@@ -110,10 +109,6 @@ export function VolumesList({ onVolumeSelect }: VolumesListProps = {}) {
 
   return (
     <div className="volumes-list">
-      <VolumesHeader
-			  title='Volumes'
-        count={filteredVolumes.length}
-      />
       {content}
     </div>
   )
