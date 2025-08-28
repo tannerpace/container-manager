@@ -113,8 +113,6 @@ export function VolumesList({ onVolumeSelect }: VolumesListProps = {}) {
       <VolumesHeader
 			  title='Volumes'
         count={filteredVolumes.length}
-        loading={loading}
-        onRefresh={handleRefresh}
       />
       {content}
     </div>

@@ -47,7 +47,6 @@ export function NetworksList() {
         title="Networks"
         count={filteredNetworks.length}
         loading={loading}
-        onRefresh={handleRefresh}
       />
 
       {filteredNetworks.length === 0 ? (

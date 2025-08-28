@@ -4,6 +4,7 @@
   border-radius: 0.75rem;
   width: 90vw;
   max-width: 50rem;
+  min-height: 600px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -348,6 +349,7 @@
 @media (max-width: 768px) {
   .container-create-modal {
     width: 95vw;
+    min-height: 900px;
     max-height: 95vh;
   }
 

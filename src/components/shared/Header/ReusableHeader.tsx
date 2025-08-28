@@ -5,7 +5,7 @@ type ReusableHeaderProps = {
   title: string;
   count: number;
   loading: boolean;
-  onRefresh: () => void;
+  onRefresh?: () => void;
 };
 
 export const ReusableHeader: React.FC<ReusableHeaderProps> = ({
@@ -21,14 +21,16 @@ export const ReusableHeader: React.FC<ReusableHeaderProps> = ({
           {title} ({count})
         </h2>
         <div className="header-actions">
-          <button
-            onClick={onRefresh}
-            className="refresh-btn"
-            disabled={loading}
-            data-tooltip={`Refresh ${title.toLowerCase()} list`}
-          >
-            🔄 Refresh
-          </button>
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              className="refresh-btn"
+              disabled={loading}
+              data-tooltip={`Refresh ${title.toLowerCase()} list`}
+            >
+              🔄 Refresh
+            </button>
+          )}
         </div>
       </div>
     </div>

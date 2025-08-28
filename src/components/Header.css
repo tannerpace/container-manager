@@ -295,6 +295,90 @@
   visibility: visible;
 }
 
+.refresh-btn {
+  position: relative;
+  background: rgba(120, 120, 128, 0.16);
+  border: 0.0625rem solid rgba(0, 0, 0, 0.08);
+  color: #6e6e73;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: 12rem;
+}
+
+.refresh-btn:hover {
+  background: rgba(0, 122, 255, 0.08);
+  color: #007aff;
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 122, 255, 0.1);
+}
+
+.refresh-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0.0625rem 0.25rem rgba(0, 122, 255, 0.1);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.refresh-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(1.25rem) saturate(180%);
+  -webkit-backdrop-filter: blur(1.25rem) saturate(180%);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1000;
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.3);
+  font-family: var(--font-family-system);
+  pointer-events: none;
+  max-width: 15rem;
+  text-align: center;
+}
+
+.refresh-btn::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 0.125rem);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 0.375rem solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.refresh-btn:hover::after,
+.refresh-btn:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .header {
