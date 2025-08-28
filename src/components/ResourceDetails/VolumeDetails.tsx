@@ -25,16 +25,14 @@ export const VolumeDetails = ({ volumeName, onClose }: VolumeDetailsProps) => {
 
   if (loading) {
     return (
-      <div className="modal-overlay">
-        <div className="volume-details-modal">
-          <div className="modal-header">
-            <h2>Volume Details: {volumeName}</h2>
-            <button className="close-btn" onClick={onClose}>×</button>
-          </div>
-          <div className="modal-content">
-            <div className="loading-spinner"></div>
-            <p>Loading volume details...</p>
-          </div>
+      <div className="volume-details-modal">
+        <div className="modal-header">
+          <h2>Volume Details: {volumeName}</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-content">
+          <div className="loading-spinner"></div>
+          <p>Loading volume details...</p>
         </div>
       </div>
     );
@@ -42,20 +40,18 @@ export const VolumeDetails = ({ volumeName, onClose }: VolumeDetailsProps) => {
 
   if (error) {
     return (
-      <div className="modal-overlay">
-        <div className="volume-details-modal">
-          <div className="modal-header">
-            <h2>Volume Details: {volumeName}</h2>
-            <button className="close-btn" onClick={onClose}>×</button>
-          </div>
-          <div className="modal-content">
-            <div className="error-message">
-              <h3>Error loading volume details</h3>
-              <p>{error}</p>
-              <button onClick={refreshVolumes} className="retry-btn">
-                Retry
-              </button>
-            </div>
+      <div className="volume-details-modal">
+        <div className="modal-header">
+          <h2>Volume Details: {volumeName}</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-content">
+          <div className="error-message">
+            <h3>Error loading volume details</h3>
+            <p>{error}</p>
+            <button onClick={refreshVolumes} className="retry-btn">
+              Retry
+            </button>
           </div>
         </div>
       </div>
@@ -64,20 +60,18 @@ export const VolumeDetails = ({ volumeName, onClose }: VolumeDetailsProps) => {
 
   if (!volumeDetails) {
     return (
-      <div className="modal-overlay">
-        <div className="volume-details-modal">
-          <div className="modal-header">
-            <h2>Volume Details: {volumeName}</h2>
-            <button className="close-btn" onClick={onClose}>×</button>
-          </div>
-          <div className="modal-content">
-            <div className="error-message">
-              <h3>Volume not found</h3>
-              <p>The volume "{volumeName}" could not be found.</p>
-              <button onClick={refreshVolumes} className="retry-btn">
-                Refresh Volumes
-              </button>
-            </div>
+      <div className="volume-details-modal">
+        <div className="modal-header">
+          <h2>Volume Details: {volumeName}</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-content">
+          <div className="error-message">
+            <h3>Volume not found</h3>
+            <p>The volume "{volumeName}" could not be found.</p>
+            <button onClick={refreshVolumes} className="retry-btn">
+              Refresh Volumes
+            </button>
           </div>
         </div>
       </div>
@@ -85,59 +79,57 @@ export const VolumeDetails = ({ volumeName, onClose }: VolumeDetailsProps) => {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="volume-details-modal">
-        <div className="modal-header">
-          <h2>Volume Details: {volumeDetails.Name}</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
-        </div>
-        <div className="modal-content">
-          <div className="volume-info-grid">
-            <div className="info-row">
-              <span className="label">Name:</span>
-              <span className="value">{volumeDetails.Name}</span>
-            </div>
-            <div className="info-row">
-              <span className="label">Driver:</span>
-              <span className="value">{volumeDetails.Driver}</span>
-            </div>
-            <div className="info-row">
-              <span className="label">Mount Point:</span>
-              <span className="value">{volumeDetails.Mountpoint}</span>
-            </div>
-            <div className="info-row">
-              <span className="label">Scope:</span>
-              <span className="value">{volumeDetails.Scope}</span>
-            </div>
-            <div className="info-row">
-              <span className="label">Created:</span>
-              <span className="value">{new Date(volumeDetails.CreatedAt).toLocaleString()}</span>
-            </div>
-            {volumeDetails.Labels && Object.keys(volumeDetails.Labels).length > 0 && (
-              <div className="info-row">
-                <span className="label">Labels:</span>
-                <div className="labels-container">
-                  {Object.entries(volumeDetails.Labels).map(([key, value]) => (
-                    <span key={key} className="label-item">
-                      {key}: {value}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {volumeDetails.Options && Object.keys(volumeDetails.Options).length > 0 && (
-              <div className="info-row">
-                <span className="label">Options:</span>
-                <div className="options-container">
-                  {Object.entries(volumeDetails.Options).map(([key, value]) => (
-                    <span key={key} className="option-item">
-                      {key}: {value}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+    <div className="volume-details-modal">
+      <div className="modal-header">
+        <h2>Volume Details: {volumeDetails.Name}</h2>
+        <button className="close-btn" onClick={onClose}>×</button>
+      </div>
+      <div className="modal-content">
+        <div className="volume-info-grid">
+          <div className="info-row">
+            <span className="label">Name:</span>
+            <span className="value">{volumeDetails.Name}</span>
           </div>
+          <div className="info-row">
+            <span className="label">Driver:</span>
+            <span className="value">{volumeDetails.Driver}</span>
+          </div>
+          <div className="info-row">
+            <span className="label">Mount Point:</span>
+            <span className="value">{volumeDetails.Mountpoint}</span>
+          </div>
+          <div className="info-row">
+            <span className="label">Scope:</span>
+            <span className="value">{volumeDetails.Scope}</span>
+          </div>
+          <div className="info-row">
+            <span className="label">Created:</span>
+            <span className="value">{new Date(volumeDetails.CreatedAt).toLocaleString()}</span>
+          </div>
+          {volumeDetails.Labels && Object.keys(volumeDetails.Labels).length > 0 && (
+            <div className="info-row">
+              <span className="label">Labels:</span>
+              <div className="labels-container">
+                {Object.entries(volumeDetails.Labels).map(([key, value]) => (
+                  <span key={key} className="label-item">
+                    {key}: {value}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {volumeDetails.Options && Object.keys(volumeDetails.Options).length > 0 && (
+            <div className="info-row">
+              <span className="label">Options:</span>
+              <div className="options-container">
+                {Object.entries(volumeDetails.Options).map(([key, value]) => (
+                  <span key={key} className="option-item">
+                    {key}: {value}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
