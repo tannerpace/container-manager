@@ -272,8 +272,9 @@ export function ContainersList() {
             <div className="col-status">
               <div className="status-badge">
                 <div
-                  className="status-dot"
+                  className="status-dot tooltip"
                   style={{ backgroundColor: getStatusColor(container.State) }}
+                  data-tooltip={`${container.State}: ${container.Status}`}
                 ></div>
                 <span>{container.State}</span>
               </div>
