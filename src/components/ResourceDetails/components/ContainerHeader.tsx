@@ -73,21 +73,21 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
               <button
                 onClick={() => onAction("pause")}
                 className="action-btn pause-btn"
-                title="Pause container"
+                data-tooltip="Pause"
               >
                 ⏸️ Pause
               </button>
               <button
                 onClick={() => onAction("restart")}
                 className="action-btn restart-btn"
-                title="Restart container"
+                data-tooltip="Restart"
               >
                 🔄 Restart
               </button>
               <button
                 onClick={() => onAction("stop")}
                 className="action-btn stop-btn"
-                title="Stop container"
+                data-tooltip="Stop"
               >
                 ⏹️ Stop
               </button>
@@ -100,14 +100,14 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
               <button
                 onClick={() => onAction("unpause")}
                 className="action-btn start-btn"
-                title="Unpause container"
+                data-tooltip="Unpause container"
               >
                 ▶️ Unpause
               </button>
               <button
                 onClick={() => onAction("stop")}
                 className="action-btn stop-btn"
-                title="Stop container"
+                data-tooltip="Stop container"
               >
                 ⏹️ Stop
               </button>
@@ -120,14 +120,14 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
               <button
                 onClick={() => onAction("start")}
                 className="action-btn start-btn"
-                title="Start container"
+                data-tooltip="Start container"
               >
                 ▶️ Start
               </button>
               <button
                 onClick={() => onAction("remove")}
                 className="action-btn remove-btn"
-                title="Remove container"
+                data-tooltip="Remove container"
               >
                 🗑️ Remove
               </button>
@@ -137,7 +137,7 @@ export const ContainerHeader: React.FC<ContainerHeaderProps> = ({
           <button
             onClick={onClose}
             className="action-btn close-btn"
-            title="Close details"
+            data-tooltip="Close details"
           >
             ✕
           </button>

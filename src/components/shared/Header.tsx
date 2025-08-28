@@ -2,7 +2,7 @@ import { useState } from "react"
 // import whaleSvg from "../assets/whaley.svg"
 import { useDocker } from "../../hooks/useDocker"
 
-import "./Header.css"
+import "../Header.css"
 import { SystemInfoModal } from "./SystemInfoModal"
 
 export function Header() {
@@ -24,12 +24,22 @@ export function Header() {
               className="search-input"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              data-tooltip="Search across containers, images, volumes, and networks"
             />
           </div>
         </div>
 
         <div className="header-right">
-          <div className="status-indicator">
+          <div
+            className="status-indicator"
+            data-tooltip={
+              connected
+                ? "Docker daemon is running and connected"
+                : error
+                ? `Connection error: ${error}`
+                : "Docker daemon is not running or not accessible"
+            }
+          >
             <div
               className={`status-dot ${connected ? "running" : "stopped"}`}
             ></div>

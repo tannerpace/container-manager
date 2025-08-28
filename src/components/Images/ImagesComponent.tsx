@@ -48,47 +48,64 @@ export function ImagesComponent() {
 
   return (
     <div className="images-list">
+      {!createModalVisible && (
+        <>
+          {/* Show 'No images match your search' if all filtered */}
+          {isAllFiltered && (
+            <div className="images-empty">
+              <div className="empty-icon">🔍</div>
+              <h3>No images match your search</h3>
+              <p>
+                Try adjusting your search term or clear the search to see all
+                images.
+              </p>
+            </div>
+          )}
 
-      {/* Show 'No images match your search' if all filtered */}
-      {isAllFiltered && (
-        <div className="images-empty">
-          <div className="empty-icon">🔍</div>
-          <h3>No images match your search</h3>
-          <p>
-            Try adjusting your search term or clear the search to see all
-            images.
-          </p>
-        </div>
-      )}
+          {/* Show 'No images found' if there are no images at all */}
+          {filteredImages.length === 0 && images.length === 0 && (
+            <div className="empty-state">
+              <div className="empty-icon">💿</div>
+              <h3>No images found</h3>
+              <p>Pull an image to get started</p>
+            </div>
+          )}
 
-      {/* Show 'No images found' if there are no images at all */}
-      {filteredImages.length === 0 && images.length === 0 && (
-        <div className="empty-state">
-          <div className="empty-icon">💿</div>
-          <h3>No images found</h3>
-          <p>Pull an image to get started</p>
-        </div>
-      )}
-
-      {/* Show images table if there are filtered images */}
-      {filteredImages.length > 0 && (
-        <ImagesTable
-          images={filteredImages}
-          handleAction={handleAction}
-          formatBytes={formatBytes}
-          handleSelectImage={handleSelectImage}
-          selectedImage={selectedImage}
-        />
+          {/* Show images table if there are filtered images */}
+          {filteredImages.length > 0 && (
+            <ImagesTable
+              images={filteredImages}
+              handleAction={handleAction}
+              formatBytes={formatBytes}
+              handleSelectImage={handleSelectImage}
+              selectedImage={selectedImage}
+            />
+          )}
+        </>
       )}
 
       {createModalVisible && selectedImage && (
-        <ContainerCreateModal
-          isOpen={createModalVisible}
-          onClose={handleCloseCreateModal}
-          onCreateContainer={handleCreateContainer}
-          sourceImage={selectedImage}
-          mode="create"
-        />
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1000
+        }}>
+          <ContainerCreateModal
+            isOpen={createModalVisible}
+            onClose={handleCloseCreateModal}
+            onCreateContainer={handleCreateContainer}
+            sourceImage={selectedImage}
+            mode="create"
+          />
+        </div>
       )}
     </div>
   )
