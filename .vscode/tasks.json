@@ -340,6 +340,48 @@
         "clear": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "📦 Install Dependencies",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "group": "build"
+    },
+    {
+      "label": "Build and Start Electron App",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "clear": true
+      },
+      "runOptions": {
+        "runOn": "default"
+      },
+      "dependsOn": [
+        {
+          "label": "Start Electron App",
+          "type": "shell",
+          "command": "npm",
+          "args": ["run", "electron"],
+          "group": "build",
+          "problemMatcher": [],
+          "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared",
+            "clear": true
+          }
+        }
+      ]
     }
   ]
 }

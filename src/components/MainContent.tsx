@@ -1,72 +1,32 @@
-import { useState } from "react"
-import { useDocker } from "../hooks/useDocker"
-import { ContainersList } from "./ContainersList"
-import { DockerSetupGuide } from "./DockerSetupGuide"
-import { ImagesComponent } from "./ImagesComponent"
-import "./MainContent.css"
-import { NetworksList } from "./NetworksList"
-import { VolumesList } from "./VolumesList"
-import { WhaleIcon } from "./WhaleIcon"
+import { BrowserRouter as Router } from "react-router-dom";
+import { useMainContentConnection } from "../hooks/useMainContentConnection";
+import { ContentRouter } from "../routers/ContentRouter";
+import { DockerConnectionError } from './Containers/DockerConnectionError';
+import { DockerSetupGuide } from './Containers/DockerSetupGuide';
+
+import "./MainContent.css";
 
 interface MainContentProps {
-  activeTab: "containers" | "images" | "volumes" | "networks"
-  onContainerSelect: (containerId: string) => void
+  activeTab: "containers" | "images" | "volumes" | "networks";
+
 }
 
-export function MainContent({
-  activeTab,
-  onContainerSelect,
-}: MainContentProps) {
-  const { connected, error } = useDocker()
-  const [showSetupGuide, setShowSetupGuide] = useState(false)
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case "containers":
-        return <ContainersList onContainerSelect={onContainerSelect} />
-      case "images":
-        return <ImagesComponent />
-      case "volumes":
-        return <VolumesList />
-      case "networks":
-        return <NetworksList />
-      default:
-        return <ContainersList onContainerSelect={onContainerSelect} />
-    }
-  }
-
-  // Show setup guide if not connected and there's an error
-  const shouldShowSetupGuide =
-    !connected && error && error.includes("Unable to connect to Docker daemon")
+export function MainContent({ activeTab }: MainContentProps) {
+  const { shouldShowSetupGuide, showSetupGuide, setShowSetupGuide } = useMainContentConnection();
 
   return (
     <main className="main-content">
       {shouldShowSetupGuide && !showSetupGuide && (
-        <div className="docker-connection-error">
-          <div className="error-content">
-            <h3>
-              <WhaleIcon size={24} alt="Docker whale" /> Docker Connection
-              Required
-            </h3>
-            <p>
-              Unable to connect to Docker daemon. Make sure Docker is running
-              and API access is enabled.
-            </p>
-            <button
-              className="setup-guide-btn"
-              onClick={() => setShowSetupGuide(true)}
-            >
-              Show Setup Guide
-            </button>
-          </div>
-        </div>
+        <DockerConnectionError onShowGuide={() => setShowSetupGuide(true)} />
       )}
 
-      {renderContent()}
+      <Router>
+        <ContentRouter activeTab={activeTab} />
+      </Router>
 
       {showSetupGuide && (
         <DockerSetupGuide onClose={() => setShowSetupGuide(false)} />
       )}
     </main>
-  )
+  );
 }

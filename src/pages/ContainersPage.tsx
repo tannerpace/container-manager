@@ -1,12 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { ContainersList } from '../components/ContainersList';
+import { ContainersList } from '../components/Containers/ContainersList';
 
 const ContainersPage: React.FC = () => {
-	const navigate = useNavigate();
 	return (
-		<ContainersList onContainerSelect={(containerId) => {
-			navigate(`/container_details/${containerId}`);
-		}} />
+		<ContainersList />
 	);
 };
 

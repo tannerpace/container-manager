@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { VolumesList } from '../components/VolumesList';
+import { VolumesList } from '../components/Volumes/VolumesList';
 
 const VolumesPage: React.FC = () => {
 	const navigate = useNavigate();
