@@ -29,7 +29,7 @@ export const ContainerInspectModal: React.FC<ContainerInspectModalProps> = ({
       overflowY:"scroll",
 			marginBottom:"1rem",
 			alignSelf:"center"
-			
+
 		}}>
     <div onClick={onClose}>
       <div className="inspect-modal" onClick={e => e.stopPropagation()}>
@@ -51,8 +51,20 @@ export const ContainerInspectModal: React.FC<ContainerInspectModalProps> = ({
 
         <div className="modal-body">
           {loading && (
-            <div className="loading-state">
-              <div className="spinner" />
+            <div
+              className="loading-state"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "200px",
+                width: "100%",
+                textAlign: "center",
+                margin: "0 auto"
+              }}
+            >
+              <div className="spinner" style={{ marginBottom: "1rem" }} />
               <span>Loading container details...</span>
             </div>
           )}

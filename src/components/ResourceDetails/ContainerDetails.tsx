@@ -143,8 +143,20 @@ export const ContainerDetails: React.FC<ContainerDetailsProps> = ({ containerId,
 
   if (loading) {
     return (
-      <div className="details loading">
-        <div className="loading-spinner"></div>
+      <div
+        className="details loading"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "300px",
+          width: "100%",
+          textAlign: "center",
+          margin: "0 auto"
+        }}
+      >
+        <div className="loading-spinner" style={{ marginBottom: "1rem" }}></div>
         <p>Loading container details...</p>
       </div>
     )
